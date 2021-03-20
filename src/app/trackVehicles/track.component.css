@@ -1,0 +1,630 @@
+.modal-lg{
+  width: 80%;
+}
+  .actions {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .actions-item {
+    float: left;
+    margin-left: 5px;
+    font-size: 18px;
+  }
+  agm-map {
+    height: 300px;
+  }
+  
+  .tableFixHead {
+    overflow-y: auto;
+    height: 400px;
+  }
+  .tableFixHead thead th {
+    position: sticky;
+    top: 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: small;
+  }
+  th,
+  td {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+  } 
+  #onNavigate {
+    color: rgb(11, 53, 170)
+  }
+  #t1{
+    color: blue;
+  }
+  .table tr.active #t1{
+    color:white;
+
+  }
+  .table tr.active td {
+    background-color:#454397 !important;
+    color: white;
+  }
+ 
+  #startendmarker{
+    height: 2px;
+    width: 2px;
+  }
+  .cluster-diagram {
+    width: 728px;
+    text-align: center;
+    background: #aaa;
+    padding: 20px;
+    border: 10px solid #555;
+    border-radius: 68px;
+    -webkit-box-shadow: inset 0px 0px 0px 10px #a7ccd1;
+    -moz-box-shadow: inset 0px 0px 0px 10px #a7ccd1;
+    box-shadow: inset 0px 0px 0px 10px #a7ccd1;
+    margin: 25px auto;
+  }
+  
+  .cluster-diagram .row {
+    display: flow-root !important;
+  }
+  
+  .main-container {
+    position: relative;
+    text-align: center;
+    margin: 20px auto 20px auto;
+    width: 500px;
+  }
+  
+  .container-argo2500 {
+    width: 110px;
+    height: 107px;
+    position: absolute;
+    top: 135px;
+    left: 138px;
+    overflow: hidden;
+  }
+  
+  .container-water {
+    width: 112px;
+    height: 115px;
+    position: absolute;
+    top: 134px;
+    left: 247px;
+    overflow: hidden;
+  }
+  
+  .ajax-img {
+    position: relative;
+    left: 0px;
+    background: url('../../assets/img/meter/argo2500/ajaxfiori.png') no-repeat;
+    width: 500px;
+    height: 478px;
+  }
+  
+  .gaugec {
+    transition: transform .2s linear;
+    transform-origin: bottom right;
+    transform-style: preserve-3D;
+  }
+  
+  .gaugecwater {
+    transition: transform .2s linear;
+    transform-origin: bottom left;
+    transform-style: preserve-3D;
+  }
+  
+  .gauge-data {
+    position: relative;
+  }
+  
+  .fuel,
+  .water,
+  .ops {
+    position: relative;
+  }
+  
+  #inputval {
+    position: absolute;
+    padding: 2px;
+    width: 112px;
+    top: 248px;
+    left: 190px;
+    background: transparent;
+    border: 1px solid #ccc;
+    text-align: center;
+    color: #fff;
+    z-index: 1;
+  }
+  
+  #inputvalwater {
+    position: absolute;
+    padding: 2px;
+    width: 63px;
+    top: 218px;
+    left: 214px;
+    background: transparent;
+    border: 1px solid #ccc;
+    text-align: center;
+    color: #fff;
+    z-index: 1;
+  }
+  
+  #inputvalOPS {
+    position: absolute;
+    padding: 2px;
+    width: 28px;
+    top: 248px;
+    left: 270px;
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #fff;
+    z-index: 1;
+  }
+  
+  .loc-animate {
+    width: 142px;
+    height: 15px;
+    background: #33a0e1;
+    position: absolute;
+    top: 280px;
+    z-index: 10;
+    left: 182px;
+  }
+  
+  .icon-bg {
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 17px;
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .elo {
+    background-image: url('../../assets/img/meter/argo2500/engine-lubrication-oilpressure.png');
+    left: 371px;
+    top: 152px;
+  }
+  
+  .holi {
+    background-image: url('../../assets/img/meter/argo2500/hydrolic-oillevel-low-indicator.png');
+    width: 30px;
+    height: 25px;
+    left: 392px;
+    top: 197px;
+  }
+  
+  .gare1 {
+    background-image: url('../../assets/img/meter/argo2500/gear1-indication.png');
+    width: 17px;
+    height: 29px;
+    left: 397px;
+    top: 257px;
+  }
+  
+  .gare2 {
+    background-image: url('../../assets/img/meter/argo2500/gear2-indication.png');
+    width: 22px;
+    height: 29px;
+    left: 375px;
+    top: 310px;
+  }
+  
+  .hbi {
+    background-image: url('../../assets/img/meter/argo2500/highbeam-indicator.png');
+    width: 31px;
+    height: 29px;
+    left: 301px;
+    top: 374px;
+  }
+  
+  .lri {
+    background-image: url('../../assets/img/meter/argo2500/leftright-indicators.png');
+    width: 40px;
+    height: 23px;
+    left: 242px;
+    top: 390px;
+  }
+  
+  .eph {
+    background-image: url('../../assets/img/meter/argo2500/engine-preheading.png');
+    width: 31px;
+    height: 28px;
+    left: 188px;
+    top: 383px;
+  }
+  
+  .hsi {
+    background-image: url('../../assets/img/meter/argo2500/highspeed-indicators.png');
+    width: 35px;
+    height: 28px;
+    left: 134px;
+    top: 355px;
+  }
+  
+  .neutral {
+    background-image: url('../../assets/img/meter/argo2500/neutral.png');
+    width: 22px;
+    height: 28px;
+    left: 101px;
+    top: 317px;
+  }
+  
+  .wcentring {
+    background-image: url('../../assets/img/meter/argo2500/wheel-centring.png');
+    width: 25px;
+    height: 28px;
+    left: 78px;
+    top: 267px;
+  }
+  
+  .bci {
+    background-image: url('../../assets/img/meter/argo2500/battery-charging.png');
+    width: 25px;
+    height: 28px;
+    left: 74px;
+    top: 206px;
+  }
+  
+  .bci-full {
+    background-image: url('../../assets/img/meter/argo2500/battery-charging-green.png');
+  }
+  
+  .bci-med {
+    background-image: url('../../assets/img/meter/argo2500/battery-charging-yellow.png');
+  }
+  
+  .bci-low {
+    background-image: url('../../assets/img/meter/argo2500/battery-charging-red.png');
+  }
+  
+  .fri {
+    background-image: url('../../assets/img/meter/argo2500/fuel-serve.png');
+    width: 23px;
+    height: 25px;
+    left: 91px;
+    top: 159px;
+  }
+  
+  .fri-full {
+    background-image: url('../../assets/img/meter/argo2500/fuel-serve-green.png');
+  }
+  
+  .fri-med {
+    background-image: url('../../assets/img/meter/argo2500/fuel-serve-yellow.png');
+  }
+  
+  .fri-low {
+    background-image: url('../../assets/img/meter/argo2500/fuel-serve-red.png');
+  }
+  
+  .pbfailure {
+    background-image: url('../../assets/img/meter/argo2500/parking-brake-failure.png');
+    width: 26px;
+    height: 25px;
+    left: 116px;
+    top: 119px;
+  }
+  
+  .pbapplied {
+    background-image: url('../../assets/img/meter/argo2500/parking-brake-applied-indication.png');
+    width: 26px;
+    height: 25px;
+    left: 158px;
+    top: 88px;
+  }
+  
+  .pb-released {
+    background-image: url('../../assets/img/meter/argo2500/parking-brake-applied-indication-green.png');
+  }
+  
+  .pb-applied {
+    background-image: url('../../assets/img/meter/argo2500/parking-brake-applied-indication-red.png');
+  }
+  
+  .plindicator {
+    background-image: url('../../assets/img/meter/argo2500/parkinglight-indicator.png');
+    width: 30px;
+    height: 25px;
+    left: 215px;
+    top: 69px;
+  }
+  
+  .hof {
+    background-image: url('../../assets/img/meter/argo2500/hydraulicoil-level.png');
+    width: 22px;
+    height: 29px;
+    left: 281px;
+    top: 73px;
+  }
+  
+  .hof-green {
+    background-image: url('../../assets/img/meter/argo2500/hydraulicoil-level-green.png');
+  }
+  
+  .hof-red {
+    background-image: url('../../assets/img/meter/argo2500/hydraulicoil-level-red.png');
+  }
+  
+  .ewt {
+    background-image: url('../../assets/img/meter/argo2500/engine-water-temperature.png');
+    width: 30px;
+    height: 25px;
+    left: 333px;
+    top: 103px;
+  }
+  
+  
+  
+  
+  /*21-07-2017
+    customer DASHBOARD */
+  .meter-details {
+    background: #ffebcd;
+    border: 1px solid #999;
+    padding: 20px 10px;
+    border-radius: 12px;
+  }
+  
+  .text-red {
+    color: #da251d;
+  }
+  .icons-row1 {
+    margin-top: -42px !important;
+  }
+  
+  .reading-input input {
+    position: absolute;
+    width: 112px;
+    height: 24px;
+    top: 210px;
+    left: 79px;
+    float: left;
+    background: #e5ebeb;
+    border: 0px;
+    color: red;
+    font-size: 15px;
+    padding: 3px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .reading-input input::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #000;
+  }
+  
+  .reading-input input::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #000;
+  }
+  
+  .reading-input input:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #000;
+  }
+  
+  .reading-input input:-moz-placeholder {
+    /* Firefox 18- */
+    color: #000;
+  }
+  
+  .gauge {
+    position: relative;
+    display: inline-block;
+    font-size: 33px;
+    line-height: 1em;
+    height: 1em;
+    width: 2em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  .gauge.gauge-big {
+    background: url('../../assets/img/meter/speedometer.png') no-repeat;
+    width: 264px;
+    height: 258px;
+    display: inline-block;
+    font-size: 100px;
+  }
+  
+  .gauge.gauge-fuel {
+    background: url('../../assets/img/meter/speedometer-fuel.png') no-repeat;
+    width: 190px;
+    height: 258px;
+    display: inline-block;
+    background-size: 100%;
+    font-size: 100px;
+  }
+  
+  .gauge.gauge-temperature {
+    background: url('../../assets/img/meter/speedometer-temperature.png') no-repeat;
+    width: 190px;
+    height: 258px;
+    display: inline-block;
+    background-size: 100%;
+    font-size: 100px;
+  }
+  
+  .gauge.gauge-small {
+    font-size: 17px;
+  }
+  
+  .gauge:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 100%;
+    height: 2em;
+    width: 2em;
+    line-height: 1em;
+  
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+    border-radius: 100%;
+    clip: rect(auto, auto, 1em, auto);
+  }
+  
+  .gauge .gauge-arrow {
+    height: 82px;
+    width: 0.075em;
+    margin-left: -.05em;
+    -webkit-transform-origin: 50% 100%;
+    -moz-transform-origin: 50% 100%;
+    -ms-transform-origin: 50% 100%;
+    -o-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    top: 41px;
+    box-shadow: 3px 4px 3px #333;
+  }
+  
+  .gauge .gauge-arrow,
+  .gauge .gauge-arrow:before {
+    position: absolute;
+    display: inline-block;
+    background: #fff;
+    left: 51%;
+    border-radius: 50% 50% 50% 50% / 50% 50% 0 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  .gauge.gauge-fuel .gauge-arrow,
+  .gauge.gauge-fuel .gauge-arrow:before {
+    left: 39%;
+  }
+  
+  .gauge.gauge-fuel .gauge-arrow {
+    top: 7px;
+  }
+  
+  .gauge.gauge-temperature .gauge-arrow,
+  .gauge.gauge-temperature .gauge-arrow:before {
+    left: 66%;
+  }
+  
+  .gauge.gauge-temperature .gauge-arrow {
+    top: 13px;
+  }
+  
+  .gauge .gauge-arrow:before {
+    content: '';
+    height: 0.15em;
+    width: 0.15em;
+    bottom: -0.1em;
+    margin-left: -0.075em;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+    background: #333;
+    box-shadow: 1px 1px 9px #ccc;
+  }
+  
+  
+  .cluster-icon {
+    width: 53px;
+    height: 52px;
+    float: left;
+  }
+  
+  .battery-icon {
+    width: 53px;
+    height: 52px;
+    float: left;
+    margin-left: 19px;
+  }
+  
+  .cluster-icon-size {
+    width: 53px;
+    height: 52px;
+  }
+  
+  .battery {
+    background: url('../../assets/img/meter/battery-regular.png') no-repeat;
+  }
+  
+  .battery-full {
+    background: url('../../assets/img/meter/battery-green.png') no-repeat;
+  }
+  
+  .battery-med {
+    background: url('../../assets/img/meter/battery-yellow.png') no-repeat;
+  }
+  
+  .battery-low {
+    background: url('../../assets/img/meter/battery-red.png') no-repeat;
+  }
+  
+  .hydroulic-oil {
+    background: url('../../assets/img/meter/hydroulic-regular.png') no-repeat;
+  }
+  
+  .hydroulic-oil-green {
+    background: url('../../assets/img/meter/hydroulic-green.png') no-repeat;
+  }
+  
+  .hydroulic-oil-red {
+    background: url('../../assets/img/meter/hydroulic-red.png') no-repeat;
+  }
+  
+  .parking-brake {
+    background: url('../../assets/img/meter/parking-regular.png') no-repeat;
+  }
+  
+  .parking-brake-applied {
+    background: url('../../assets/img/meter/parking-red.png') no-repeat;
+  }
+  
+  .parking-brake-released {
+    background: url('../../assets/img/meter/parking-green.png') no-repeat;
+  }
+  
+  .icons-row2 div:last-child {
+    margin-right: 0px;
+  }
+  
+  .icons-left {
+    float: left;
+    width: 132px;
+    margin-left: 32px;
+  }
+  
+  .icons-right {
+    float: right;
+    margin-right: 24px;
+    width: 132px;
+  }
+  
+  .icons-row2 div {
+    float: left;
+    margin: 5px 10px;
+  }
+  
+  .icons-row2 {
+    margin: 10px 0px 10px 8px;
+  }
+  
+  .m-l-20 {
+    margin-left: 20px;
+  }
+  
+  .m-t-10 {
+    margin-top: 10px;
+  }
+  

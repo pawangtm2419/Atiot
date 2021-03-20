@@ -1,0 +1,390 @@
+﻿<div style="margin-left: 1%; margin-right: 5%; margin-top: 2%;">
+    <div class="row">
+        <div class="col-md-6 banner-sec">
+            <h2 style="margin-bottom: 10%; margin-left: 3%;">
+                My Dashboard
+            </h2>
+        </div>
+        <div class="col-md-6 banner-sec">
+            <div ng-app ng-controller="Ctrl" style="text-align: right; margin-top: 10px; margin-right: 1%;">
+                <b style="margin-bottom: 0px;">
+                    {{date | date:'dd.MM.yyyy'}}
+                </b>
+            </div>
+            <div style="text-align: right; margin-right: 1%;">
+                {{date | date:'EEEE'}}
+            </div>
+        </div>
+    </div>
+    <!--<a routerLink="add" class="btn btn-sm btn-success mb-2">Add User</a>-->
+
+
+    <div class="container dash">
+        <div class="row">
+            <div class="col-md-8 zone">
+                <div class="col-md-4">
+                    <div class="container rounded">
+                        <ngx-charts-pie-chart [scheme]="colorScheme" [results]="iotNonIotValueNew" [designatedTotal]="totalLegends"  [legend]="false"
+                        [labels]="true" [doughnut]="true" [legendTitle]="'IOT Report'" [view]="[390,390]"
+                        [labels]="true">
+                    </ngx-charts-pie-chart>
+                    </div>
+                </div>
+                <div class="shadow p-3 container rounded"
+                    >
+                    Zonewise View
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-md-4 zone">
+                            <ngx-charts-pie-grid [scheme]="colorScheme" [results]="allzone"
+                            [designatedTotal]="totalLegends" [view]="[345,345]" [labels]="true">
+                        </ngx-charts-pie-grid>
+                            <!-- <ul style="list-style-type:none; padding: 0;">
+                                <li>
+                                    <h5>North <i class="fas fa-ellipsis-h" style="float:right"> </i> </h5>
+                                </li>
+                                <li style="font-size: medium;">No. of Vehicles</li>
+                                <li>
+                                    <h2>20 </h2>
+                                </li>
+                            </ul> -->
+                            <!-- <ngx-charts-pie-grid [results]="eastzone">
+                            </ngx-charts-pie-grid> -->
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="rounded" style="background-color:white;">
+                    <!-- <div class="heading" style="margin-top: 8%;">Vehicle Monitoring </div> -->
+                    <!-- <div class="rounded" id="map" style="height: 433px;"></div> -->
+                    <div class="rounded" style="height: 300px;">
+                        <agm-map [latitude]="maplat" [longitude]="maplng" [fullscreenControl]='true'
+                            [mapTypeControl]='true' [fitBounds]="true">
+                            <agm-marker *ngFor="let coordinate of coordinatedata; let i=index" [iconUrl]="{url: agmmarker, scaledSize: {height:50,width: 50}}"
+                                [latitude]="coordinate.lat" [longitude]="coordinate.lng" [agmFitBounds]="true">
+                                <agm-info-window>
+                                    <strong>Date : {{coordinate.date}}</strong>
+                                    <br>
+                                    <strong>Time : {{coordinate.time}}</strong>
+                                    <br>
+                                    <Strong>Pinno. : {{coordinate.pinno}}</Strong>
+                                    <br>
+                                    <Strong>Lat : {{coordinate.lat}}</Strong>
+                                    <br>
+                                    <Strong>Lng : {{coordinate.lng}}</Strong>
+                                    </agm-info-window>
+                            </agm-marker>
+                        </agm-map>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 2%;">
+            <div class="col-md-6">
+                <div class="border container rounded" style="background-color:white;">
+                    <div class="heading" style="margin-top: 3%;"> Run Hour Statistics </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            MTD
+                        </div>
+                        <div class="col-md-4">
+                            Last Month
+                        </div>
+                        <div class="col-md-4">
+                            YTD
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px; margin-bottom: 4%;">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            0 to 50 hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{currentmonthcount[0]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            0 to 50 hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{lastmonthcount[0]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            0 to 50 hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{currentyearcount[0]}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px; margin-bottom: 4%;">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            50 to 250 hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{currentmonthcount[1]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            50 to 250 hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{lastmonthcount[1]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            50 to 250 hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{currentyearcount[1]}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            250 to above hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{currentmonthcount[2]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            250 to above hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{lastmonthcount[2]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row" style="margin-bottom: 34px;">
+                                <div class="col-md-9">
+                                    <ul style="list-style-type:none; padding: 0; text-align:left;">
+                                        <li class="l1">
+                                            250 to above hrs
+                                        </li>
+                                        <li class="l2">
+                                            No. of Vehicles
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 num">
+                                    {{currentyearcount[2]}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="border container rounded" style="background-color:white;">
+                    <div class="heading" style="margin-top: 8%;">Service Schedules </div>
+                    <div class="row" style="margin-top: 3%;">
+                        <div class="col-md-9">
+                            <ul>
+                                <li class="l1">
+                                    Upcoming
+                                </li>
+                                <li class="l2">
+                                    No. of Vehicles
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="col-md-3 num">
+                            2
+                        </div>
+
+                    </div>
+                    <hr style="margin-top: 0;">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <ul>
+                                <li class="l1">
+                                    Overdue
+                                </li>
+                                <li class="l2">
+                                    No. of Vehicles
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 num">
+                            0
+                        </div>
+
+                    </div>
+                    <hr style="margin-top: 0;">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <ul>
+                                <li class="l1">
+                                    Overdue Past 7 Days
+                                </li>
+                                <li class="l2">
+                                    No. of Vehicles
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 num">
+                            0
+                        </div>
+
+                    </div>
+                    <hr style="margin-top: 0;">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <ul>
+                                <li class="l1">
+                                    Overdue Past 30 Days
+                                </li>
+                                <li class="l2">
+                                    No. of Vehicles
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 num" style="color: red;">
+                            0
+                        </div>
+                        <hr>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="border container rounded" style="background-color:white;">
+                    <div class="heading" style="margin-top: 8%;">Vehicle Monitoring 
+                         </div>
+                    <div class="row" style="margin-top: 19%;">
+                        <div class="col-md-9">
+                            <ul>
+                                <li class="l1">
+                                    Active Vehicles
+                                </li>
+                                <li class="l2">
+                                    No. of Vehicles
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="col-md-3 num">
+                            {{monitordata.count.Active}}
+
+                        </div>
+
+                    </div>
+                    <hr style="margin-top: 0;">
+                    <div class="row" style="margin-bottom: 119px;">
+
+                        <div class="col-md-9">
+                            <ul>
+                                <li class="l1">
+                                    Inactive Vehicles
+                                </li>
+                                <li class="l2">
+                                    No. of Vehicles
+                                    <div style="font-size: x-small;">
+                                        *Data not recieved Past 72 Hours
+                                </div> 
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 num">
+                            {{monitordata.count.InActive}}
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>

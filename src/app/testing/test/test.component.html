@@ -1,0 +1,399 @@
+<!-- Modal -->
+<div style="margin-left:1%; margin-right: 5%; margin-top: 2%;">
+
+    <div class="row">
+        <div class="col-md-6 banner-sec">
+            <h2 style="margin-bottom: 6%;">
+                QA Testing
+            </h2>
+        </div>
+        <div class="col-md-6 banner-sec">
+            <div ng-app ng-controller="Ctrl" style="text-align: right; margin-top: 10px; margin-right: 1%;">
+                <b style="margin-bottom: 0px;">
+                    {{date | date:'dd.MM.yyyy'}}
+                </b>
+            </div>
+            <div style="text-align: right; margin-right: 1%;">
+                {{date | date:'EEEE'}}
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-md-4">
+            <div class="input-group-icon input-group-icon-left mr-3">
+                <form class="form-inline" style="margin-top: 5px;">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input class="form-control form-control-sm ml-3 w-75" id="key-search" type="text" name="search"
+                        [(ngModel)]="searchText" autocomplete="off" placeholder="Search"
+                        style="background-color: #d9d9d9;">
+                </form>
+            </div>
+        </div>
+        <!-- <div class="col-md-3">
+            <label class="radio-inline" style="margin-right: 10%; ;"><input type="radio" name="optradio"
+                    style="margin-right: 10px;" checked>Formated Data</label>
+            <label class="radio-inline"><input type="radio" name="optradio" style="margin-right: 10px;">Raw Data</label>
+        </div> -->
+
+        <div class="col-md-6">
+            <form class="form-inline" [formGroup]="form" (ngSubmit)="onSubmit()" style="float:right;">
+
+                <input type="date" class="form-control" [ngModel]="startDate | date:'yyyy-MM-dd'" max="{{startDate}}"
+                    formControlName="startDate" style="padding: 0px 10px; margin-right: 15px;">
+                <input type="date" class="form-control" [ngModel]="endDate | date:'yyyy-MM-dd'" min="{{endDate}}"
+                    formControlName="endDate" placeholder="Tosasasasas" style="padding: 0px 10px; margin-right: 10px;">
+                <button class="btn btn-success" type="button" type="submit"
+                    style="background-color:  #3385ff; padding: 2px 5px; float: right;">GO!</button>
+                   
+            </form>
+            
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success mr-1" title="Download Excel file" (click)="exportAsXLSX()" style="float: right;">
+                <i class="fas fa-file-excel fa-2x"></i>
+            </button>
+
+        </div>
+
+    </div>
+    <div class="tableFixHead">
+        <table class="table table-striped table-bordered table-hover" style="margin-top: 15px;">
+            <!-- <thead class="thead-dark">
+            <tr class="head">
+                <th >#</th>
+                <th >Date and Time </th>
+                <th >Latitude</th>
+                <th >Longitude</th>
+                <th >Power Src</th>
+                
+                <th >Ext. Battery</th>
+                <th >Int Battery </th>
+                <th>Fuel level</th>
+                <th>Coolent Temp</th>
+                <th>Oil Pressure </th>
+                <th>Ignition Status </th>
+                <th>RPM</th>
+                <th>Parking Switch</th>
+                <th>Hydraulic Oil Filter</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr  *ngFor="let deal of dealer  | filter:searchText | paginate : {itemsPerPage : 50, currentPage : p} let i = index ">
+                <td>{{i+1}}</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+              <td>XXXXXX</td>
+                
+              
+              
+            </tr>
+        </tbody>   -->
+            <thead class="thead-dark">
+                <tr class="head">
+                    <th>#</th>
+                    <th>Device ID</th>
+                    <th>Model</th>
+                    <th>Pin No</th>
+                    <th>Machine Data</th>
+
+                    <th>Batch Report</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngFor="let mod of model"> -->
+                <tr
+                    *ngFor="let qa of dataQADocs  | filter:searchText | paginate : {itemsPerPage : 50, currentPage : p} let i = index" 
+                    (click)= "setClickedRow(i)" [class.active]="i == selectedRow">
+                    <td>{{i+1}}</td>
+                    <td> {{qa.deviceID}} </td>
+                    <td> {{qa.deviceModel}} </td>
+                    <td> {{qa.pinno}} </td>
+
+
+                    <td style="white-space: nowrap">
+                        <button type="button" id="closeModel" data-toggle="modal" data-target="#exampleModal"
+                            (click)="getReportQATestForMachineData(qa.deviceID, qa.deviceModel, 'report')" class="btn btn-sm btn-primary mr-1"
+                            style="padding: 1px 18px;">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
+
+                    <td style="white-space: nowrap">
+                        <button type="button" id="closeModel" class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#exampleModal"
+                            style="padding: 1px 18px;" (click)="getReportQATestForBatchData(qa.deviceID, qa.deviceModel, 'batch')">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-6">
+            <div class="input-group-icon input-group-icon-left mr-3">
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{msg}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <form class="form-inline" [formGroup]="form" (ngSubmit)="onSubmit()" style="float: right;">
+                            <input type="hidden" formControlName="type" [ngModel]="type">
+                            <input type="date" class="form-control" [ngModel]="startDate | date:'yyyy-MM-dd'"
+                                max="{{startDate}}" formControlName="startDate"
+                                style="padding: 0px 10px; margin-right: 15px;">
+                            <input type="date" class="form-control" [ngModel]="endDate | date:'yyyy-MM-dd'"
+                                min="{{endDate}}" formControlName="endDate" placeholder="Tosasasasas"
+                                style="padding: 0px 10px; margin-right: 10px;">
+                            <button class="btn btn-success" type="button" type="submit"
+                                style="background-color:  #3385ff; padding: 2px 5px; float: right;">GO!</button>
+                        </form>
+                    </div>
+                    <div class="col-md-4" *ngIf="formateAndRowDatashow">
+                        <label class="radio-inline" style="margin-right: 10%; ;"><input type="radio" name="optradio"
+                                style="margin-right: 10px;" checked (click)="formatedData()">Formated Data</label>
+                        <label class="radio-inline"><input type="radio" name="optradio" style="margin-right: 10px;" (click)="rowData()">Raw
+                            Data</label>
+                    </div>
+                    <div class="col-md-2" *ngIf="shoxlsxbtn">
+                        <button class="btn btn-primary" title="Download Excel file"
+                            (click)="exportAsXLSXMachine()">xlsx</button>
+                    </div>
+                </div>
+                <div *ngIf="trFormatedData">
+                    <div *ngIf="machinedata">
+                        <div class="tableFixHead" style="margin-top: 10px;">
+                            <table class="table table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <tr class="head">
+                                            <th>#</th>
+                                            <th>Date and Time <br>
+                                            dd-mm-yyyy hh24:mi:ss  </th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Power Src</th>
+                                            <th>Battery Level (volts) </th>
+                                            <th>Fuel level</th>
+                                            <th>Coolant Temp <sup> o </sup>C</th>
+                                            <th>Oil Pressure (bar)</th>
+                                            <th>Ignition Status (volts) </th>
+                                            <th>RPM</th>
+                                            <th>Parking Switch</th>
+                                            <th>Hydraulic Oil Filter</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let qadevice of dataQaTestDocs  | filter:searchText | paginate : {itemsPerPage : 50, currentPage : device} let i = index "
+                                        (click)= "setClickedRow(i)" [class.active]="i == selectedRow">
+                                            <td>{{i+1}}</td>
+                                            <td> {{qadevice.devicePublishTime | date:'dd-MM-yyyy'}}
+                                                {{qadevice.devicePublishTime | date:'HH-mm-ss'}} </td>
+                                            <td> {{qadevice.lat}} </td>
+                                            <td> {{qadevice.lng}} </td>
+                                            <td> {{qadevice.extras[0].powerSource}} </td>
+                                            <td> {{qadevice.extras[0].batteryLevel}}</td>
+                                            <td>{{qadevice.extras[0].fuelLevel}}</td>
+                                            <td>{{qadevice.extras[0].coolantTemp}}</td>
+                                            <td>{{qadevice.extras[0].oilpressure}}</td>
+                                            <td>{{qadevice.extras[0].ignitionStatus}}</td>
+                                            <td>{{qadevice.extras[0].rpm}}</td>
+                                            <td>{{qadevice.extras[0].parkingSwitch}}</td>
+                                            <td>{{qadevice.extras[0].hydralicOilFilterChoke}}</td>
+                                        </tr>
+                                        <tr *ngIf="!qadevice">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-lg align-center"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    </div>
+                    <div *ngIf="batchdata">
+                        <div class="tableFixHead" style="margin-top: 10px;">
+                            <table class="table table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th style="vertical-align: top;">#</th>
+                                            <th style="vertical-align: top;">Batch No.</th>
+                                            <th style="vertical-align: top;">AGGT10mm</th>
+                                            <th style="vertical-align: top;">AGGT20mm</th>
+                                            <th style="vertical-align: top;">AGGT30mm</th>
+                                            <th style="vertical-align: top;">CEMT01</th>
+                                            <th style="vertical-align: top;">CEMT02</th>
+                                            <th style="vertical-align: top;">SAND01</th>
+                                            <th style="vertical-align: top;">SAND02</th>
+                                            <th style="vertical-align: top;">Water</th>
+                                            <th style="vertical-align: top;">Additive</th>
+                                            <th style="vertical-align: top;">Total WT</th>
+                                            <th style="vertical-align: top;">CuM</th>
+                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of batchDatadocs | paginate : {itemsPerPage : 50, currentPage : device} let i = index"
+                                        (click)= "setClickedRow(i)" [class.active]="i == selectedRow">
+                                            <td>{{i+1}}</td>
+                                            <td>{{item.batchNo}}</td>
+                                            <td>{{item.aggt10mm}}</td>
+                                            <td>{{item.aggt20mm}}</td>
+                                            <td>{{item.aggt30mm}}</td>
+                                            <td>{{item.cement01mm}}</td>
+                                            <td>{{item.cement02mm}}</td>
+                                            <td>{{item.sand01mm}}</td>
+                                            <td>{{item.sand02mm}}</td>
+                                            <td>{{item.water}}</td>
+                                            <td>{{item.additive}}</td>
+                                            <td>{{item.totalWT}}</td>
+                                            <td>{{item.cum}}</td>
+                                        </tr>
+                                        <tr *ngIf="!item">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-lg align-center"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    </div>
+                    <div *ngIf="consumptiondata">
+                        <div class="tableFixHead" style="margin-top: 10px;">
+                            <table class="table table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th style="width: 10%;">Batch No.</th>
+                                            <th style="width: 9%">AGGT10mm</th>
+                                            <th style="width: 9%">AGGT20mm</th>
+                                            <th style="width: 9%">AGGT30mm</th>
+                                            <th style="width: 9%">CEMT01</th>
+                                            <th style="width: 9%">CEMT02</th>
+                                            <th style="width: 9%">SAND01</th>
+                                            <th style="width: 9%">SAND02</th>
+                                            <th style="width: 9%">Water</th>
+                                            <th style="width: 9%">Additive</th>
+                                            <th style="width: 9%">Total WT</th>
+                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of consumptionDatadocs | paginate : {itemsPerPage : 50, currentPage : device} let i = index"
+                                        (click)= "setClickedRow(i)" [class.active]="i == selectedRow">
+                                            <td>{{i+1}}</td>
+                                            <td>{{item.noOfBatches}}</td>
+                                            <td>{{item.aggt10mm}}</td>
+                                            <td>{{item.aggt20mm}}</td>
+                                            <td>{{item.aggt30mm}}</td>
+                                            <td>{{item.cement01mm}}</td>
+                                            <td>{{item.cement02mm}}</td>
+                                            <td>{{item.sand01mm}}</td>
+                                            <td>{{item.sand02mm}}</td>
+                                            <td>{{item.water}}</td>
+                                            <td>{{item.additive}}</td>
+                                            <td>{{item.totalWT}}</td>
+                                        </tr>
+                                        <tr *ngIf="!item">
+                                            <td colspan="15" class="text-center">
+                                                <span class="spinner-border spinner-border-lg align-center"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    </div>
+                </div>
+                <div *ngIf="trRowData">
+                    <div class="tableFixHead" style="margin-top: 10px;">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr class="head">
+                                <th>#</th>
+                                <th style="width: 15%;">Date and Time <br>
+                                dd-mm-yyyy hh24:mi:ss  </th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Power Src</th>
+                                <th>Battery Level (volts) </th>
+                                <th>Fuel level (volts)</th>
+                                <th>Coolant Temp (volts) </th>
+                                <th>Oil Pressure (volts)</th>
+                                <th>Ignition Status (volts) </th>
+                                <th>RPM</th>
+                                <th>Parking Switch</th>
+                                <th>Hydraulic Oil Filter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of actualRowData | paginate : {itemsPerPage : 50, currentPage : device} let i = index"
+                            (click)= "setClickedRow(i)" [class.active]="i == selectedRow">
+                                <td>{{i+1}}</td>
+                                <td style="width: 15%;"> {{item.rowData[9] | slice : 0 : 2 }}-{{item.rowData[9] | slice : 2 : 4 }}-{{item.rowData[9] | slice : 4 : 8 }}<br>
+                                    {{item.rowData[10] | slice : 0 : 2 }}-{{item.rowData[10] | slice : 2 : 4 }}-{{item.rowData[10] | slice : 4 : 6 }}
+                                </td>
+                                <td>  {{item.rowData[11]}} {{item.rowData[12]}} </td>
+                                <td>  {{item.rowData[13]}} {{item.rowData[14]}} </td>
+                                <td></td>
+                                <td>{{item.rowData[26]}}</td>
+                                <td>{{item.rowData[51]}}</td>
+                                <td>{{item.rowData[52]}}</td>
+                                <td>{{item.rowData[53]}}</td>
+                                <td>{{item.rowData[24]}}</td>
+                                <td>{{item.rowData[55] | slice : 0 : 1 }}</td>
+                                <td>{{item.rowData[46] | slice : 0 : 1 }}</td>
+                                <td>{{item.rowData[46] | slice : 2 : 3}}</td>
+                            </tr>
+                            <tr *ngIf="!item">
+                                <td colspan="14" class="text-center">
+                                    <span class="spinner-border spinner-border-lg align-center"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <pagination-controls (pageChange)="device = $event"></pagination-controls>
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button> -->
+            </div>
+        </div>
+    </div>
+</div>

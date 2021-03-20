@@ -1,0 +1,35 @@
+.zone{
+    font-size: large;
+    color: aliceblue;
+}
+.heading{
+    font-size: large;
+}
+.dash{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+.l1{
+   font-size: 15px;
+}
+.l2{
+    font-size: small;
+    color: gray;
+}
+.num{
+    font-size: 18px;
+    text-align: left; 
+    padding: 0;
+    margin-top: 17px;
+}
+.border-3{
+    border-width:3px;
+}
+ul{
+    list-style-type:none; 
+    padding: 0; 
+    text-align:left;
+}
+
+agm-map {
+    height: 435px;
+  }
