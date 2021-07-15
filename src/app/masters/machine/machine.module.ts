@@ -3,14 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Ng2SearchPipeModule} from 'ng2-search-filter';
-import {NgxPaginationModule} from 'ngx-pagination';
-
-
+import { NgxPaginationModule } from 'ngx-pagination';
 import { MachineRoutingModule } from './machine-routing.module';
 import { LayoutComponent } from './layout.component';
 import { MachineComponent } from './machine.component';
 import { AddComponent } from './add.component';
-
 
 @NgModule({
     imports: [
@@ -19,9 +16,7 @@ import { AddComponent } from './add.component';
         MachineRoutingModule,
         FormsModule,
         Ng2SearchPipeModule,
-        NgxPaginationModule,
-
-
+        NgxPaginationModule
     ],
     declarations: [
         LayoutComponent,
