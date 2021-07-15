@@ -18,7 +18,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { FooterComponent } from './footer/footer.component'
 import{CustDashboardComponent}from './home/cust-dashboard/cust-dashboard.component';
-
+import { QRCodeModule } from 'angularx-qrcode';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -50,7 +50,6 @@ import { BatteryComponent } from './report/battery/battery.component';
 import { FuelanalyticsComponent } from './report/fuelanalytics/fuelanalytics.component'
 
 
-
 @NgModule({
     imports: [
         BrowserModule,
@@ -59,6 +58,7 @@ import { FuelanalyticsComponent } from './report/fuelanalytics/fuelanalytics.com
         AppRoutingModule,
         BrowserAnimationsModule,
         FormsModule,
+        QRCodeModule,
         NgxChartsModule,
         Ng2SearchPipeModule,
         NgxPaginationModule,

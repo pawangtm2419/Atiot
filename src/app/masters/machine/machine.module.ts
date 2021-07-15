@@ -8,6 +8,7 @@ import { MachineRoutingModule } from './machine-routing.module';
 import { LayoutComponent } from './layout.component';
 import { MachineComponent } from './machine.component';
 import { AddComponent } from './add.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { AddComponent } from './add.component';
         MachineRoutingModule,
         FormsModule,
         Ng2SearchPipeModule,
-        NgxPaginationModule
+        NgxPaginationModule,
+        QRCodeModule
     ],
     declarations: [
         LayoutComponent,

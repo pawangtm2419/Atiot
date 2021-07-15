@@ -37,6 +37,7 @@ export class MachineComponent implements OnInit {
   variant = null;
   form: FormGroup;
   showMapping=false;
+  qrCode=false;
   showAddMachine=false;
   exceltoJson = {};
   deviceform: FormGroup;
@@ -77,6 +78,7 @@ export class MachineComponent implements OnInit {
   disableDelete=false;
   devicetypeValue: string;
   status: any;
+  qrData: any;
   // http: any;
   // fileformat: any;
   // fileContent: any;
@@ -625,7 +627,9 @@ deleteMachine(id: string) {
   } 
  */
 
-
-
+  qrCodeGen(model: String, mngDate: Date, engineNumber: string) {
+    this.qrCode = true;
+    this.qrData = model+', '+mngDate+', '+engineNumber;
+  }
 
 }

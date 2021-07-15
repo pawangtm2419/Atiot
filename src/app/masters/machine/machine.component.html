@@ -1,38 +1,26 @@
 <div *ngIf="!master || inActive == false ">
     <span class="spinner-border spinner-border-lg align-center"></span>
 </div>
-
-<div *ngIf="checkedStatus == 'machine is not mapped' " class="modal fade" id="example1" tabindex="-1"
-    aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='showModal? "block":"none"'>
+<div *ngIf="checkedStatus == 'machine is not mapped'" class="modal fade" id="example1" tabindex="-1" aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='showModal? "block":"none"'>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="example1Label">Add Device</h5>
-                <button type="button" #closeButton class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" #closeButton class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
 
             <div class="modal-body">
                 <form [formGroup]="deviceform" (ngSubmit)="ondeviceSubmit()">
-
                     <div class="row" style="margin-top: 10px;">
-
                         <div class="col-md-6">
-                            <input class="form-control" list="deviceID" name="deviceID" formControlName="deviceID"
-                                placeholder="search....." (input)="filterItem($event)" autocomplete="off">
+                            <input class="form-control" list="deviceID" name="deviceID" formControlName="deviceID" placeholder="search....." (input)="filterItem($event)" autocomplete="off">
                             <datalist id="deviceID">
-                                <option value="{{device.deviceID}}-{{device.category?device.category:device.type}}"
-                                    *ngFor="let device of devices">
+                                <option value="{{device.deviceID}}-{{device.category?device.category:device.type}}" *ngFor="let device of devices">
                             </datalist>
                         </div>
                         <div class="col-md-6">
-                            <input class="form-control" type="text" name="modeltext" [(ngModel)]="modeltext"
-                                [ngModelOptions]="{standalone: true}" disabled>
+                            <input class="form-control" type="text" name="modeltext" [(ngModel)]="modeltext" [ngModelOptions]="{standalone: true}" disabled>
                         </div>
-
-
-
                         <!-- <div class="col-md-12">
                             <label><span class="required-asterisk">*</span>Device</label><br>
                             <select class="form-control" formControlName="deviceID" class="form-control"
@@ -44,28 +32,36 @@
                                 <div *ngIf="f1.deviceID.errors.required">Device is required</div>
                             </div>
                         </div> -->
-                    </div>
-
-                    <br>
+                    </div><br>
                     <div class="form-group" style="text-align: center;">
-
-                        <button type="submit" class="btn btn-primary" (click)="updateDeviceMapping()" id="closeModel1">
-                            Save
-                        </button>&nbsp;
+                        <button type="submit" class="btn btn-primary" (click)="updateDeviceMapping()" id="closeModel1"> Save </button>&nbsp;
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
                     </div>
                 </form>
-
             </div>
-
-
-
         </div>
     </div>
 </div>
 
 
+
+<div class="modal fade" id="qrCode" tabindex="-1" aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='showModal? "block":"none"'>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="example1Label">QR Code</h5>
+                <button type="button" #closeButton class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body section-to-print">
+                <qrcode [qrdata]="qrData" [width]="400" [errorCorrectionLevel]="'M'"></qrcode>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.print()">&#9113;</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-6">
@@ -315,7 +311,7 @@
         <table class="table table-striped table-bordered table-hover" style="margin-top: 10px;">
             <thead class="thead-dark">
                 <tr>
-                    <th style="width: 10%;">#</th>
+                    <th style="width: 2%;">#</th>
                     <th style="width: 10%;">Model</th>
                     <th style="width: 10%;">Variant</th>
                     <th style="width: 10%;">{{pinNo}}</th>
@@ -328,15 +324,14 @@
                     <th style="width: 10%;">Status</th>
                     <th style="width: 10%;">Device ID</th>
                     <th style="width: 10%;">Actions</th>
+                    <th style="width: 10%;">QR code</th>
                 </tr>
             </thead>
 
 
             <tbody>
                 <!-- <tr *ngFor="let machine of master ; let id = index"> -->
-                <tr
-                    *ngFor="let machine of master  | filter:searchText | paginate : {itemsPerPage : itemsperpage, currentPage : p} let i = index ">
-
+                <tr *ngFor="let machine of master | filter:searchText | paginate : {itemsPerPage : itemsperpage, currentPage : p} let i = index">
                     <td>{{itemsperpage *(p-1)+i+1}}</td>
                     <td>{{machine.deviceModel}}</td>
                     <td>{{machine.variant}}</td>
@@ -344,38 +339,25 @@
                     <td>{{machine.engineNumber}}</td>
                     <td>{{machine.batterylotno}}</td>
                     <td>{{machine.manufacturingDate | date:'dd-MM-yyyy'}}</td>
-                    <td [hidden]="true">{{machine.shipmentDate == "Invalid Date" || machine.shipmentDate == "" ? ("date not available")
-                        : (machine.shipmentDate | date:'dd-MM-yyyy')}}
-                    </td>
-                    <td [hidden]="true">{{machine.deliveryDate == "Invalid Date" || machine.deliveryDate == "" ? ("date not available")
-                        : (machine.deliveryDate | date:'dd-MM-yyyy')}}
-                    </td>
-                    <td>{{machine.batteryInstallationDate == "Invalid Date" || machine.batteryInstallationDate == "" ?
-                        ("date not available") : (machine.batteryInstallationDate | date:'dd-MM-yyyy')}}
-                    </td>
+                    <td [hidden]="true">{{machine.shipmentDate == "Invalid Date" || machine.shipmentDate == "" ? ("date not available") : (machine.shipmentDate | date:'dd-MM-yyyy')}} </td>
+                    <td [hidden]="true">{{machine.deliveryDate == "Invalid Date" || machine.deliveryDate == "" ? ("date not available") : (machine.deliveryDate | date:'dd-MM-yyyy')}} </td>
+                    <td>{{machine.batteryInstallationDate == "Invalid Date" || machine.batteryInstallationDate == "" ? ("date not available") : (machine.batteryInstallationDate | date:'dd-MM-yyyy')}} </td>
                     <td>{{machine.status}}</td>
                     <td>{{machine.deviceID}}</td>
                     <td style="white-space: nowrap">
-                        <a style="margin-right: 10px;"><i class="fa fa-map-marker fa-lg" data-toggle="modal"
-                                data-target="#example1" [hidden]="showMapping"
-                                (click)="mapCheck(machine.deviceID,machine.pinno,machine.id)"></i>
-                        </a>
-                        <button type="button" (click)="update($event,i,machine.id)" hidden="true" id="closeModel"
-                            class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#exampleModal">
+                        <a style="margin-right: 10px;"><i class="fa fa-map-marker fa-lg" data-toggle="modal" data-target="#example1" [hidden]="showMapping" (click)="mapCheck(machine.deviceID,machine.pinno,machine.id)"></i></a>
+                        <button type="button" (click)="update($event,i,machine.id)" hidden="true" id="closeModel" class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#exampleModal">
                             <i class="far fa-edit"></i>
                         </button>
-
-
-                        <button (click)="deleteMachine(machine.id)" class="btn btn-sm btn-danger"
-                            [disable]="machine.isDeleting" [hidden]="disableDelete">
+                        <button (click)="deleteMachine(machine.id)" class="btn btn-sm btn-danger" [disable]="machine.isDeleting" [hidden]="disableDelete">
                             <span *ngIf="machine.isDeleting" class="spinner-border spinner-border-sm"></span>
                             <span *ngIf="!machine.isDeleting"> <i class="far fa-trash-alt"></i></span>
-
                         </button>
                     </td>
-
+                    <td style="white-space: nowrap">
+                        <button (click)="qrCodeGen(machine.deviceModel, machine.manufacturingDate, machine.engineNumber)" class="btn btn-sm btn-info" data-toggle="modal" data-target="#qrCode"><i class="fa fa-qrcode"></i></button>
+                    </td>
                 </tr>
-
             </tbody>
         </table>
     </div>
