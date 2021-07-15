@@ -14,10 +14,13 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./e2e/tsconfig.json"
     }
-]
+    // {
+    //   "path": "./e2e/tsconfig.json"
+    // }
+],
+"compilerOptions": {
+  "lib": ["es2017", "dom"]
+}
 }
 

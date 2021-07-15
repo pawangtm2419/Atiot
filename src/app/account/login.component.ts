@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     credentials: { loginName: any; password: any; };
+    status: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -34,11 +35,14 @@ export class LoginComponent implements OnInit {
     mouseover(){
         document.getElementById('loginButton').style.backgroundColor = "#454397" ;
         document.getElementById('loginButton').style.padding = "7px 60px";
+
+
     }
     mouseout(){
         document.getElementById('loginButton').style.backgroundColor = "#3C84F0" ;
         document.getElementById('loginButton').style.padding = "4px 45px";
     }
+
 
     onSubmit() {
         this.submitted = true;
@@ -56,14 +60,45 @@ export class LoginComponent implements OnInit {
             loginName : this.f.loginName.value,
             password : this.f.password.value
         }
-        this.accountService.login(this.credentials).pipe(first()).subscribe({next: () => {
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-                window.location.href = returnUrl
-            },
-            error: error => {
-                this.alertService.error(error);
-                this.loading = false;
-            }
-        });
+        this.accountService.login(this.credentials)
+            .pipe(first())
+            .subscribe({
+                next: () => {
+                   // this.createUserLOgs();
+                   let type = JSON.parse(localStorage.getItem('user')).role;
+
+                      if(type=='customer')
+                      {
+                      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard/CustomerDashboard';
+                      window.location.href = returnUrl
+                     }
+                     else
+                     {
+                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
+                        window.location.href = returnUrl
+                    }                
+                },
+                error: error => {
+					//console.log(error);
+                    this.alertService.error(error);
+                    this.loading = false;
+                }
+            });
+    }
+    createUserLOgs(){
+        debugger
+    let params={
+        "loginName":this.f.loginName.value,
+        "module":"LOGIN",
+        "function":"LOGIN",
+        "type":"web"
+    }
+    this.accountService.createUserlogs(params).subscribe((data) => {    
+         this.status=data['status'];
+         console.log("status",this.status);
+      },
+        error => {
+          this.alertService.error(error);
+        })
     }
 }

@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Model } from '@app/_models';
 import { AuthService } from '@app/_services/auth.service';
+import { ExcelService, ExcelServiceXlsx } from '@app/_services/excel.service';
 
 @Component({
   selector: 'app-model',
@@ -34,20 +35,24 @@ export class ModelComponent implements OnInit {
   selectedRow : Number;
   setClickedRow : Function;
   deleteMod: Model[];
+  modelExcelData=[];
+  status: any;
   constructor(private accountService: AccountService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private alertService: AlertService,
-    private auth: AuthService) { 
+    private excelxlsxService: ExcelServiceXlsx,
+    private excelService: ExcelService,
+   ) { 
       this.setClickedRow = function(index){
         this.selectedRow = index;
 
     }
-    this.auth.authFunction(window.location.pathname);
+  
     }
 
   ngOnInit() {
-   
+   this.createUserLOgs();
     this.getModelData();
 
     this.form = this.formBuilder.group({
@@ -58,17 +63,42 @@ export class ModelComponent implements OnInit {
     });
   }
 
-
+  createUserLOgs(){
+    let params={
+        "loginName":JSON.parse(localStorage.getItem('user')).loginName,
+        "module":"MASTER",
+        "function":"MODEL",
+        "type":"web"
+    }
+    this.accountService.createUserlogs(params).subscribe((data) => {    
+         this.status=data['status'];
+         console.log("status",this.status);
+      },
+        error => {
+          this.alertService.error(error);
+        })
+    }
   getModelData(){
-
+debugger
     this.accountService.getAllModels()
     .pipe(first())
     .subscribe(model => {
       this.model = model;
      this.model = this.model.docs.filter(it => it.status == 'Active')
      this.inActive = true; 
+     this.model.forEach(element => {
+      this.modelExcelData.push({
+        "Model":element.title,
+        "Created On":new Date(element.createdAt),
+        "Status":element.status     
+      });
+     });  
     });
   }
+
+  exportAsXLSX(): void {
+    this.excelxlsxService.exportAsExcelFile(this.modelExcelData, 'ModelMaster');
+   }
 
   inactiveRecords(event: any){
 
@@ -111,10 +141,12 @@ export class ModelComponent implements OnInit {
 
     this.loading = true;
     if (this.isEditMode) {
+      this.loading = false;
       this.updateModel(this.id);
       this.submitted = false;
     }
     else {
+      this.loading = false;
       this.createModel();
       this.submitted = false;
 
@@ -131,7 +163,9 @@ export class ModelComponent implements OnInit {
   }
 
   createModel() {  
+  debugger
   
+
     this.accountService.newModel(this.form.value)
       .pipe(first())
       .subscribe({
@@ -154,16 +188,17 @@ export class ModelComponent implements OnInit {
 
 
   update(event, index, id) {
-
+debugger
     this.showModal = true;
     this.isEditMode = true;
+   
     this.id = id;
 
 
 
     let ids = index;
     if (this.isEditMode) {
-
+      this.loading = false;
       this.accountService.getByIdModel(this.id)
         .subscribe(model => {
           this.model = model;
@@ -176,10 +211,15 @@ export class ModelComponent implements OnInit {
 
 
   deleteModel(id: string){
-    this.accountService.deleteModel(id).subscribe((data) => {
-      this.deleteMod = data
-      this.getModelData()
-    })
+    debugger
+    let result = window.confirm("Are you sure you want to delete the record?")
+    if (result == true) {
+      this.accountService.deleteModel(id).subscribe((data) => {
+        this.deleteMod = data
+        this.alertService.success('Model deleted successfully', { keepAfterRouteChange: true });
+        this.getModelData()
+      })
+    }
 }
 
   updateModel(id) {

@@ -25,6 +25,7 @@ export class DealerComponent implements OnInit {
   loading = false;
   p: number = 1;
   searchText;
+  isChecked;
   isEdit = false;
   editMachineData: Master;
   id: string;
@@ -34,7 +35,7 @@ export class DealerComponent implements OnInit {
   role = null;
   subzone = null;
   states = null;
-  dealer = null;
+  dealer: any = [];
   userzone = null;
   usersubzone = null;
   userrole = null;
@@ -58,34 +59,45 @@ export class DealerComponent implements OnInit {
   }
   maketCode: null;
   name: null;
-  zoneCode: null;
+   zoneCode: null;
   subzoneCode: null;
   stateCode: null;
   code: null;
+  up:any;
+  deletedealerdata: Object;
+  dealers=[];
+  mobileNumberPattern="^((\\+91-?)|0)?[0-9]{10}$";
+  params: {};
+  addressData: any;
 
   constructor(private usermanagementService: UsermanagemntService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
-    private auth: AuthService) { 
-      this.auth.authFunction(window.location.pathname);
+   ) { 
+     
     }
 
   ngOnInit() {
-    this. getAlldealers();
+    this.getAlldealers();
 
     //add machine
     this.dropdownData();
     this.form = this.formBuilder.group({
       // deviceModel: ['', Validators.required],
       name: ['', Validators.required],
-      marketCode: ['', Validators.required],
-      zoneCode: ['', Validators.required],
-      subzoneCode: ['', Validators.required],
-      useType: ['', Validators.required],
-      stateCode: ['', Validators.required],
       code: ['', Validators.required],
+      marketCode: ['', Validators.required],
+      address:[''],
+      zoneCode: ['', Validators.required],
+      pinCode:[''],
+      subzoneCode: ['', Validators.required],
+      lat:[''],
+      stateCode: ['', Validators.required],
+      lng:[''],
+      contactNo:['',Validators.pattern(this.mobileNumberPattern)],
+      contactPerson:['']
     });
 
 
@@ -93,17 +105,34 @@ export class DealerComponent implements OnInit {
 
 
 
-
   getAlldealers() {
-
+debugger
     this.usermanagementService.getAlldealers()
       .pipe(first())
       .subscribe(dealer => {
         this.dealer = dealer
-        this.dealer = this.dealer.docs;
-        console.log(this.dealer)
+        this.dealer = this.dealer.docs.filter(it => it.isActive == 'true');
+     //   this.dealer =  this.dealer.filter(s => s.includes(s.isActive == true));
       });
+      console.log(this.dealer)
+  }
+  inactiveRecords(event: any) {
+    debugger
+    if (event) {
+      this.usermanagementService.getAlldealers()
+        .pipe(first())
+        .subscribe(dealer => {
+          this.dealer = dealer
+          this.dealer = this.dealer.docs.filter(it => it.isActive == 'false');
+        });
 
+    }
+
+    else {
+
+      this.getAlldealers();
+
+    }
   }
 
   getrole() {
@@ -119,21 +148,17 @@ export class DealerComponent implements OnInit {
   }
 
   getZone() {
-
-    this.usermanagementService.getZone(this.form.value.createdAtmuserMarket)
+    this.usermanagementService.getZone(this.form.value.marketCode)
       .subscribe(zone => {
         this.zone = zone;
         this.zone = this.zone.docs;
-
       });
-
-
   }
 
   getSubZone() {
 
-    const market = this.form.value.createdAtmuserMarket;
-    const zonecode = this.form.value.userZone;
+    const market = this.form.value.marketCode;
+    const zonecode = this.form.value.zoneCode;
     const subzoneData = {
       "marketCode": market,
       "zoneCode": zonecode
@@ -149,23 +174,98 @@ export class DealerComponent implements OnInit {
 
 
   }
+  getState() {
 
-  
+    const market = this.form.value.marketCode;
+    const zonecode = this.form.value.zoneCode;
+    const subzoneCode = this.form.value.subzoneCode;
+    const subzoneData = {
+      "marketCode": market,
+      "zoneCode": zonecode,
+      "subzoneCode": subzoneCode
+    }
+
+    this.usermanagementService.getState(subzoneData)
+      .subscribe(state => {
+        this.states = state;
+        this.states = this.states.docs;
+
+      });
+
+
+  }
+
+  getDealers() {
+
+
+    const subzoneData = {
+      "marketCode": this.form.value.marketCode,
+      "zoneCode": this.form.value.zoneCode,
+      "subzoneCode": this.form.value.subzoneCode,
+      "stateCode": this.form.value.stateCode.toLowerCase()
+    }
+
+    this.usermanagementService.getDealers(subzoneData)
+      .subscribe(dealer => {
+        this.dealer = dealer;
+        this.dealer = this.dealer.docs;
+
+
+      });
+
+
+  }
+
+  deleteDealer(id: string) {
+    debugger
+    const dealer = this.dealer.find(x => x.id === id);
+    dealer.isDeleting = true;
+    let result = window.confirm("Are you sure you want to delete the record?")
+    if (result == true) {
+      this.usermanagementService.deleteDealers(id).subscribe((data) => {
+        this.deletedealerdata = data
+        this.alertService.success('Dealer deleted successfully', { keepAfterRouteChange: true });
+        this.getAlldealers();
+      })
+    }
+    else {
+      dealer.isDeleting = false;
+    }
+  }
+
 
 
 
   createDealer() {
     console.log(this.form);
-
+  // this.params={
+  //   name:this.form.value.name,
+  //   code:this.form.value.name,
+  //   marketCode:this.form.value.marketCode,
+  //   zoneCode:this.form.value.zoneCode,
+  //   address:this.form.value.address,
+  //   pincode:this.form.value.pincode
+  //   subzoneCode:this.form.value.subzoneCode,
+  //   lat:this.form.value.lat,
+  //   stateCode:this.form.value.stateCode,
+  //   lng:this.form.value.lng,
+  //   contactNo:this.form.value.contactNo,
+  //   contactPerson:this.form.value.contactPerson
+  // }
     this.usermanagementService.newDealer(this.form.value)
       // .pipe(first())
       .subscribe(res => {
         //next: () 
         console.log(res)
+        this.up = res
+
+        if (this.up.status == "success") {
         this.alertService.success('Dealer added successfully', { keepAfterRouteChange: true });
+        this.getAlldealers();
+
+        }
         // this.router.navigate(['../'], { relativeTo: this.route });
         this.closeButton.nativeElement.click();
-        this.getAlldealers();
       },
         error => {
           this.alertService.error(error);
@@ -178,19 +278,31 @@ export class DealerComponent implements OnInit {
  
 
 
-  deleteUser(id: string) {
-    const master = this.user.find(x => x.id === id);
-    master.isDeleting = true;
-    // this.usermanagementService.deleteUsers(id)
-    //   .pipe(first())
-    //   .subscribe(() => this.user = this.user.filter(x => x.id !== id));
-  }
   onSubmit() {
-    
-   
-    this.createDealer();
+    debugger;
+    this.submitted = true;
 
-}
+    // reset alerts on submit
+    this.alertService.clear();
+
+    // stop here if form is invalid
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.loading = true;
+
+    if (this.isEditMode) {
+      this.updateDealer(this.id);
+    }
+    else {
+      this.createDealer();
+
+    }
+
+  }
+
 
 
 
@@ -213,17 +325,13 @@ export class DealerComponent implements OnInit {
 
   isEditMode: boolean;
   showModal: boolean;
-  addMachine() {
+  addDealer() {
     this.showModal = true;
     this.isEditMode = false;
     this.form.reset();
-    this.name = null;
-    this.maketCode = null;
     this.zoneCode = null;
     this.subzoneCode = null;
     this.stateCode = null;
-    this.code = null;
-
     this.submitted = false;
   }
 
@@ -231,36 +339,57 @@ export class DealerComponent implements OnInit {
 
 
   update(event, index, id) {
-
+debugger
     this.showModal = true;
     this.isEditMode = true;
     this.id = id;
     console.log(this.id);
-
-
     let ids = index;
     if (this.isEditMode) {
 
-      this.usermanagementService.getByIdUser(this.id)
-        .subscribe(user => {
+      this.usermanagementService.getDealerById(this.id)
+        .subscribe(dealer => {
+          this.getZone();
+if(dealer){
+  this.dealer = dealer;
+  this.form.patchValue(this.dealer);
+ // this.form.controls['zoneCode'].patchValue(this.dealer.zoneCode);
+ this.zoneCode=this.dealer.zoneCode;;
+ this.subzoneCode=this.dealer.subzoneCode;
+ this.stateCode=this.dealer.stateCode;
+}
+  console.log("Form",this.form)
+ this.userzone = this.dealer.zoneCode;
+  this.usermarket = this.dealer.marketCode;
+  this.usersubzone = this.dealer.subzoneCode;
+  this.userstate = this.dealer.stateCode;
+});
+}
+}
 
-          this.user = user;
-          this.form.patchValue(this.user);
 
-          this.userzone = this.user.userZone;
-          this.userrole = this.user.role;
-          this.usermarket = this.user.createdAtmuserMarket;
-          this.usersubzone = this.user.userSubzone;
-          this.userstate = this.user.userState;
-          this.userdealer = this.user.userDealer;
+  updateDealer(id) {
+    debugger
+    console.log(this.form.value);
+    this.usermanagementService.updateDealer(id, this.form.value)
 
+      .subscribe(res => {
+        console.log(res);
+        this.alertService.success('Dealer updated successfully', { keepAfterRouteChange: true });
+        this.closeButton.nativeElement.click();
+        this.getAlldealers();
+      },
+        error => {
+          console.log(error)
+          this.alertService.error(error);
+          this.loading = false;
+          this.closeButton.nativeElement.click();
+        }
 
-        });
-    }
+      );
+
 
   }
-
-
 
 
 

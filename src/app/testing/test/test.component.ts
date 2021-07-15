@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ExcelService, ExcelServiceXlsx } from '../../_services/excel.service';
 
+
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
@@ -35,27 +36,26 @@ export class TestComponent implements OnInit {
   aqTestForDataId: any;
   dataQATestRowData: any;
   dataQaTesRowDatatDocs: any;
-
   trFormatedData = true;
   trRowData = false;
-
   machinedata = false;
   batchdata = false;
-  consumptiondata = false;
   formateAndRowDatashow = false;
-
   rowDataArray: any;
   msg: string;
   type: any;
-  shoxlsxbtn: boolean;
+  shoxlsxbtn=false;
   batchDatas: any;
   batchDatadocs: any;
-  consumptionDatas: any;
-  consumptionDatadocs: any;
   actualRowData: any;
+  actualRowData1: any;
   dataRow: any;
-  selectedRow : Number;
-  setClickedRow : Function;
+  selectedRow: Number;
+  setClickedRow: Function;
+  hideModal: boolean = true;
+  machineExcelData=[];
+  itemsperpage=50;
+
   constructor(private accountServices: AccountService,
     private excelxlsxService: ExcelServiceXlsx,
     private excelService: ExcelService,
@@ -64,10 +64,12 @@ export class TestComponent implements OnInit {
     private router: Router,
     private alertService: AlertService,
     private datePipe: DatePipe,
-  ) {  this.setClickedRow = function(index){
-    this.selectedRow = index;
+  ) {
+    this.setClickedRow = function (index) {
+      this.selectedRow = index;
 
-}}
+    }
+  }
 
   ngOnInit() {
 
@@ -80,7 +82,7 @@ export class TestComponent implements OnInit {
 
     this.getQAData();
     this.form = this.formBuilder.group({
-      type : '',
+      type: '',
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
     });
@@ -88,127 +90,172 @@ export class TestComponent implements OnInit {
   }
   get f() { return this.form.controls; }
   getQAData() {
+
+    this.loading = true;
     this.timeBetween = {
       gte: this.startDate,
       lt: this.endDate
     }
-    this.accountServices.getQAData(this.timeBetween).subscribe((data) => {
+    this.accountServices.getReportQATestData(this.timeBetween).subscribe((data) => {
       this.dataQA = data
       if (this.dataQA.status == 'Device has empty data') {
         this.alertService.error(this.dataQA.status);
+        this.clearAlert();
         this.loading = false;
       } else {
-        this.dataQADocs = this.dataQA.docs
-        console.log("Data QA Docs ",this.dataQADocs);
-        
+        this.dataQADocs = this.dataQA.array
+        console.log("Data QA Docs ", this.dataQADocs);
+
       }
 
     })
   }
   getReportQATestForMachineData(deviceID, deviceModel, type) {
+    debugger
+    console.log("hi");
+    this.hideModal = false;
+    this.trFormatedData = true;
+    this.trRowData=false;
     this.formateAndRowDatashow = true;
+    this.shoxlsxbtn=true;
     this.type = type;
-    this.dataQaTestDocs = '';
+    this.dataQaTestDocs = [];
     this.varantCode = deviceModel;
     this.aqTestForDataId = '5fe2e88d7cc3536c2c7bf2d9';
     this.devicenumberOnClicked = deviceID
-    
-     this.msg = "Machine Data - Device No : "+deviceID+" - Model : "+deviceModel;
-
-     this.machinedata = true;
-     this.batchdata = false;
-     this.consumptiondata = false;
-
-
+    this.msg = "Machine Data - Device No : " + deviceID + " - Model : " + deviceModel;
+    this.machinedata = true;
+    this.batchdata = false;
+    this.loading = true;
     this.timeBetween = {
       gte: this.form.value.startDate + "T00:00:00.000Z",
-      lt :this.form.value.endDate + "T00:00:00.000Z",
+      lt: this.form.value.endDate + "T00:00:00.000Z",
       deviceID: deviceID
     }
-    this.accountServices.getReportQATestForData(this.timeBetween).subscribe((data) => {
+    this.accountServices.getQATestMachineData(this.timeBetween).subscribe((data) => {
+      this.loading = false;
       this.dataQATest = data
-      this.dataQaTestDocs = this.dataQATest.docs
-      console.log("QA Test for data ",this.dataQATest)
-      this.getReportQATestForRowData();
+      if(data) {
+        if (this.dataQATest.status == 'Device has empty data') {
+          this.alertService.error(this.dataQATest.status);
+          this.clearAlert();
+          this.batchdata = false;
+          this.hideModal = true;
+        } else {
+          this.dataQaTestDocs = this.dataQATest.docs
+          this.dataQaTestDocs.forEach(element => {
+            if(element.extras)
+            {
+              element.extras.forEach(element1 => {
+                this.machineExcelData.push(
+                  {
+                    'Date & Time':element.devicePublishTime,
+                    'Latitude':element.lat,
+                    'Longitude':element.lng,
+                    'Power Source':element1.powerSource,
+                    'Battery Level(Volts)':element1.batteryLevel,
+                    'Fuel Level':element1.fuelLevel,
+                    'Coolant Temp':element1.coolantTemp,
+                    'Oil Pressure(bar)':element1.oilpressure,
+                    'Ignition Status(Volts)':element1.ignitionStatus,
+                    'RPM':element1.rpm,
+                    'Parking Switch':element1.parkingSwitch,
+                    'Hydraulic Oil Filter':element1.hydralicOilFilterChoke,
+                  }
+                )
+              });
+            
+            }
+          });
+        
+          this.hideModal = false;
+        }
+      }
+      
     })
+  }
+
+  clearData() {
+    this.hideModal = true;
   }
   getReportQATestForRowData() {
-    console.log(this.timeBetween)
-    this.accountServices.getReportQATestForRowDataAPI(this.timeBetween).subscribe((data) => {
-      this.dataQATestRowData = data
-      this.dataQaTestDocs = this.dataQATestRowData.docs
-       
-      // console.log(this.dataQATestRowData)
-      // this.dataRow = this.actualRowData.rawData
+    debugger
+    this.loading = true;
+    this.shoxlsxbtn = false;
+  //  if (this.machinedata == true) {
+      this.actualRowData = [];
+      this.actualRowData1 = [];
+      this.dataQaTestDocs = [];
+      this.accountServices.getQATestMachineData(this.timeBetween).subscribe((data) => {
+        this.loading = false;
+        this.dataQATestRowData = data
+        if (this.dataQATestRowData.status == 'Device has empty data') {
+          this.alertService.error(this.dataQATest.status);
+          this.clearAlert();
+          this.loading = false;
+          this.dataQaTestDocs = [];
+        }
+        else {
+          this.dataQaTestDocs = this.dataQATestRowData.docs;
 
-      // this.rowDataArray = this.dataRow.replace('[', '').replace(']', '').split(',');
-      // console.log(this.rowDataArray)
-      // console.log(this.dataQaTestDocs.length)
+          var rowDataArray = [];
+          for (var i = 0; i < this.dataQaTestDocs.length; i++) {
+            rowDataArray.push({
+              rowData: this.dataQaTestDocs[i].rawData.replace('[', '').replace(']', '').split(',')
+            })
+          }
+          rowDataArray.forEach(element => {
+            if (element.rowData.length == 47) {
+              this.actualRowData1 = rowDataArray;
+            }
+            else {
+              this.actualRowData = rowDataArray;
+            }
 
-      var rowDataArray = [];
-      for (var i = 0; i < this.dataQaTestDocs.length; i++) {
-        rowDataArray.push({
-          rowData: this.dataQaTestDocs[i].rawData.replace('[', '').replace(']', '').split(',')
-        })
-      }
-      this.actualRowData = rowDataArray;
-      console.log(this.actualRowData);
-    })
+          }
+          );
+        }
+      })
+   // }
+
   }
 
-  getReportQATestForBatchData(deviceID, deviceModel, id,type) {
-    this.formateAndRowDatashow = false;
+  getReportQATestForBatchData(deviceID, deviceModel, type) {
+   debugger
+    this.formateAndRowDatashow=false;
+    this.machinedata=false;
+    this.batchdata = true;
     this.type = type;
-    this.dataQaTestDocs = '';
+    this.shoxlsxbtn = false;
     this.varantCode = deviceModel;
     this.aqTestForDataId = '5fe2e88d7cc3536c2c7bf2d9';
     this.devicenumberOnClicked = deviceID
-
-    this.msg = "Batch Data - Device No : "+deviceID+" - Model : "+deviceModel;
-
-    this.machinedata = false;
-     this.batchdata = true;
-     this.consumptiondata = false;
-   
+    this.loading = true;
+    this.hideModal = false;
+    this.msg = "Batch Data - Device No : " + deviceID + " - Model : " + deviceModel;
     this.timeBetween = {
       gte: this.form.value.startDate + "T00:00:00.000Z",
       lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
       deviceID: this.devicenumberOnClicked
     }
-    this.accountServices.getBatchData(this.timeBetween).subscribe((data) => {
+    this.accountServices.getQATestBatchData(this.timeBetween).subscribe((data) => {
+      this.loading = false;
       this.batchDatas = data
-      this.batchDatadocs = this.batchDatas.docs
-      console.log("Batch ", this.batchDatas)
-      this.getReportQATestForRowData();
-
+      if (this.batchDatas.status == 'Device has empty data') {
+        this.alertService.error(this.batchDatas.status);
+        this.clearAlert();
+        this.loading = false;
+        this.hideModal = true;
+        this.batchDatadocs = [];
+      } 
+      else {
+        this.batchDatadocs = this.batchDatas.docs
+        this.loading = false;
+        this.hideModal = false;
+      }
     })
   }
-  getReportQATestForCunsumptinoData(deviceID, deviceModel, id,type){
-    this.formateAndRowDatashow = false;
-    this.type = type;
-    this.dataQaTestDocs = '';
-    this.varantCode = deviceModel;
-    this.aqTestForDataId = '5fe2e88d7cc3536c2c7bf2d9';
-    this.devicenumberOnClicked = deviceID;
 
-    this.msg = "Cunsumption Data - Device No : "+deviceID+" - Model : "+deviceModel;
-
-    this.machinedata = false;
-     this.batchdata = false;
-     this.consumptiondata = true;
-  
-    this.timeBetween = {
-      gte: this.form.value.startDate + "T00:00:00.000Z",
-      lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
-      deviceID: this.devicenumberOnClicked
-    }
-    this.accountServices.getConsumptionData(this.timeBetween).subscribe((data) => {
-      this.consumptionDatas = data
-      this.consumptionDatadocs = this.consumptionDatas.docs
-      console.log("consumptions ",this.consumptionDatas);
-      this.getReportQATestForRowData();
-    })
-  }
 
   onSubmit() {
     this.submitted = true;
@@ -216,66 +263,100 @@ export class TestComponent implements OnInit {
 
     if (this.form.invalid) {
       return;
-    }else if(this.form.value.type == 'report'){
+    } else if (this.form.value.type == 'report') {
+      this.batchdata = false;
+      this.machinedata = true;
+      this.trRowData=false;
+      this.trFormatedData = true;
+      this.shoxlsxbtn=true;
+      this.dataQaTestDocs = [];
       this.timeBetween = {
         gte: this.form.value.startDate + "T00:00:00.000Z",
-        lt :this.form.value.endDate + "T00:00:00.000Z",
+        lt: this.form.value.endDate + "T00:00:00.000Z",
         deviceID: this.aqTestForDataId
       }
       console.log(this.timeBetween);
-      
-      this.accountServices.getReportQATestForData(this.timeBetween).subscribe((data) => {
+      this.loading = true;
+      this.accountServices.getQATestMachineData(this.timeBetween).subscribe((data) => {
+        this.loading = false;
+        this.formateAndRowDatashow = true;
         this.dataQATest = data
-        this.dataQaTestDocs = this.dataQATest.docs
-        console.log(this.dataQaTestDocs)
-        this.getReportQATestForRowData();
-      })
-    }else if(this.form.value.type == 'batch'){
-      this.timeBetween = {
-        gte: this.form.value.startDate + "T00:00:00.000Z",
-        lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
-        deviceID: this.devicenumberOnClicked
-      }
-      console.log(this.timeBetween);
-      
-      this.accountServices.getBatchData(this.timeBetween).subscribe((data) => {
-        this.batchDatas = data
-        this.batchDatadocs = this.batchDatas.docs
-        console.log("Batch ", this.batchDatas)
-        this.getReportQATestForRowData();
-  
-      })
-    }else if(this.form.value.type == 'consumption'){
-      this.timeBetween = {
-        gte: this.form.value.startDate + "T00:00:00.000Z",
-        lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
-        deviceID: this.devicenumberOnClicked
-      }
-      console.log(this.timeBetween);
-      
-      this.accountServices.getConsumptionData(this.timeBetween).subscribe((data) => {
-        this.consumptionDatas = data
-        this.consumptionDatadocs = this.consumptionDatas.docs
-        console.log("consumptions ",this.consumptionDatas);
-        this.getReportQATestForRowData();
-      })
-    }else{
-      this.timeBetween = {
-        gte: this.form.value.startDate + "T00:00:00.000Z",
-        lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z"
-      }
-      this.accountServices.getQAData(this.timeBetween).subscribe((data) => {
-        this.loading = true;
-        this.dataQA = data
-        if (this.dataQA.status == 'Device has empty data') {
-          this.alertService.error(this.dataQA.status);
+        if (this.dataQATest.status == 'Device has empty data') {
+          this.alertService.error(this.dataQATest.status);
+          this.clearAlert();
           this.loading = false;
+          this.batchdata = false;
         } else {
-          this.dataQADocs = this.dataQA.docs
+          this.dataQaTestDocs = this.dataQATest.docs
+            this.dataQaTestDocs.forEach(element => {
+            if(element.extras)
+            {
+              element.extras.forEach(element1 => {
+                this.machineExcelData.push(
+                  {
+                    'Date & Time':element.devicePublishTime,
+                    'Latitude':element.lat,
+                    'Longitude':element.lng,
+                    'Power Source':element1.powerSource,
+                    'Battery Level(Volts)':element1.batteryLevel,
+                    'Fuel Level':element1.fuelLevel,
+                    'Coolant Temp':element1.coolantTemp,
+                    'Oil Pressure(bar)':element1.oilpressure,
+                    'Ignition Status(Volts)':element1.ignitionStatus,
+                    'RPM':element1.rpm,
+                    'Parking Switch':element1.parkingSwitch,
+                    'Hydraulic Oil Filter':element1.hydralicOilFilterChoke,
+                  }
+                )
+              });
+            
+            }
+          });
+          console.log(this.dataQaTestDocs)
           this.loading = false;
-          console.log(this.dataQADocs)
+          this.machinedata = true;
+          // if (this.trRowData == true) {
+          //   this.actualRowData = [];
+          //   this.actualRowData1 = [];
+          //   this.getReportQATestForRowData();
+          // }
         }
-  
+
+        //this.getReportQATestForRowData();
+      })
+    } else if (this.form.value.type == 'batch') {
+      this.formateAndRowDatashow = false;
+      this.loading = true;
+      this.batchDatadocs = [];
+      this.batchdata = true;
+      this.machinedata = false;
+      this.shoxlsxbtn = false;
+      // this.trRowData=false;
+      this.timeBetween = {
+        gte: this.form.value.startDate + "T00:00:00.000Z",
+        lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
+        deviceID: this.devicenumberOnClicked
+      }
+      console.log(this.timeBetween);
+
+      this.accountServices.getQATestBatchData(this.timeBetween).subscribe((data) => {
+        this.loading = false;
+        this.batchDatas = data
+        if (this.batchDatas.status == 'Device has empty data') {
+          this.alertService.error(this.batchDatas.status);
+          this.clearAlert();
+          this.loading = false;
+          this.machinedata = false;
+        } else {
+          this.batchDatadocs = this.batchDatas.docs
+          console.log("Batch ", this.batchDatas)
+          this.loading = false;
+          this.batchdata = true;
+
+        }
+
+        // this.getReportQATestForRowData();
+
       })
     }
 
@@ -284,19 +365,30 @@ export class TestComponent implements OnInit {
   formatedData() {
     this.shoxlsxbtn = true;
     this.trFormatedData = true;
+    //this.trFormatedData1 = true;
     this.trRowData = false;
+    this.formateAndRowDatashow=true;
   }
   rowData() {
     this.trFormatedData = false;
     this.trRowData = true;
     this.shoxlsxbtn = false;
+    this.actualRowData = [];
+    this.actualRowData1 = [];
+    this.getReportQATestForRowData();
   }
 
   exportAsXLSX(): void {
     this.excelxlsxService.exportAsExcelFile(this.dataQADocs, 'QA_Testing');
   }
   exportAsXLSXMachine(): void {
-    this.excelxlsxService.exportAsExcelFile(this.dataQaTestDocs, 'QA_Machine');
+      this.excelxlsxService.exportAsExcelFile(this.machineExcelData, 'QA_Machine');
+   
+  }
+  clearAlert() {
+    setTimeout(() => {
+      this.alertService.clear();
+    }, 4000);
   }
 }
 

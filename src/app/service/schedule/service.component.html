@@ -1,10 +1,12 @@
 <div class="row">
     <div class="col-md-6 banner-sec">
-        <h2 style="margin-bottom: 5%;">
+<a onclick="goBack()"><i class="fa fa-arrow-circle-left" style="margin: 10px 0;"></i> Back </a> 
+        
+        <h5 style="margin-bottom: 2%;">
             Upcoming Services
-        </h2>
+        </h5>
     </div>
-    <div class="col-md-6 banner-sec">
+    <div class="col-md-6 banner-sec m-mb-1 mob-date">
         <div ng-app ng-controller="Ctrl" style="text-align: right; margin-top: 10px;">
         <b style="margin-bottom: 0px;">
             {{date | date:'dd.MM.yyyy'}}
@@ -17,11 +19,7 @@
 </div>
 
 
-
-
-
-
-<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
     [style.display]='showModal? "block":"none"'>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -36,31 +34,25 @@
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
                     <!-- <app-add></app-add>  add.component.ts -->
                     <div class="row" style="margin-top: 10px;">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label>Device Model </label><br>
                             <input type="text" placeholder="XXXXXX"  readonly [(ngModel)]="deviceModel" formControlName="dmodel" class="form-control" />
 
                         </div>
-                        
+
+                        <div class="col-md-6">
+                            <label>Pin No </label><br>
+                            <input type="text" placeholder="XXXXXX" readonly [(ngModel)]="pinno"  formControlName="pinno" id="pinno" class="form-control"/>
+                        </div>
                     </div>
 
                     <div class="row" style="margin-top: 10px;">
-                        <div class="col-md-6">
-                            <label>Pin No </label><br>
-                            <input type="text" placeholder="XXXXXX" readonly [(ngModel)]="pinno"  formControlName="pinno" id="pinno" class="form-control" 
-                            />
-
-                        </div>
                         <div class="col-md-6">
                             <label>Engine Hours</label><br>
                             <input type="text"  formControlName="enhr" 
                             readonly [(ngModel)]="enhr"
                             class="form-control" />
-
                         </div>
-                    </div>
-
-                    <div class="row" style="margin-top: 10px;">
                         <div class="col-md-6">
                             <label> <span class="required-asterisk">*</span>Service Number </label><br>
                             <input type="text" placeholder="XXXXXX" formControlName="serviceNumber" 
@@ -70,15 +62,6 @@
                             <div *ngIf="submitted && f.serviceNumber.errors" class="invalid-feedback">
                                 <div *ngIf="f.serviceNumber.errors.required">Service Number is required</div>
                             </div>
-
-                        </div>
-                        <div class="col-md-6">
-                            <label>Service Engineer</label><br>
-                            <select class="form-control" formControlName="serveng" class="form-control"
-                            >
-                            <option></option>
-                            <option ></option>
-                        </select>
                         </div>
                     </div>
 
@@ -95,15 +78,22 @@
                             <div *ngIf="submitted && f.scheduledCompletionDate.errors" class="invalid-feedback">
                                 <div *ngIf="f.scheduledCompletionDate.errors.required">Expected Date Of Completion is required</div>
                             </div>
-
-                        
                         </div>
                     </div>
 
-
-                   <br>
+                    <!-- Data for Send Notification start here -->
+                    <div style="display: none;">
+                        <input type="text" placeholder="Device ID"  readonly [(ngModel)]="deviceId" formControlName="deviceId1" class="form-control" />
+                        <input type="text" placeholder="Company ID"  readonly [(ngModel)]="companyId" formControlName="companyId1" class="form-control" />
+                        <input type="text" placeholder="Customer Mobile"  readonly [(ngModel)]="customerMob" formControlName="customerMob1" class="form-control" />
+                        <input type="text" placeholder="Machine No."  readonly [(ngModel)]="engineNo" formControlName="engineNo1" class="form-control" />
+                        <input type="text" placeholder="Type"  readonly [(ngModel)]="type" formControlName="type1" class="form-control" />
+                    </div>
+                    <!-- Data for Send Notification end here -->
+                    
+                    <br>
                     <div class="form-group" style="text-align: center;">
-
+                        
                         <button [disabled]="loading" type="submit" class="btn btn-primary" id="closeModel">
                             Save
                         </button>&nbsp;
@@ -121,15 +111,12 @@
 </div>
 
 
-
-
-
 <div class="row" style="margin-bottom: 10px;">
     <div class="col-md-6" >
         <div class="input-group-icon input-group-icon-left mr-3">
             <form class="form-inline">
             <i class="fas fa-search" aria-hidden="true"></i>
-            <input class="form-control form-control-sm ml-3 w-75" id="key-search" type="text"
+            <input class="form-control form-control-sm ml-3 w-87" id="key-search" type="text"
                 name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Search Device"
                 style="background-color: #d9d9d9; ">
         </form>
@@ -183,7 +170,7 @@
                     <li>
                     <button type="button"  class="btn btn-success" style="background-color:  #3385ff; padding: 1px 7px; float: right;"
                     data-toggle="modal"
-                    data-target="#exampleModal2" (click)="register(mod.pinno,mod.totalEngineHours,mod.upcomingServices[t].serviceNumber,mod.deviceModel)">
+                    data-target="#exampleModal3" (click)="register(mod.pinno,mod.totalEngineHours,mod.upcomingServices[t].serviceNumber, mod.deviceModel, mod.deviceID, mod.companyID, mod.customerMobile, mod.engineNumber, mod.type)">
                         <i class="fa fa-plus" aria-hidden="true" style="width: 30px; -webkit-text-stroke: 0.05px white;">
                         
                         </i>

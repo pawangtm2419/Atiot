@@ -15,6 +15,7 @@ declare var google: any;
 })
 export class ListComponent implements OnInit {
   location = null;
+  date = new Date();
   form: FormGroup;
   submitted = false;
   formdata: any;
@@ -35,11 +36,12 @@ export class ListComponent implements OnInit {
   areaDetails = { fieldName: '', companyID: '', maxIdealTime: '' };
   deletePoi: any;
   locationDocs: any;
-  constructor(private accountService: AccountService, private formBuilder: FormBuilder, 
+  status: any;
+  constructor(private accountService: AccountService, private formBuilder: FormBuilder,
     private alertService: AlertService,
-    private auth: AuthService) { 
-      this.auth.authFunction(window.location.pathname);
-     }
+  ) {
+   
+  }
 
   ngAfterViewInit() {
     MapLoaderService.load().then(() => {
@@ -86,6 +88,27 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit() {
+this.checkAgreement();
+  }
+
+  checkAgreement(){
+    if(JSON.parse(localStorage.getItem('user')).role =='customer' || JSON.parse(localStorage.getItem('user')).role == 'dealer')
+    {
+      if(JSON.parse(localStorage.getItem('user')).agreementSignedOn == null)
+      {
+        this.accountService.logout();
+      } else {
+  this.helperFunction();
+      }
+    }
+    else
+    {
+      this.helperFunction();
+    }
+  }
+
+  helperFunction(){
+    this.createUserLOgs();
     this.getAllLocatin()
     this.form = this.formBuilder.group({
       fieldName: ['', Validators.required],
@@ -95,24 +118,49 @@ export class ListComponent implements OnInit {
       // stateCode: ['', Validators.required]
     });
   }
+  createUserLOgs(){
+    let params={
+        "loginName":JSON.parse(localStorage.getItem('user')).loginName,
+        "module":"MASTER",
+        "function":"LOCATION",
+        "type":"web"
+    }
+    this.accountService.createUserlogs(params).subscribe((data) => {    
+         this.status=data['status'];
+         console.log("status",this.status);
+      },
+        error => {
+          this.alertService.error(error);
+        })
+    }
   get f() { return this.form.controls; }
 
   getAllLocatin() {
-    this.accountService.getAllLocation()
+    let params=
+    {
+      "useType":JSON.parse(localStorage.getItem('user')).useType,
+    "loginName":JSON.parse(localStorage.getItem('user')).loginName, 
+}
+ 
+    this.accountService.getAllLocation(params)
       .pipe(first())
       .subscribe((location) => {
         this.locationDocs = location
         this.location = this.locationDocs.docs
         console.log(this.location);
-        
+ 
         return this.location
       });
   }
   deletePoiRow(id: string) {
-    this.accountService.deletePoiAreaRow(id).subscribe((data) => {
-      this.deletePoi = data
-      this.getAllLocatin()
-    })
+    let result = window.confirm("Are you sure you want to delete the record?")
+    if (result == true) {
+      this.accountService.deletePoiAreaRow(id).subscribe((data) => {
+        this.deletePoi = data
+        this.alertService.success('Location deleted successfully', { keepAfterRouteChange: true });
+        this.getAllLocatin()
+      })
+    }
   }
 
   onSubmit() {
@@ -126,6 +174,7 @@ export class ListComponent implements OnInit {
         return
       } else {
         this.formdata = {
+          loginName:JSON.parse(localStorage.getItem('user')).loginName,
           fieldName: this.form.value.fieldName,
           radius: 0,
           maxIdealTime: this.form.value.maxIdealTime,
@@ -152,7 +201,7 @@ export class ListComponent implements OnInit {
         })
       }
     }
-  } 
+  }
   viewPolygon(id) {
     this.areaDetails = {
       fieldName: this.location[id].fieldName,

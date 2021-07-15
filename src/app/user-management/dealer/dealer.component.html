@@ -39,14 +39,18 @@
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-md-6">
                             <label><span class="required-asterisk" style='color: red;'>*</span>Dealer Name</label><br>
-                            <input type="text" placeholder="Dealer Name" formControlName="name" class="form-control" />
-
+                            <input type="text" placeholder="Dealer Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors}" formControlName="name" class="form-control" />
+                            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                <div *ngIf="f.name.errors.required">Dealer Name is required</div>
+                            </div>
                             
                         </div>
                         <div class="col-md-6">
                             <label><span class="required-asterisk" style='color: red;'>*</span> Dealer Code</label><br>
-                            <input type="text" placeholder="Dealer Code" formControlName="code" class="form-control" />
-
+                            <input type="text" placeholder="Dealer Code" formControlName="code" [ngClass]="{ 'is-invalid': submitted && f.code.errors}" class="form-control" />
+                            <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                                <div *ngIf="f.code.errors.required">Dealer Code is required</div>
+                            </div>
                         </div>
                         
                         
@@ -55,15 +59,17 @@
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-md-6">
                             <label> <span class="required-asterisk" style='color: red;'>*</span> Market/Country </label><br>
-                            <select class="form-control"  formControlName="marketCode">
-                            
-                            <option value="India"> India </option>
-                         
+                            <select class="form-control"  formControlName="marketCode" (click)="getZone()"
+                            [ngClass]="{ 'is-invalid': submitted && f.marketCode.errors }">
+                            <option *ngFor="let mar of market">{{mar.code}}</option>                         
                         </select>
+                        <div *ngIf="submitted && f.marketCode.errors" class="invalid-feedback">
+                            <div *ngIf="f.marketCode.errors.required">Market/Country is required</div>
+                        </div>
                         </div>
                         <div class="col-md-6">
                             <label> Address</label><br>
-                            <textarea class="form-control" rows="2" id="to" placeholder="Enter Here"></textarea>
+                            <textarea class="form-control" formControlName="address" rows="2" id="to" placeholder="Enter Here"></textarea>
                         </div>
                     </div>
 
@@ -71,14 +77,21 @@
                         <div class="col-md-6">
                             <label> <span class="required-asterisk" style='color: red;'>*</span> Select Zone </label><br>
                             <select class="form-control" formControlName="zoneCode" 
-                           >
-                           <option value="north"> North </option>
+                            (click)="getSubZone()"
+                            [ngClass]="{ 'is-invalid': submitted && f.zoneCode.errors }" >
+                            <option>{{zoneCode}}</option>
+                            <option *ngFor="let zon of zone">
+                                <span>{{zon.code}}</span>
+                            </option>
                           
                         </select>
+                        <div *ngIf="submitted && f.zoneCode.errors" class="invalid-feedback">
+                            <div *ngIf="f.zoneCode.errors.required">Zone is required</div>
+                        </div>
                         </div>
                         <div class="col-md-6">
                             <label>Pin Code</label><br>
-                            <input type="text" placeholder="Dealer Code"  class="form-control" />
+                            <input type="text" class="form-control" placeholder="Pin Code" formControlName="pinCode"  class="form-control" />
 
                         </div>
                     </div>
@@ -87,14 +100,20 @@
                         <div class="col-md-6">
                             <label> <span class="required-asterisk" style='color: red;'>*</span> Select Sub-Zone </label><br>
                             <select class="form-control"  formControlName="subzoneCode"
-                           >
-                            <option value="north"> North </option>
-                           
+                            (click)="getState()"
+                            [ngClass]="{ 'is-invalid': submitted && f.subzoneCode.errors }"
+                            >
+                            <option>{{subzoneCode}}</option>
+                            <option *ngFor="let sub of subzone">{{sub.code}}</option>
+
                         </select>
+                        <div *ngIf="submitted && f.subzoneCode.errors" class="invalid-feedback">
+                            <div *ngIf="f.subzoneCode.errors.required">Subzone is required</div>
+                        </div>
                         </div>
                         <div class="col-md-6">
-                            <label>Lat</label><br>
-                            <input type="text" placeholder="Lat"  class="form-control" />
+                            <label>Latitude</label><br>
+                            <input type="text" class="form-control" placeholder="Lat" formControlName="lat"  class="form-control" />
 
                         </div>
                     </div>
@@ -103,19 +122,36 @@
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-md-6">
                             <label> <span class="required-asterisk" style='color: red;'>*</span> State </label><br>
-                            <select class="form-control" formControlName="stateCode"
-                           >
-                            <option value="maharashtra"> Maharashtra</option>
+                            <select class="form-control" formControlName="stateCode" [value]='stateCode'
+                            [ngClass]="{ 'is-invalid': submitted && f.stateCode.errors }">
+                            <option>{{stateCode}}</option>
+                            <option *ngFor="let state of states">{{state.name}}</option>
                            
                         </select>
+                        <div *ngIf="submitted && f.stateCode.errors" class="invalid-feedback">
+                            <div *ngIf="f.stateCode.errors.required">State is required</div>
+                        </div>
                         </div>
                         <div class="col-md-6">
-                            <label>Lng</label><br>
-                            <input type="text" placeholder="Lng"  class="form-control" />
+                            <label>Longitude</label><br>
+                            <input type="text" class="form-control" placeholder="Lng" formControlName="lng" class="form-control" />
 
                         </div>
                     </div>
-                
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <label>Contact No.</label><br>
+                            <input type="text" placeholder="Contact Number" [pattern]="mobileNumberPattern" maxlength="10" [ngClass]="{ 'is-invalid': submitted && f.contactNo.errors && f.contactNo.dirty}"  formControlName="contactNo" class="form-control"/>
+                            <div *ngIf="submitted && f.contactNo.errors && f.contactNo.dirty" class="invalid-feedback">
+                            <div *ngIf="f.contactNo.errors.pattern">Please, Enter 10 digit Mobile Number.</div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Contact Person</label><br>
+                            <input type="text" placeholder="Contact Person" formControlName="contactPerson" class="form-control" />
+
+                        </div>
+                    </div>
                    <br>
                
                     
@@ -149,7 +185,9 @@
         </div>
     </div>
     <div class="col-md-6">
-         <button type="button"  class="btn btn-success" (click) = "addMachine()"
+        <input type="checkbox" [(ngModel)]="isChecked" style="margin-right: 10px;"
+        (change)="inactiveRecords(isChecked)"> Show Inactive Dealers
+         <button type="button"  class="btn btn-success" (click) = "addDealer()"
          data-toggle="modal"
          data-target="#exampleModal" style="background-color:  #3385ff; padding: 2px 10px; float: right;">
 
@@ -192,11 +230,11 @@
               
                 <td style="white-space: nowrap">
                     <button type="button" id="closeModel"
-                        class="btn btn-sm btn-primary mr-1"  data-toggle="modal" data-target="#exampleModal"
+                        class="btn btn-sm btn-primary mr-1"  data-toggle="modal" data-target="#exampleModal" (click)="update($event,i,deal.id)"
                         style="padding: 1px 5px;">
                         Edit
                     </button>
-                    <button class="btn btn-sm btn-danger btn-delete-user" style="padding: 1px 5px;"> Delete
+                    <button class="btn btn-sm btn-danger btn-delete-user" style="padding: 1px 5px;" (click)="deleteDealer(deal.id)"> Delete
                         <!-- <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
                         <span *ngIf="!user.isDeleting">Delete</span> -->
                     </button>

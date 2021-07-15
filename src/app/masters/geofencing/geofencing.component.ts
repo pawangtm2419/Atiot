@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '@app/_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-geofencing',
@@ -33,31 +34,74 @@ export class GeofencingComponent implements OnInit {
   geofencelist: any;
   geofencelistDocs: any;
   locationData: any;
+  pinNo=environment.labelpinno;
+  status: any;
   constructor(private accountService: AccountService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private alertService: AlertService) { }
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      pinno: '',
-      poi: ['', Validators.required],
-    });
-    this.getGeofenceList()
-    this.getGeoFenceLocation()
-    this.getAllLocatin();
+this.checkAgreement();    
+}
+createUserLOgs(){
+  let params={
+      "loginName":JSON.parse(localStorage.getItem('user')).loginName,
+      "module":"MASTER",
+      "function":"GEOFENCING",
+      "type":"web"
   }
+  this.accountService.createUserlogs(params).subscribe((data) => {    
+       this.status=data['status'];
+       console.log("status",this.status);
+    },
+      error => {
+        this.alertService.error(error);
+      })
+  }
+
+checkAgreement(){
+  if(JSON.parse(localStorage.getItem('user')).role =='customer' || JSON.parse(localStorage.getItem('user')).role == 'dealer')
+  {
+    if(JSON.parse(localStorage.getItem('user')).agreementSignedOn == null)
+    {
+      this.accountService.logout();
+    } else {
+this.helperFunction();
+    }
+  }
+  else
+  {
+    this.helperFunction();
+  }
+}
+
+helperFunction() {
+  this.createUserLOgs();
+  this.form = this.formBuilder.group({
+    pinno: '',
+    poi: ['', Validators.required],
+  });
+  this.getGeofenceList()
+  this.getGeoFenceLocation()
+  this.getAllLocation();
+}
   get f() { return this.form.controls; }
 
   getGeofenceList() {
-    this.accountService.getAllGeofenceList().subscribe((data) => {
-      // console.log(data)
-      this.geofencelist = data
-      this.geofencelistDocs = this.geofencelist.docs;
-      console.log(this.geofencelistDocs);
+    let params=
+   {
+     "useType":JSON.parse(localStorage.getItem('user')).useType,
+   "loginName":JSON.parse(localStorage.getItem('user')).loginName, 
+}
+   this.accountService.getAllGeofenceList(params).subscribe((data) => {
+     // console.log(data)
+     this.geofencelist = data
+     this.geofencelistDocs = this.geofencelist.docs;
+     console.log(this.geofencelistDocs);
 
-    })
-  }
+   })
+ }
 
   getPinno(pinno) {
     this.pinno = pinno
@@ -104,17 +148,37 @@ export class GeofencingComponent implements OnInit {
 
     })
   }
-  getAllLocatin() {
-    this.accountService.getAllLocation()
+  getAllLocation() {
+    let params=
+    {
+      "useType":JSON.parse(localStorage.getItem('user')).useType,
+    "loginName":JSON.parse(localStorage.getItem('user')).loginName, 
+     }
+    this.accountService.getAllLocation(params)
       .pipe(first())
       .subscribe((location) => {
         this.locationDocs = location
         this.location = this.locationDocs.docs
         console.log(this.location);
-
         return this.location
       });
   }
+//   getAllLocation() {
+//     let params=
+//    {
+//      "useType":JSON.parse(localStorage.getItem('user')).useType,
+//    "loginName":JSON.parse(localStorage.getItem('user')).loginName, 
+// }
+//    this.accountService.getAllLocation(URLSearchParams)
+//      .pipe(first())
+//      .subscribe((location) => {
+//        this.locationDocs = location
+//        this.location = this.locationDocs.docs
+//        console.log(this.location);
+
+//        return this.location
+//      });
+//  }
 
 
   // Test get address

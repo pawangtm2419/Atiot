@@ -77,29 +77,29 @@
             <tr>
                 <th style="vertical-align: top;">#</th>
                 <th style="vertical-align: top;">Title</th>
-                <th style="vertical-align: top;">Pin No.</th>
-                <th style="vertical-align: top;">Type</th>
-                <!-- <th style="vertical-align: top;">Mode</th> -->
-                <th style="vertical-align: top;">Sent To</th>
+                <th style="vertical-align: top;">Machine</th>
+               <!-- <th style="vertical-align: top;">Type</th>
+                 <th style="vertical-align: top;">Mode</th> -->
+                
                 <th style="vertical-align: top;">Message</th>
                 <th style="vertical-align: top;"> Date & Time </th>
-                <th style="vertical-align: top;">Created On</th>
+                <th style="vertical-align: top;">Sent To</th>
                 <th style="vertical-align: top;">Device Id</th>
             </tr>
         </thead>
         <tbody>
             <!-- <tr *ngFor="let v of variant"> -->
-            <tr *ngFor="let n of notification | filter:searchText | paginate : {itemsPerPage : 50, currentPage : p} let i = index"
+            <tr *ngFor="let n of notification | filter:searchText | paginate : {itemsPerPage : 100, currentPage : p} let i = index"
                 (click)="setClickedRow(i)" [class.active]="i == selectedRow">
                 <td>{{i+1}}</td>
                 <td>{{n.title}} </td>
-                <td>{{n.machineno}}</td>
-                <td>{{n.type}}</td>
-                <!-- <td></td> -->
-                <td>{{n.mobileNumber}}</td>
+                <td>{{n.pinno}}</td>
+               <!-- <td>{{n.type}}</td>
+                 <td></td> -->
+               
                 <td>{{n.message}}</td>
-                <td> {{n.createdAt | date:'dd-MM-yyyy'}} {{n.createdAt | date:'hh:mm:ss'}} </td>
-                <td> {{n.dueDate | date:'dd-MM-yyyy'}}</td>
+                <td> {{n.createdAt | date:'dd-MM-yyyy'}} {{n.createdAt |date:'h:mm:ss a':'+0000'}} </td>
+                <td>{{n.mobileNumber}}</td>
                 <td>{{n.deviceID}}</td>
             </tr>
             <!-- <tr *ngIf="!track">

@@ -46,12 +46,29 @@ export class UsermanagemntService {
 
     }
     deleteUsers(id){
+        //delete User data
+ var headers_object = new HttpHeaders({​​​​​​​​​​​​ 'Content-Type':'application/json', 'Authorization':"Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID':environment.companyID }​​​​​​​​​​​​);
+    const httpOptions = {​​​​​​​​​​​​ headers:headers_object }​​​​​​​​​​​​;
+    const URL = environment.apiUrl + '/users/deleteUser/' + id;
+    console.log("url", URL)
+    return this.http.put(URL, httpOptions);
+    }
+    deleteDealers(id){
+        //delete dealer data
+        var headers_object = new HttpHeaders({​​​​ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID }​​​​);
+        const httpOptions = {​​​​ headers: headers_object }​​​​;
+        const URL = environment.apiUrl + '/masters/dealer/deleteDealer/' + id;
+        console.log("url", URL)
+        return this.http.put(URL, httpOptions);
+    }
+    getDealerById(id){
+
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
+        return this.http.get(`${environment.apiUrl}/masters/dealer/id/${id}`,httpOptions);
 
     }
-
     getMarket(){
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
@@ -71,7 +88,6 @@ export class UsermanagemntService {
     newUser(user: Userm) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-
         return this.http.post<Userm[]>(`${environment.apiUrl}/users/register`, user,httpOptions);
 
 
@@ -91,41 +107,47 @@ export class UsermanagemntService {
 
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-
         return this.http.get<Zone>(`${environment.apiUrl}/masters/zone/${country}`,httpOptions);
     }
 
     getSubZone(zone){
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-
-
         return this.http.post<any>(`${environment.apiUrl}/masters/subzone`, zone ,httpOptions );
     }
 
     getState(subzone){
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-
         return this.http.post<any>(`${environment.apiUrl}/masters/states`, subzone ,httpOptions);
     }
-
+    getStateData(data){
+        //Get Admin State list
+        var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
+            const httpOptions = { headers: headers_object };
+            return this.http.post(`${environment.apiUrl}/users/stateData`,data, httpOptions); 
+        }
     getDealers(state){
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-
         return this.http.post<any>(`${environment.apiUrl}/masters/dealer`, state ,httpOptions);
     }
-
 
     updateUser(id, params) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-
         return this.http.put(`${environment.apiUrl}/users/${id}`, params ,httpOptions)
             .pipe(map((x) => {
                 return x;
-
+            }));
+    }
+    updateDealer(id, params) {
+        //Update dealer data
+        var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
+        const httpOptions = { headers: headers_object };
+        return this.http.put(`${environment.apiUrl}/masters/dealer/update/${id}`, params, httpOptions)
+            .pipe(map(x => {
+                return x;
             }));
     }
     getAlldealers() {

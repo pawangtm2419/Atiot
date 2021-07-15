@@ -1,4 +1,3 @@
-
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { first } from 'rxjs/operators';
 
@@ -8,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Master } from '@app/_models';
 import { DatePipe } from '@angular/common';
 import { environment } from '@environments/environment';
-import { AuthService } from '@app/_services/auth.service';
+
 
 
 @Component({
@@ -25,6 +24,9 @@ export class UsersComponent implements OnInit {
   model = null;
   variant = null;
   form: FormGroup;
+  fieldTextType: boolean;
+  fieldTextType1: boolean;
+  showPassword = false;
   submitted = false;
   loading = false;
   p: number = 1;
@@ -33,11 +35,14 @@ export class UsersComponent implements OnInit {
   editMachineData: Master;
   id: string;
   deviceModel;
+  isChecked;
   market = null;
   zone = null;
   role = null;
   subzone = null;
+  disable = false;
   states = null;
+  ifZone=false;
   dealer = null;
   userzone = null;
   usersubzone = null;
@@ -46,7 +51,9 @@ export class UsersComponent implements OnInit {
   userstate = null;
   userdealer = null;
   date = new Date();
+  disableField = false;
   comp = environment.companyID;
+  disableZone=false;
 
   error_messages = {
     'loginName': [
@@ -61,17 +68,34 @@ export class UsersComponent implements OnInit {
     ],
 
   }
+  userDetail: any;
+  selectZone: any;
+  selectedUserType: any;
+  ifMZone=false;
+  ifAZone=false;
 
   constructor(private usermanagementService: UsermanagemntService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
-    private auth: AuthService) {
-      this.auth.authFunction(window.location.pathname);
-     }
+   ) {
+  
+  }
 
   ngOnInit() {
+    debugger
+    this.userDetail = JSON.parse(localStorage.getItem('user'));
+    this.selectedUserType=this.userDetail.useType;
+    if(this.userDetail.useType == "ZONE")
+    {
+      this.ifMZone=false;
+      this.ifAZone=false;
+    }
+    else{
+      this.ifMZone=true;
+      this.ifAZone=true;
+    }
     this.getAllUser();
 
     //add machine
@@ -80,21 +104,21 @@ export class UsersComponent implements OnInit {
       // deviceModel: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.maxLength(10)]],
       email: [''],
-      companyID : ['',Validators.required],
+      companyID: [''],
       useType: ['', Validators.required],
       role: ['', Validators.required],
       userZone: [''],
       userSubzone: [''],
-      userState: ['',Validators.required],
+      userState: ['', Validators.required],
       loginName: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(30)
       ])),
-
-      createdAtmuserMarket: ['',Validators.required],
+      agreementSignedOn: [''],
+      createdAtmuserMarket: ['india', Validators.required],
       pincode: ['', Validators.required],
       city: ['', Validators.required],
       userDealer: [''],
@@ -109,6 +133,26 @@ export class UsersComponent implements OnInit {
 
   }
 
+  checkDisableFields() {
+    debugger
+    if (this.isEditMode) {
+      debugger
+      this.form.controls['useType'].disable();
+      this.form.controls['role'].disable();
+      this.form.controls['loginName'].disable();
+      this.form.controls['password'].disable();
+      this.form.controls['confirmpassword'].disable();
+      //this.addMachine();
+    }
+    else {
+      this.form.controls['useType'].enable();
+      this.form.controls['role'].enable();
+      this.form.controls['loginName'].enable();
+      this.form.controls['password'].enable();
+      this.form.controls['confirmpassword'].enable();
+      //  this.addMachine();
+    }
+  }
 
 
 
@@ -118,32 +162,62 @@ export class UsersComponent implements OnInit {
       .pipe(first())
       .subscribe(user => {
         this.user = user
-        this.user = this.user.docs;
-      });
+        this.user = this.user.docs.filter(it => it.isActive == true);
 
+      });
+    console.log(this.user);
+  }
+
+  inactiveRecords(event: any) {
+    debugger
+    if (event) {
+      this.usermanagementService.getAllUsers()
+        .pipe(first())
+        .subscribe(user => {
+          this.user = user
+          this.user = this.user.docs.filter(it => it.isActive == false);
+        });
+
+    }
+
+    else {
+
+      this.getAllUser();
+
+    }
   }
 
   getrole() {
-
-
     this.usermanagementService.getRole(this.form.value.useType)
       .subscribe(role => {
-        this.role = role;
-        this.role = this.role.docs;
-
+        if (role) {
+          this.role = role;
+          this.role = this.role.docs;
+        }
       });
-
   }
 
   getZone() {
-
-    this.usermanagementService.getZone(this.form.value.createdAtmuserMarket)
+    if(this.userDetail.useType == "ZONE")
+    {
+      this.selectZone=this.userDetail.userZone;
+      this.userzone= this.selectZone;
+      this.disableZone = true;
+     
+    }
+    else
+    {
+      this.disableZone = false;   
+      this.userzone = null;
+      this.usermanagementService.getZone(this.form.value.createdAtmuserMarket)
       .subscribe(zone => {
         this.zone = zone;
         this.zone = this.zone.docs;
 
       });
-
+    
+    }
+   
 
   }
 
@@ -210,15 +284,14 @@ export class UsersComponent implements OnInit {
 
   }
 
-
   deleteUser(id: string) {
-    const master = this.user.find(x => x.id === id);
-    master.isDeleting = true;
-    // this.usermanagementService.deleteUsers(id)
-    //   .pipe(first())
-    //   .subscribe(() => this.user = this.user.filter(x => x.id !== id));
+    debugger
+    const user = this.user.find(x => x.id === id);
+    user.isDeleting = true;
+    this.usermanagementService.deleteUsers(id)
+      .pipe(first())
+      .subscribe(() => this.user = this.user.filter(x => x.id !== id));
   }
-
 
 
   dropdownData() {
@@ -241,6 +314,7 @@ export class UsersComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
+
     if (this.form.invalid) {
       return;
     }
@@ -262,8 +336,11 @@ export class UsersComponent implements OnInit {
   isEditMode: boolean;
   showModal: boolean;
   addMachine() {
+    debugger
+
     this.showModal = true;
     this.isEditMode = false;
+    this.checkDisableFields();
     this.form.reset();
     this.userzone = null;
     this.userrole = null;
@@ -275,9 +352,17 @@ export class UsersComponent implements OnInit {
     this.submitted = false;
   }
 
-  createUser() {
-    console.log(this.form.value);
 
+  createUser() {
+    debugger
+    if (this.form.value.useType == 'DEALER' || this.form.value.useType == 'CUSTOMER') {
+      this.form.value.agreementSignedOn = '';
+    }
+    else {
+      // this.form.value.agreementSignedOn = new Date();
+      this.form.value.agreementSignedOn = '';
+    }
+    this.form.value.companyID = this.comp;
     this.usermanagementService.newUser(this.form.value)
       // .pipe(first())
       .subscribe(res => {
@@ -298,34 +383,26 @@ export class UsersComponent implements OnInit {
 
 
   update(event, index, id) {
-
     this.showModal = true;
     this.isEditMode = true;
+    this.checkDisableFields();
     this.id = id;
-    console.log(this.id);
-
-
     let ids = index;
-    if (this.isEditMode) {
-
-      this.usermanagementService.getByIdUser(this.id)
-        .subscribe(user => {
-
-          this.user = user;
-          this.form.patchValue(this.user);
-
-          this.userzone = this.user.userZone;
-          this.userrole = this.user.role;
-          this.usermarket = this.user.createdAtmuserMarket;
-          this.usersubzone = this.user.userSubzone;
-          this.userstate = this.user.userState;
-          this.userdealer = this.user.userDealer;
+    this.usermanagementService.getByIdUser(this.id)
+      .subscribe((user) => {
+        this.user = user;
+        this.form.patchValue(this.user);
+        this.userzone = this.user.userZone;
+        this.userrole = this.user.role;
+        this.usermarket = this.user.createdAtmuserMarket;
+        this.usersubzone = this.user.userSubzone;
+        this.userstate = this.user.userState;
+        this.userdealer = this.user.userDealer;
 
 
-        });
-    }
-
+      });
   }
+
 
 
 
@@ -351,7 +428,17 @@ export class UsersComponent implements OnInit {
 
 
   }
+  toggleFieldTextType() {
+    if (this.isEditMode == false) {
+      this.fieldTextType = !this.fieldTextType;
+    }
+  }
 
+  toggleFieldTextType1() {
+    if (this.isEditMode == true) {
+      this.fieldTextType1 = !this.fieldTextType1;
+    }
+  }
 
 
 }

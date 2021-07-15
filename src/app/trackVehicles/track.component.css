@@ -41,14 +41,14 @@
   #t1{
     color: blue;
   }
-  .table tr.active #t1{
+  /* .table tr.active #t1{
     color:white;
 
   }
   .table tr.active td {
     background-color:#454397 !important;
     color: white;
-  }
+  } */
  
   #startendmarker{
     height: 2px;
@@ -628,3 +628,12 @@
     margin-top: 10px;
   }
   
+  .dropdown-toggle::after {
+    display: none !important;
+  }
+
+  .btn-drop-down
+  {
+    padding: 0px !important;
+    margin-left: 35%;
+  }

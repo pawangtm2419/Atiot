@@ -25,7 +25,7 @@ export class NotificationsComponent implements OnInit {
   startDate: string;
   
   endDate: string;
-  timeBetween: { gte: string; lt: string; };
+  timeBetween: { gte: string; lt: string; useType:string, loginName:string; };
   notificationList: any;
   form: FormGroup;
   submitted = false
@@ -33,6 +33,9 @@ export class NotificationsComponent implements OnInit {
   date = new Date();
   p: number = 1;
   searchText;
+  useType;
+  loginName;
+  data:any;
   constructor(private accountService: AccountService, private formBuilder: FormBuilder, 
     private datePipe: DatePipe, private alertService: AlertService, private router: Router, 
     private auth: AuthService) { 
@@ -53,21 +56,24 @@ export class NotificationsComponent implements OnInit {
 
   getRecord() {
     this.today = new Date();
-    this.today.setDate(this.today.getDate() - 7);
+    this.today.setDate(this.today.getDate() - 30);
     this.fromDate = this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00.000Z";
     this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd') + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z";
-    this.startDate = this.fromDate.toString(),
-      this.endDate = this.toDate.toString()
-
-    this.timeBetween = {
-      gte: this.startDate,
-      lt: this.endDate
+    this.startDate = this.fromDate.toString();
+    this.endDate = this.toDate.toString();
+      this.useType = JSON.parse(localStorage.getItem('user')).useType;
+      this.loginName = JSON.parse(localStorage.getItem('user')).loginName;
+      this.loginName = this.loginName.toUpperCase( );
+    this.data = {
+      useType: this.useType,
+      loginName:this.loginName,
     }
-    this.accountService.getNotificationList(this.timeBetween).subscribe((notification) => {
+
+    this.accountService.getNotificationListAll(this.data).subscribe((notification) => {
       this.notificationList = notification
       this.notification = this.notificationList.docs
 
-      console.log(this.notificationList);
+      console.log("Notification List2 ====", this.notificationList);
 
 
       // this.trackdocs = _.sortBy(this.trackdocs, (o) => moment["default"](o.createdAt)).reverse();
@@ -87,13 +93,15 @@ export class NotificationsComponent implements OnInit {
     }
     this.timeBetween = {
       gte: this.form.value.startDate + "T00:00:00.000Z",
-      lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z"
+      lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
+      useType : JSON.parse(localStorage.getItem('user')).useType,
+      loginName : JSON.parse(localStorage.getItem('user')).loginName,
     }
     this.accountService.getNotificationList(this.timeBetween).subscribe((notification) => {
       this.notificationList = notification
       this.notification = this.notificationList.docs
 
-      console.log(this.notificationList);
+      console.log('Notification List ===', this.notificationList);
       // this.track = track
       // this.trackdocs = this.track.docs
       // // console.log(this.trackdocs.createdAt);

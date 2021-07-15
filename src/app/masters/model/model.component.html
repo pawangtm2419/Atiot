@@ -4,11 +4,12 @@
 
 <div class="row">
               <div class="col-md-6 banner-sec">
-                  <h1 style="margin-bottom: 5%;">
+                <a onclick="goBack()"><i class="fa fa-arrow-circle-left" style="margin: 10px 0;"></i> Back </a>  
+                <h5 style="margin-bottom: 3%;">
                       Model
-                  </h1>
+                  </h5>
             </div>
-              <div class="col-md-6 banner-sec">
+              <div class="col-md-6 banner-sec mob-date m-mb-1">
                   <div ng-app ng-controller="Ctrl" style="text-align: right; margin-top: 10px;">
                   <b style="margin-bottom: 0px;">
                       {{date | date:'dd.MM.yyyy'}}
@@ -53,13 +54,11 @@
                             <input type="text" formControlName="title" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.title.errors }" />
                             <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
-                                <div *ngIf="f.title.errors.required">Pin No is required</div>
+                                <div *ngIf="f.title.errors.required">Model name is required</div>
                             </div>
                         </div>
 
                     </div>
-
-
                     <br>
                     <div class="form-group" style="text-align: center;">
 
@@ -84,20 +83,25 @@
         <div class="input-group-icon input-group-icon-left mr-3">
             <form class="form-inline">
             <i class="fas fa-search" aria-hidden="true"></i>
-            <input class="form-control form-control-sm ml-3 w-75" id="key-search" type="text"
-                name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Search Model"
+            <input class="form-control form-control-sm ml-3 w-87 m-mb-1" id="key-search" type="text"
+                name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Search"
                 style="background-color: #d9d9d9; ">
         </form>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <input type="checkbox" [(ngModel)]="isChecked"  (change)="inactiveRecords(isChecked)" style="margin-right: 10px;"> Show Inactive Models
-        <button type="button" (click)="addModel()" class="btn btn-success" data-toggle="modal"
+        <button type="button" (click)="addModel()" class="btn btn-success m-mb-1" data-toggle="modal"
             data-target="#exampleModal" style="background-color:  #3385ff; padding: 2px 10px; float: right;">
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
               </svg>
             NEW MODEL
+        </button>
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-success mr-1" title="Download Model Report" (click)="exportAsXLSX()"
+            style="float:right; padding: 3px 10px;"><i class="fas fa-file-excel"></i>
         </button>
     </div>
 </div>

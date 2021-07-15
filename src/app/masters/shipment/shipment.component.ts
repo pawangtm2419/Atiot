@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '@app/_services';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AccountService, AlertService,UsermanagemntService } from '@app/_services';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { validate } from 'json-schema';
 import { AuthService } from '@app/_services/auth.service';
+import { ExcelService, ExcelServiceXlsx } from '@app/_services/excel.service';
 
 @Component({
   selector: 'app-shipment',
@@ -16,10 +17,13 @@ export class ShipmentComponent implements OnInit {
   [x: string]: Object;
   @ViewChild('exampleModal', { static: true }) exampleModalRef: ElementRef;
   @ViewChild('closeButton') closeButton;
+  @ViewChild('myInput') myInput;
+
   customer: any;
   p: number = 1;
   searchText;
   form: FormGroup;
+  realeseForm:FormGroup;
   submitted = false;
   isEdit = false;
 
@@ -33,7 +37,7 @@ export class ShipmentComponent implements OnInit {
   invoiceList: any;
   inovoiceListDocs: any;
   releases:any = [];
-  release: any = [];
+  release:any = [];
   jsondata: any;
   jsonobh: any;
   batchFilter:any;
@@ -45,33 +49,63 @@ export class ShipmentComponent implements OnInit {
   invoiePreview: any;
   invoiePreviewDetails: any;
   invoicePreviewModelPop = false;
-
+  dealers :any
+  checkStatus:any;
+  invoiceListExcelData=[];
+  realesesubmitted=false;
 
   constructor(private accountService: AccountService,
+    private usermanagementService: UsermanagemntService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private alertService: AlertService,
-    private auth: AuthService) { 
-      this.auth.authFunction(window.location.pathname);
+    private excelxlsxService: ExcelServiceXlsx,
+    private excelService: ExcelService,
+  ) { 
+    
      }
-
+     @ViewChild(FormGroupDirective) formGroupDirective: FormGroupDirective;
   ngOnInit(): void {
+    this.createUserLOgs();
     this.form = this.formBuilder.group({
-      deviceModel: ['', Validators.required],
-      variant: ['', Validators.required],
-      pinno: ['', Validators.required,],
       dealer: ['', Validators.required],
       invoiceno: ['', Validators.required],
       invoiceDate : ['', Validators.required],
       dispatchDate: ['', Validators.required],
-      fromDate: ['', Validators.required],
-      toDate: ['', Validators.required]
+      fromAddress: ['', Validators.required],
+      toAddress: ['', Validators.required],
+      dealerCode:['']
+    });
+    this.realeseForm = this.formBuilder.group({
+      deviceModel: ['', Validators.required],
+      variant: ['', Validators.required],
+      pinno: ['', Validators.required,]
     });
     this.getAllInvoice()
     this.dropdownData()
+    this.getAlldealers()
+this.getPinNoList()
+   
   }
-  get f() { return this.form.controls; }
 
+  createUserLOgs(){
+    let params={
+        "loginName":JSON.parse(localStorage.getItem('user')).loginName,
+        "module":"MASTER",
+        "function":"SHIPMENT",
+        "type":"web"
+    }
+    this.accountService.createUserlogs(params).subscribe((data) => {    
+         this.checkStatus=data['status'];
+         console.log("status",this.checkStatus);
+      },
+        error => {
+          this.alertService.error(error);
+        })
+    }
+  get f() { return this.form.controls; }
+  
+  get f1() { return this.realeseForm.controls; }
   dropdownData() {
     this.accountService.getAllModels()
     .pipe(first())
@@ -92,9 +126,9 @@ export class ShipmentComponent implements OnInit {
   }
   getVariant(){
 
-    console.log(this.form.value.deviceModel);
+    console.log(this.realeseForm.value.deviceModel);
 
-    this.accountService.getVariantModel(this.form.value.deviceModel)
+    this.accountService.getVariantModel(this.realeseForm.value.deviceModel)
     .subscribe(variant => {
       this.variant = variant;
 
@@ -102,11 +136,28 @@ export class ShipmentComponent implements OnInit {
 
  }
 
+ 
+getToday(): string {
+  return new Date().toISOString().split('T')[0]
+}
+ getAlldealers(){
+  this.usermanagementService.getAlldealers()
+    .pipe(first())
+    .subscribe(dealers => {
+      this.dealers = dealers
+      this.dealers = this.dealers.docs;
+      this.dealers.sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : a.name > b.name ? 1 : 0)
+      console.log("Dealers ",this.dealers)
+    });
+
+}
+
 
 getPinNoList(){
+  debugger
   this.batchFilter = {
-    deviceModel:this.form.value.deviceModel,
-    variant : this.form.value.variant
+    deviceModel:this.realeseForm.value.deviceModel,
+    variant : this.realeseForm.value.variant
   } 
   console.log(this.batchFilter)
   this.accountService.getPinno(this.batchFilter)
@@ -120,10 +171,35 @@ getPinNoList(){
     this.accountService.getAllInvoiceList().subscribe((data) => {
       this.invoiceList = data
       this.inovoiceListDocs = this.invoiceList.docs
+      this.inovoiceListDocs.forEach(element => {
+        this.invoiceListExcelData.push({
+          "Invoice No.":element.invoiceno,
+          "Invoice Date":new Date(element.invoicedate),
+          "Quantity":element.qty,
+          "From Plant":element.from,
+          "To Dealer":element.to,
+          "Shipment Date":new Date(element.shipdate)
+        })
+      });
     })
   }
 
+  addShipment() {
+    this.showModal = true;
+   // this.isEditMode = false;
+    this.form.reset();
+    this.realeseForm.reset();
+    this.submitted = false;
+    this.showFromData=false;
+    this.realesesubmitted=false;
+    this.release=[];
+  }
+
+  exportAsXLSX(): void {
+    this.excelxlsxService.exportAsExcelFile(this.invoiceListExcelData, 'ShipmentMaster');
+   }
   getInvoicPreview(i){
+    debugger
     this.invoicePreviewModelPop = true;
     this.invoiePreview = this.inovoiceListDocs[i];
     this.invoiePreviewDetails = this.invoiePreview.details
@@ -134,40 +210,86 @@ getPinNoList(){
   }
 
  
-  addInvoid() {
+  onreleaseSubmit() {
+    debugger
+    this.realesesubmitted = true;
+    if (this.realeseForm.valid) {
+      setTimeout(() => 
+      this.formGroupDirective.resetForm(), 0)
+    }
     this.releases = {
-      deviceModel: this.form.value.deviceModel,
-      variant: this.form.value.variant,
-      pinno: this.form.value.pinno,
+      deviceModel: this.realeseForm.value.deviceModel,
+      variant: this.realeseForm.value.variant,
+      pinno: this.realeseForm.value.pinno,
     };
-    this.release.push(this.releases)
-    this.showFromData = true
+    if((this.releases.deviceModel && this.releases.variant && this.releases.pinno))
+    {
+      this.release.push(this.releases)
+      this.showFromData = true;
+    }
+    else if(this.release.length>0)
+    {
+      this.showFromData = true;
+    }
+    else
+    {
+      this.showFromData = false;
+     
+    }
+   
+  //  this.realeseForm.reset();
   }
+ 
   delete(v){
-    this.release.pop(this.release[v])
+    this.release.splice(v, 1);
   }
 
   onSubmit() {
+    debugger
     this.submitted = true;
-    if (this.form.invalid) {
-      return;
-    } else {
+    this.realesesubmitted=true;
+      let dealer = [];
+      dealer = this.form.value.dealer.split(" ");
+      let selectedDealer = dealer[dealer.length - 1];
+     // var fields = this.form.value.dealer.split(" ").slice(-1)[0];
+     this.release.forEach(element => {
+       this.release.push({
+         'dealerCode':selectedDealer
+       });
+     });
       this.records = {
         details : this.release,
         qty : this.release.length,
-        dealer: this.form.value.dealer,
+        dealerCode:selectedDealer,
         invoiceno: this.form.value.invoiceno,
         shipdate : this.form.value.dispatchDate,
         invoicedate : this.form.value.invoiceDate,
-        from : this.form.value.fromDate,
-        to :  this.form.value.toDate
+        pinno:this.releases.pinno,
+        from : this.form.value.fromAddress,
+        to :  this.form.value.toAddress
       }
+      console.log(this.records);
       this.accountService.createInvoiceList(this.records).subscribe((invoice) => {
+        debugger
         this.createInvoid = invoice
+        this.alertService.success('Shipment created Sucessfully', { keepAfterRouteChange: true });
+        this.closeButton.nativeElement.click();
+    //    this.exampleModalRef.nativeElement.
+      //  this.form.reset();
         const buttonModal = document.getElementById("invoiceMode")
         buttonModal.click()
         this.getAllInvoice() 
       })
-    }
   }
+  assignCopy(){
+    this.model = Object.assign([], this.items);
+ }
+  filterItem(value){
+    if(!value){
+        this.assignCopy();
+    } // when nothing has typed
+    this.model = Object.assign([], this.items).filter(
+      device => device.title.toLowerCase().indexOf(value.toLowerCase()) > -1
+    )
+ }
 }

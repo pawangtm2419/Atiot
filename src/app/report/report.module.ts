@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Ng2SearchPipeModule} from 'ng2-search-filter';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {​​​​​​​​ UserlogsComponent }​​​​​​​​ from'./userlogs/userlogs.component';
+
+
 
 
 import { ReportRoutingModule } from './report-routing.module';
@@ -24,7 +27,8 @@ import { ExcelService, ExcelServiceXlsx } from '../_services/excel.service';
     ],
     declarations: [
         LayoutComponent,
-        ReportComponent
+        ReportComponent,
+        UserlogsComponent
     ],
     providers: [ExcelService,ExcelServiceXlsx]
 })

@@ -1,76 +1,1290 @@
-<div style="background: #454397; align-items: center;">
-    <nav class="navbar">
+<div class="desk-menu" style="background: #454397; align-items: center;">
+    <nav class="navbar" *ngIf='userRecord2 == "admin"'>
         <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
-            <li class="nav-item" style="margin-bottom:120px;">
-                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;">
+            <li class="nav-item" style="margin-bottom:60px;">
+                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
             </li>
-            <li class="nav-item" *ngIf="dashboard">
-                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+            <li class="nav-item">
+                <a class="nav-item nav-link sideBar-icon" routerLink="/dashboard" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
                     <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
                 </a>
             </li>
-            <!--<a class="nav-item nav-link" routerLink="/masters" routerLinkActive="active">Machine</a>
-                <a class="nav-item nav-link" routerLink="/device" routerLinkActive="active">Device</a>-->
-            <li class="nav-item" *ngIf="masters">
+
+            <!--  <a class="nav-item nav-link" routerLink="/masters" routerLinkActive="active">Machine</a>
+    <a class="nav-item nav-link" routerLink="/device" routerLinkActive="active">Device</a> -->
+
+            <li class="nav-item">
                 <div class="dropdown">
-                    <a href="#" id="imageDropdown" data-toggle="dropdown">
+                    <a class="sideBar-icon" id="imageDropdown" data-toggle="dropdown">
                         <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
                     </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown" style="background-color: #454397; border: 0px; outline: 0px;">
-                        <li class="icon_li" role="presentation" *ngIf="model"><a class="menu" role="menuitem" routerLink="/masters/model">Model</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="variant"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/variant">Variant</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="machine"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/machine">Machine</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="device"><a class="menu icon_li" role="menuitem" *ngIf="device" tabindex="-1" routerLink="/masters/device">Device</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="customer"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/customer">Customer</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="location"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/location">Location</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="geofence"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/geofencing">Geofence</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="shipment"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/shipment">Shipment</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="serviceMaster"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/service">Service</a></li>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/masters/model">Model</a>
+                        </li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/variant">Variant</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/machine">Machine</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/device">Device</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/customer">Customer</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/location">Location</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/geofencing">Geofence</a></li>
+
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/shipment">Shipment</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/services">Service</a></li>
                     </ul>
                 </div>
             </li>
-            <li class="nav-item" *ngIf="trackvehicles">
+            <li class="nav-item">
+                <a class="nav-link sideBar-icon" routerLink="/track">
+                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon' style="width: 30px;">
+                </a>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="sideBar-icon" id="imageDropdown2" data-toggle="dropdown">
+                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem"
+                                routerLink="/service/schedule">Schedule</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/service/update">Update</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/report.svg" class='icon' title="Reports">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report">Vehicle</a></li>
+			<li role="presentation"><a class="menu" role="menuitem" routerLink="report/batch-report">Batch Data</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/service-report">Service Report</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/subscription">Subscription</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/non-iot-machines-report">Non IOT Machines</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/userLogs_report">User Logs</a></li>
+			<li role="presentation"><a class="menu" role="menuitem" routerLink="testing/test">QA Testing</a></li>
+                                
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="nav-item nav-link sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/Users.png" class="icon" title="User Management">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/user/userlist">Users</a>
+                        </li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/user/dealer">Dealers</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/analytics.png" class='icon' title="Analytics">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/machine_utilization_report">Machine Utilization</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="analytics/battery">Battery</a></li>
+                                         </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <nav class="navbar" *ngIf="userRecord2 == 'officero'">
+        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+            <li class="nav-item" style="margin-bottom:60px;">
+                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+                </a>
+            </li>
+
+            <!--  <a class="nav-item nav-link" routerLink="/masters" routerLinkActive="active">Machine</a>
+    <a class="nav-item nav-link" routerLink="/device" routerLinkActive="active">Device</a> -->
+
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a id="imageDropdown" data-toggle="dropdown">
+                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/masters/model">Model</a>
+                        </li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/variant">Variant</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/machine">Machine</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/device">Device</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/customer">Customer</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/location">Location</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/geofencing">Geofence</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/shipment">Shipment</a></li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" routerLink="/track">
                     <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon' style="width: 30px;">
                 </a>
             </li>
-            <li class="nav-item" *ngIf="services">
+            <li class="nav-item">
                 <div class="dropdown">
-                    <a href="#" id="imageDropdown2" data-toggle="dropdown">
+                    <a id="imageDropdown2" data-toggle="dropdown">
                         <img src="assets/img/Settings Icon.png" class="icon" title="Services">
                     </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2" style="background-color: #454397; border: 0px; outline: 0px;">
-                        <li class="icon_li" role="presentation" *ngIf="schedules"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/service/schedule">Schedule</a></li>
-                        <li class="icon_li" role="presentation" *ngIf="update"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/service/update">Update</a></li>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem"
+                                routerLink="/service/schedule">Schedule</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/service/update">Update</a></li>
                     </ul>
                 </div>
             </li>
-            <li class="nav-item" *ngIf="reports">
+
+            <li class="nav-item">
                 <div class="dropdown">
-                    <a href="#" id="imageDropdown3" data-toggle="dropdown">
-                        <img src="assets/img/Reports Icon.png" class='icon' title="Reports">
+                    <a id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/report.svg" class='icon' title="Reports">
                     </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3" style="background-color: #454397; border: 0px; outline: 0px;">
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
                         <li role="presentation"><a class="menu" role="menuitem" routerLink="report">Vehicle</a></li>
-                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/service-report">Service Report</a></li>
-                        <li role="presentation"><a class="menu" role="menuitem" routerLink="testing/test">QA Testing</a></li>
-                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/machine_utilization_report">Utilization</a></li>
-                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/subscription">Subscription</a></li>
+			<li role="presentation"><a class="menu" role="menuitem" routerLink="report/batch-report">Batch Data</a></li>
                         <li role="presentation"><a class="menu" role="menuitem" routerLink="report/non-iot-machines-report">Non IOT Machines</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/userLogs_report">User Logs</a></li>
+			<li role="presentation"><a class="menu" role="menuitem" routerLink="testing/test">QA Testing</a></li>
                     </ul>
                 </div>
-            </li> 
-            <li class="nav-item" *ngIf="usermanagement">
+            </li>
+            <li class="nav-item">
                 <div class="dropdown">
-                    <a class="nav-item nav-link" href="#" id="imageDropdown3" data-toggle="dropdown">
-                        <img src="assets/img/Users.png" class="icon" title="User Management">
+                    <a class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/analytics.png" class='icon' title="Analytics">
                     </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3" style="background-color: #454397; border: 0px; outline: 0px;">
-                        <li role="presentation" *ngIf="users"><a class="menu" role="menuitem" routerLink="/user/userlist">Users</a></li>
-                        <li role="presentation" ngIf="dealers"><a class="menu" role="menuitem" routerLink="/user/userlist">Dealers</a></li>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                 <li role="presentation"><a class="menu" role="menuitem" routerLink="report/machine_utilization_report">Machine Utilization</a></li>
+		<li role="presentation"><a class="menu" role="menuitem" routerLink="analytics/battery">Battery</a></li>
+
                     </ul>
                 </div>
             </li>
         </ul>
     </nav>
+
+    <!-- serviceandsales menu starts -->
+
+    <nav class="navbar" *ngIf='userRecord2 == "serviceandsales"'>
+        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+            <li class="nav-item" style="margin-bottom:60px;">
+                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                </a>
+
+            </li>
+
+
+
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a id="imageDropdown" data-toggle="dropdown">
+                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/machine">Machine</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/customer">Customer</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/location">Location</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/geofencing">Geofence</a></li>
+
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/shipment">Shipment</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/services">Service</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+
+
+            <li class="nav-item">
+
+                <a class="nav-link" routerLink="/track">
+                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon' style="width: 30px;">
+                </a>
+
+            </li>
+            <li class="nav-item">
+
+
+                <div class="dropdown">
+
+                    <a id="imageDropdown2" data-toggle="dropdown">
+                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem"
+                                routerLink="/service/schedule">Schedule</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/service/update">Update</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/report.svg" class='icon' title="Reports">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report">Vehicle</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/batch-report">Batch Data</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/service-report">Service Report</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/subscription">Subscription</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/non-iot-machines-report">Non IOT Machines</a></li>
+                        </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="nav-item nav-link sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/Users.png" class="icon" title="User Management">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/user/userlist">Users</a>  </li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/user/dealer">Dealers</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/analytics.png" class='icon' title="Analytics">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/machine_utilization_report">Machine Utilization</a></li>
+                                   </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <!-- serviceandsales menu ends -->
+
+    <!-- Sales Zonal menu starts -->
+    <nav class="navbar" *ngIf='userRecord2 == "saleszonal"'>
+        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+            <li class="nav-item" style="margin-bottom:60px;">
+                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+            </li>
+
+            <li class="nav-item">
+
+                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                </a>
+
+            </li>
+
+            <!--  <a class="nav-item nav-link" routerLink="/masters" routerLinkActive="active">Machine</a>
+    <a class="nav-item nav-link" routerLink="/device" routerLinkActive="active">Device</a> -->
+
+            <li class="nav-item">
+
+                <div class="dropdown">
+                    <a id="imageDropdown" data-toggle="dropdown">
+                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/machine">Machine</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/customer">Customer</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/location">Location</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/geofencing">Geofence</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+
+
+            <li class="nav-item">
+
+                <a class="nav-link" routerLink="/track">
+                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon' style="width: 30px;">
+                </a>
+
+            </li>
+            <li class="nav-item">
+
+
+                <div class="dropdown">
+
+                    <a id="imageDropdown2" data-toggle="dropdown">
+                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem"
+                                routerLink="/service/schedule">Schedule</a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/service/update">Update</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+            <li class="nav-item">
+
+                <div class="dropdown">
+                    <a id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/report.svg" class='icon' title="Reports">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report">Vehicle</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem"
+                                routerLink="report/machine_utilization_report">Machine Utilization</a></li>
+
+                    </ul>
+
+                </div>
+
+            </li>
+            <li class="nav-item">
+
+                <div class="dropdown">
+
+                    <a class="nav-item nav-link sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/Users.png" class="icon" title="User Management">
+
+                    </a>
+
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/user/userlist">Users</a>
+                        </li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/user/dealer">Dealers</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+        </ul>
+    </nav>
+    <!-- Sales Zonal menu ends -->
+<!-- Engineering menu starts -->
+<nav class="navbar" *ngIf='userRecord2 == "engineering"'>
+    <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+        <li class="nav-item" style="margin-bottom:120px;">
+            <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;">
+        </li>
+
+
+        <li class="nav-item">
+
+
+            <a class="nav-item nav-link sideBar-icon" routerLink="/dashboard" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+            </a>
+
+        </li>
+
+
+<li class="nav-item">
+
+<div class="dropdown">
+<a href="#" class="sideBar-icon" id="imageDropdown" data-toggle="dropdown">
+  <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+</a>
+
+<ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown" style="background-color: #454397; border: 0px; outline: 0px;">
+  <li role="presentation" ><a class="menu" role="menuitem" routerLink="/masters/model" >Model</a></li>
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/variant">Variant</a></li>
+  <li class="icon_li" role="presentation" ><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/machine">Machine</a></li>
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/device">Device</a></li>
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/customer">Customer</a></li>
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/location">Location</a></li>
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/geofencing">Geofence</a></li>
+
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/shipment">Shipment</a></li>
+  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/services">Service</a></li>
+
+
+
+</ul>
+
+</div>
+
+</li>
+
+
+        <li class="nav-item">
+
+            <a class="nav-link sideBar-icon" routerLink="/track">
+                <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon'
+                    style="width: 30px;">
+            </a>
+
+        </li>
+        <li class="nav-item" >
+                
+                
+            <div class="dropdown">
+               
+                <a href="#" class="sideBar-icon" id="imageDropdown2" data-toggle="dropdown">
+                    <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2" style="background-color: #454397; border: 0px; outline: 0px;">
+                  <li role="presentation" ><a class="menu" role="menuitem" routerLink="/service/schedule" >Schedule</a></li>
+                  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/service/update">Update</a></li>
+                
+                
+                </ul>
+                
+            </div>
+            
+        </li>
+        <li class="nav-item">
+                
+            <div class="dropdown">
+                <a href="#" class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                    <img src="assets/img/Reports Icon.png" class='icon' title="Reports">
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3" style="background-color: #454397; border: 0px; outline: 0px;">
+                    <li role="presentation" ><a class="menu" role="menuitem" routerLink="report" >Vehicle</a></li>
+                    <li role="presentation" ><a class="menu" role="menuitem" routerLink="report/service-report" >Service Report</a></li>
+                    <li role="presentation" ><a class="menu" role="menuitem" routerLink="testing/test" >QA Testing</a></li>
+                    <li role="presentation" ><a class="menu" role="menuitem" routerLink="report/machine_utilization_report">Machine Utilization</a></li>
+                    <li role="presentation" ><a class="menu" role="menuitem" routerLink="report/subscription" >Subscription</a></li>
+                    <li role="presentation" ><a class="menu" role="menuitem" routerLink="report/non-iot-machines-report" >Non IOT Machines</a></li>
+                    
+                  
+                  </ul>
+               
+            </div>
+            
+        </li>
+        <li class="nav-item">
+ 
+            <div class="dropdown">
+                              
+            <a class="nav-item nav-link sideBar-icon" 
+             href="#" id="imageDropdown3" data-toggle="dropdown">
+               <img src="assets/img/Users.png" class="icon" title="User Management">
+      
+           </a>
+
+               
+                <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3" style="background-color: #454397; border: 0px; outline: 0px;">
+                  <li role="presentation"><a class="menu" role="menuitem" routerLink="/user/userlist" >Users</a></li>
+                  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/user/dealer">Dealers</a></li>
+                
+                
+                </ul>
+                
+            </div>
+        
+        </li>      
+    </ul>
+    </nav>
+<!-- Engineering menu ends -->
+            <!-- Production menu strats  -->
+            <nav class="navbar" *ngIf='userRecord2 == "production"'>
+                <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+                    <li class="nav-item" style="margin-bottom:120px;">
+                        <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;">
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-item nav-link sideBar-icon" routerLink="/dashboard" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                            <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                        </a>
+
+                    </li>
+
+    <li class="nav-item">
+
+        <div class="dropdown">
+            <a href="#" class="sideBar-icon" id="imageDropdown" data-toggle="dropdown">
+              <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+            </a>
+            
+            <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown" style="background-color: #454397; border: 0px; outline: 0px;">
+              <li class="icon_li" role="presentation" ><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/machine">Machine</a></li>
+              <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/device">Device</a></li>
+            
+            </ul>
+            
+          </div>
+           
+     </li>
+  
+                    <li class="nav-item">
+                            
+                        <div class="dropdown">
+                            <a href="#" class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                                <img src="assets/img/Reports Icon.png" class='icon' title="Reports">
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3" style="background-color: #454397; border: 0px; outline: 0px;">
+                                <li role="presentation" ><a class="menu" role="menuitem" routerLink="report" >Vehicle</a></li>
+                              
+                              </ul>
+                           
+                        </div>
+                        
+                    </li>
+                     
+                </ul>
+            </nav>
+            <!-- Production menu ends  -->
+
+              <!-- QAInspector menu strats  -->
+              <nav class="navbar" *ngIf='userRecord2 == "qainspector"'>
+                <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+                    <li class="nav-item" style="margin-bottom:120px;">
+                        <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;">
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-item nav-link sideBar-icon" routerLink="/dashboard" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                            <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                        </a>
+
+                    </li>
+
+    <li class="nav-item">
+
+        <div class="dropdown">
+            <a href="#" class="sideBar-icon" id="imageDropdown" data-toggle="dropdown">
+              <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+            </a>
+            
+            <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown" style="background-color: #454397; border: 0px; outline: 0px;">
+              <li class="icon_li" role="presentation" ><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/masters/machine">Machine</a></li>   
+            </ul>
+          </div>
+     </li>
+                    <li class="nav-item">        
+                        <div class="dropdown">
+                            <a href="#" class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                                <img src="assets/img/Reports Icon.png" class='icon' title="Reports">
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3" style="background-color: #454397; border: 0px; outline: 0px;">
+                                <li role="presentation" ><a class="menu" role="menuitem" routerLink="report" >Vehicle</a></li>
+                                <li role="presentation" ><a class="menu" role="menuitem" routerLink="testing/test" >QA Testing</a></li>         
+                              </ul>           
+                        </div>
+                        
+                    </li>
+                     
+                </ul>
+            </nav>
+            <!-- QAInspector menu ends -->
+
+
+<!--Service Engineer menu starts -->
+   <nav class="navbar" *ngIf='userRecord2 == "serviceengineer"'>
+    <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+        <li class="nav-item" style="margin-bottom:120px;">
+            <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;">
+        </li>
+
+
+        <li class="nav-item">
+
+
+            <a class="nav-item nav-link sideBar-icon" routerLink="/dashboard" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+            </a>
+
+        </li>
+
+
+
+
+
+        <li class="nav-item">
+
+            <a class="nav-link sideBar-icon" routerLink="/track">
+                <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon'
+                    style="width: 30px;">
+            </a>
+
+        </li>
+        <li class="nav-item" >
+                
+                
+            <div class="dropdown">
+               
+                <a href="#" class="sideBar-icon" id="imageDropdown2" data-toggle="dropdown">
+                    <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2" style="background-color: #454397; border: 0px; outline: 0px;">
+                  <li role="presentation" ><a class="menu" role="menuitem" routerLink="/service/schedule" >Schedule</a></li>
+                  <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1" routerLink="/service/update">Update</a></li>
+                
+                
+                </ul>
+                
+            </div>
+            
+        </li>
+              
+    </ul>
+    </nav>
+<!--Service Engineer menu ends  -->
+
+    <!-- Customer menu starts-->
+
+    <nav class="navbar" *ngIf="userRecord2 == 'customer'">
+        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+            <li class="nav-item" style="margin-bottom:60px;">
+                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+            </li>
+
+
+            <li class="nav-item">
+
+
+                <a class="nav-item nav-link" routerLink="/dashboard/CustomerDashboard" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <div class="dropdown">
+                    <a id="imageDropdown" data-toggle="dropdown">
+                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/masters/location">Location
+                            </a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/geofencing">Geofence</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+            <li class="nav-item">
+
+                <a class="nav-link" routerLink="/track">
+                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon' style="width: 30px;">
+                </a>
+
+            </li>
+            <li class="nav-item">
+
+
+                <div class="dropdown">
+
+                    <a id="imageDropdown2" data-toggle="dropdown">
+                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem"
+                                routerLink="/service/schedule">Schedule</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                        <img src="assets/img/analytics.png" class='icon' title="Analytics">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="report/machine_utilization_report">Machine Utilization</a></li>
+                                   </ul>
+                </div>
+            </li>
+
+
+        </ul>
+    </nav>
+
+    <!-- Customer menu ends -->
+
+    <!-- Dealer menu starts-->
+
+    <nav class="navbar" *ngIf="userRecord2 == 'dealer'">
+        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+            <li class="nav-item" style="margin-bottom:60px;">
+                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+            </li>
+
+
+            <li class="nav-item">
+
+
+                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <div class="dropdown">
+                    <a id="imageDropdown" data-toggle="dropdown">
+                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/masters/location">Location
+                            </a></li>
+                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem" tabindex="-1"
+                                routerLink="/masters/geofencing">Geofence</a></li>
+
+
+                    </ul>
+
+                </div>
+
+            </li>
+            <li class="nav-item">
+
+                <a class="nav-link" routerLink="/track">
+                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon' style="width: 30px;">
+                </a>
+
+            </li>
+            <li class="nav-item">
+
+
+                <div class="dropdown">
+
+                    <a id="imageDropdown2" data-toggle="dropdown">
+                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                        style="background-color: #454397; border: 0px; outline: 0px;">
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/service/schedule">Schedule</a></li>
+                        <li role="presentation"><a class="menu" role="menuitem" routerLink="/service/update">Update</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <!-- Dealer menu ends -->
+</div>
+
+
+<!-- Mobile Responsive Menu -->
+<!-- Sidebar Left -->
+<div class="modal mobi-menu fade left" data-keyboard="false" data-backdrop="static" id="sidebar-left" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header mob-nab-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-arrow-left"></i></button>
+                <!-- <h4 class="modal-title">Left Sidebar</h4> -->
+            </div>
+            <div class="modal-body" style="padding: 0px;">
+                <div style="background: #454397; align-items: center;">
+                    <nav class="navbar" *ngIf='userRecord2 == "admin"'>
+                        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+                            <li class="nav-item" style="margin-bottom:30px;">
+                                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-item nav-link sideBar-icon" routerLink="/dashboard"
+                                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                                    style="display: block; margin: auto;">
+
+                                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+                                </a>
+                            </li>
+
+                            <!--  <a class="nav-item nav-link" routerLink="/masters" routerLinkActive="active">Machine</a>
+                    <a class="nav-item nav-link" routerLink="/device" routerLinkActive="active">Device</a> -->
+
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <div type="button" class="sideBar-icon" id="imageDropdown" data-toggle="dropdown">
+                                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/masters/model">Model</a>
+                                        </li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/variant">Variant</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/machine">Machine</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/device">Device</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/customer">Customer</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/location">Location</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/geofencing">Geofence</a></li>
+
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/shipment">Shipment</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/services">Service</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link sideBar-icon" routerLink="/track">
+                                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon'
+                                        style="width: 30px;">
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <div class="sideBar-icon" id="imageDropdown2" data-toggle="dropdown">
+                                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/service/schedule">Schedule</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/service/update">Update</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <div class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                                        <img src="assets/img/report.svg" class='icon' title="Reports">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="report">Vehicle</a></li>
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="report/service-report">Service Report</a></li>
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="testing/test">QA Testing</a>
+                                        </li>
+                                        
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="report/subscription">Subscription</a></li>
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="report/non-iot-machines-report">Non IOT Machines</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <div class="nav-item nav-link sideBar-icon" id="imageDropdown3"
+                                        data-toggle="dropdown">
+                                        <img src="assets/img/Users.png" class="icon" title="User Management">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/user/userlist">Users</a>
+                                        </li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/user/dealer">Dealers</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <div class="sideBar-icon" id="imageDropdown3" data-toggle="dropdown">
+                                        <img src="assets/img/analytics.png" class='icon' title="Analytics">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                            routerLink="report/machine_utilization_report">Machine Utilization</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+
+  
+                    <!-- Sales Zonal menu starts -->
+                    <nav class="navbar" *ngIf='userRecord2 == "saleszonal"'>
+                        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+                            <li class="nav-item" style="margin-bottom:30px;">
+                                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+                            </li>
+
+                            <li class="nav-item">
+
+                                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active"
+                                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                                </a>
+
+                            </li>
+
+                            <!--  <a class="nav-item nav-link" routerLink="/masters" routerLinkActive="active">Machine</a>
+                    <a class="nav-item nav-link" routerLink="/device" routerLinkActive="active">Device</a> -->
+
+                            <li class="nav-item">
+
+                                <div class="dropdown">
+                                    <div id="imageDropdown" data-toggle="dropdown">
+                                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                                    </div>
+
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/machine">Machine</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/customer">Customer</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/location">Location</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/geofencing">Geofence</a></li>
+
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a class="nav-link" routerLink="/track">
+                                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon'
+                                        style="width: 30px;">
+                                </a>
+
+                            </li>
+                            <li class="nav-item">
+
+
+                                <div class="dropdown">
+
+                                    <div id="imageDropdown2" data-toggle="dropdown">
+                                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/service/schedule">Schedule</a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/service/update">Update</a></li>
+
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+                            <li class="nav-item">
+
+                                <div class="dropdown">
+                                    <div id="imageDropdown3" data-toggle="dropdown">
+                                        <img src="assets/img/report.svg" class='icon' title="Reports">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="report">Vehicle</a></li>
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="report/machine_utilization_report">Machine Utilization</a>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+                            <li class="nav-item">
+
+                                <div class="dropdown">
+
+                                    <div class="nav-item nav-link sideBar-icon" id="imageDropdown3"
+                                        data-toggle="dropdown">
+                                        <img src="assets/img/Users.png" class="icon" title="User Management">
+
+                                    </div>
+
+
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown3"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/user/dealer">Dealers</a></li>
+
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- Sales Zonal menu ends -->
+
+
+                    <!-- Customer menu starts-->
+
+                    <nav class="navbar" *ngIf="userRecord2 == 'customer'">
+                        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+                            <li class="nav-item" style="margin-bottom:30px;">
+                                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+                            </li>
+
+
+                            <li class="nav-item">
+
+
+                                <a class="nav-item nav-link" routerLink="/dashboard/CustomerDashboard"
+                                    routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                                    style="display: block; margin: auto;">
+
+                                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                                </a>
+
+                            </li>
+
+                            <li class="nav-item">
+
+                                <div class="dropdown">
+                                    <div id="imageDropdown" data-toggle="dropdown">
+                                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                                    </div>
+
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/masters/location">Location
+                                            </a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/geofencing">Geofence</a></li>
+
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+                            <li class="nav-item">
+
+                                <a class="nav-link" routerLink="/track">
+                                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon'
+                                        style="width: 30px;">
+                                </a>
+
+                            </li>
+                            <li class="nav-item">
+
+
+                                <div class="dropdown">
+
+                                    <div id="imageDropdown2" data-toggle="dropdown">
+                                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/service/schedule">Schedule</a></li>
+
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+
+
+                        </ul>
+                    </nav>
+
+                    <!-- Customer menu ends -->
+
+                    <!-- Dealer menu starts-->
+
+                    <nav class="navbar" *ngIf="userRecord2 == 'dealer'">
+                        <ul class="navbar-nav" style="list-style-type:none; padding: 0;">
+
+                            <li class="nav-item" style="margin-bottom:30px;">
+                                <img src="assets/img/dp.jpg" style="width:30px;border-radius:50%; margin-top: 10%;     margin-left: 15%;">
+                            </li>
+
+
+                            <li class="nav-item">
+
+
+                                <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active"
+                                    [routerLinkActiveOptions]="{exact: true}" style="display: block; margin: auto;">
+
+                                    <img src="assets/img/Dashboard Icon.png" class="icon" title="Dashboard">
+
+                                </a>
+
+                            </li>
+
+                            <li class="nav-item">
+
+                                <div class="dropdown">
+                                    <div id="imageDropdown" data-toggle="dropdown">
+                                        <img src="assets/img/Breifcase Icon.png" class="icon" title="Master">
+                                    </div>
+
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/masters/location">Location
+                                            </a></li>
+                                        <li class="icon_li" role="presentation"><a class="menu icon_li" role="menuitem"
+                                                tabindex="-1" routerLink="/masters/geofencing">Geofence</a></li>
+
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+                            <li class="nav-item">
+
+                                <a class="nav-link" routerLink="/track">
+                                    <img src="assets/img/Truck Icon.png" title="Track Vehicles" class='icon'
+                                        style="width: 30px;">
+                                </a>
+
+                            </li>
+                            <li class="nav-item">
+
+
+                                <div class="dropdown">
+
+                                    <div id="imageDropdown2" data-toggle="dropdown">
+                                        <img src="assets/img/Settings Icon.png" class="icon" title="Services">
+                                    </div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="imageDropdown2"
+                                        style="background-color: #454397; border: 0px; outline: 0px;">
+                                        <li role="presentation"><a class="menu" role="menuitem"
+                                                routerLink="/service/schedule">Schedule</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- Dealer menu ends -->
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>

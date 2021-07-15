@@ -12,6 +12,7 @@ import { TrackComponent } from './track.component';
 import { dateFilter } from './dateFilter/dateFilter.pipe';
 import { DatePipe } from '@angular/common';
 import { AgmCoreModule } from '@agm/core';
+import { TrackSummaryComponent } from './track-summary/track-summary.component';
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import { AgmCoreModule } from '@agm/core';
     declarations: [
         LayoutComponent,
         TrackComponent,
-        dateFilter
+        dateFilter,
+        TrackSummaryComponent
     ],
     
     providers: [DatePipe]

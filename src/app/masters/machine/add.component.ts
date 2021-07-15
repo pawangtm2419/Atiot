@@ -40,14 +40,22 @@ export class AddComponent implements OnInit {
       // batteryInstallationDate: ['', Validators.required],
 
     });
+    
 
   }
-
   dropdownData(){
-    this.accountService.getAllMachines1()
-            .pipe(first())
-            .subscribe(master =>this.master = master);
+    const data1 = {
+      useType: JSON.parse(localStorage.getItem('user')).useType,
+      loginName:JSON.parse(localStorage.getItem('user')).loginName
+     }
+     this.accountService.getAllMachines1(data1) .subscribe(master =>this.master = master);
   }
+
+  // dropdownData(){
+  //   this.accountService.getAllMachines1()
+  //           .pipe(first())
+  //           .subscribe(master =>this.master = master);
+  // }
   get f() { return this.form.controls; }
 
   onSubmit() {
@@ -63,7 +71,7 @@ export class AddComponent implements OnInit {
 
     this.loading = true;
 
-    this.accountService.newMachine(this.form.value)
+    this.accountService.newMC(this.form.value)
       .pipe(first())
       .subscribe({
         next: () => {

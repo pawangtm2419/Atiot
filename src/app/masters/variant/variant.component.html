@@ -3,11 +3,12 @@
 </div>
 <div class="row">
     <div class="col-md-6 banner-sec">
-        <h1 style="margin-bottom: 5%;">
+        <a onclick="goBack()"><i class="fa fa-arrow-circle-left" style="margin: 10px 0;"></i> Back </a> 
+        <h5 style="margin-bottom: 3%;">
             Variant
-        </h1>
+        </h5>
   </div>
-    <div class="col-md-6 banner-sec">
+    <div class="col-md-6 banner-sec mob-date">
         <div ng-app ng-controller="Ctrl" style="text-align: right; margin-top: 10px;">
         <b style="margin-bottom: 0px;">
             {{date | date:'dd.MM.yyyy'}}
@@ -85,20 +86,26 @@
         <div class="input-group-icon input-group-icon-left mr-3">
             <form class="form-inline">
             <i class="fas fa-search" aria-hidden="true"></i>
-            <input class="form-control form-control-sm ml-3 w-75" id="key-search" type="text"
-                name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Search Variant"
+            <input class="form-control form-control-sm ml-3 w-87 m-mb-1" id="key-search" type="text"
+                name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Search"
                 style="background-color: #d9d9d9; ">
         </form>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <input type="checkbox" [(ngModel)]="isChecked"  (change)="inactiveRecords(isChecked)" style="margin-right: 10px;"> Show Inactive Variant
-        <button type="button" (click)="addVariant()" class="btn btn-success" data-toggle="modal"
+     
+        <button type="button" (click)="addVariant()" class="btn btn-success m-mb-1" data-toggle="modal"
             data-target="#exampleModal" style="background-color:  #3385ff; padding: 2px 10px; float: right;">
             <i class="fa fa-plus" aria-hidden="true" style="width: 30px; -webkit-text-stroke: 0.05px white;">
-            
             </i>
             NEW VARIANT
+        </button>
+       
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-success mr-1" title="Download Excel File" (click)="exportAsXLSX()"
+            style="float:right; padding: 3px 10px;"><i class="fas fa-file-excel"></i>
         </button>
     </div>
 </div>

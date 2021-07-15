@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { ExcelService, ExcelServiceXlsx } from '../../_services/excel.service';
 
 import { AccountService, AlertService } from '@app/_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -34,20 +35,25 @@ export class VariantComponent implements OnInit {
   selectedRow : Number;
   setClickedRow : Function;
   deleteVar: Variant;
+  variantExcelData=[];
+  status: any;
 
   constructor(private accountService: AccountService,
+      private excelxlsxService: ExcelServiceXlsx,
+      private excelService: ExcelService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
-    private auth: AuthService) { 
+ ) { 
       this.setClickedRow = function(index){
         this.selectedRow = index;
     }
-    this.auth.authFunction(window.location.pathname);
+ 
     }
 
   ngOnInit() {
+    this.createUserLOgs();
    this.getVariantData();
     this.dropdownData();
 
@@ -58,9 +64,27 @@ export class VariantComponent implements OnInit {
     });
 
   }
+  createUserLOgs(){
+    let params={
+        "loginName":JSON.parse(localStorage.getItem('user')).loginName,
+        "module":"MASTER",
+        "function":"VARIANT",
+        "type":"web"
+    }
+    this.accountService.createUserlogs(params).subscribe((data) => {    
+         this.status=data['status'];
+         console.log("status",this.status);
+      },
+        error => {
+          this.alertService.error(error);
+        })
+    }
+  exportAsXLSX(): void {
+    this.excelxlsxService.exportAsExcelFile(this.variantExcelData, 'VariantMaster');
+  }
 
   getVariantData(){
-
+debugger
     this.accountService.getAllVariants()
     .pipe(first())
     .subscribe(variant => {
@@ -68,14 +92,29 @@ export class VariantComponent implements OnInit {
     console.log("variant data ",this.variant)
      this.variant = this.variant.docs.filter(it => it.status == 'Active')
      this.inActive = true; 
+     this.variant.forEach(element => {
+      this.variantExcelData.push({
+        "Variant Name":element.title,
+        "Model":element.deviceModel,
+        "Created On":new Date(element.createdAt),
+        "Status":element.status
+      })
+    });
+   
     });
   }
-  deleteVariant(id: string){
-    this.accountService.deleteVariant(id).subscribe((data) => {
-      this.deleteVar = data
-      this.getVariantData()
-    })
-}
+
+
+  deleteVariant(id: string) {
+    let result = window.confirm("Are you sure you want to delete the record?")
+    if (result == true) {
+      this.accountService.deleteVariant(id).subscribe((data) => {
+        this.deleteVar = data
+        this.alertService.success('Variant deleted successfully', { keepAfterRouteChange: true });
+        this.getVariantData()
+      })
+    }
+  }
 
   inactiveRecords(event: any){
 
@@ -98,13 +137,7 @@ export class VariantComponent implements OnInit {
   
 
   }
-
-
-  
-
-
-
-  dropdownData() {
+dropdownData() {
     this.accountService.getAllModels()
     .pipe(first())
     .subscribe(model => {​​​​​
