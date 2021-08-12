@@ -5,20 +5,23 @@ import { AccountService } from './_services';
 import { User } from './_models';
 import { Machine } from './_models';
 
-@Component({ selector: 'app', templateUrl: 'app.component.html', styleUrls: ['./app.component.css'] })
+@Component({
+    selector: 'app',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+})
 export class AppComponent {
     user: User;
     machine: Machine;
 
     constructor(private accountService: AccountService, public router: Router) {
         this.accountService.user.subscribe((x) => {
-            this.user = x
-            // console.log(this.user);
+            this.user = x;
         });
     }
 
 
-    logout() {
+    logout(): void {
         this.accountService.logout();
     }
 }

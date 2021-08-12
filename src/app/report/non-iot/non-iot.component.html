@@ -63,6 +63,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>#</th>
+                    <th>QR Code</th>
                     <th>Model</th>
                     <th>Variant</th>
                     <th>{{pinNo}}</th>
@@ -76,14 +77,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr
-                    *ngFor="let n of nonIotCount | filter:searchText | paginate : {itemsPerPage : 50, currentPage : p} let i = index">
+                <tr *ngFor="let n of nonIotCount | filter:searchText | paginate : {itemsPerPage : 50, currentPage : p} let i = index">
                     <td> {{ i+1 }} </td>
+                    <td> <button (click)="qrCodeGen(n.pinno, n.deviceModel, n.manufacturingDate, n.engineNumber)" class="btn btn-sm btn-info" data-toggle="modal" data-target="#qrCode"><i class="fa fa-qrcode"></i></button> </td>
                     <td> {{ n.deviceModel }} </td>
                     <td> {{ n.variant }} </td>
                     <td> {{ n.pinno }} </td>
-                    <td> {{n.manufacturingDate | slice:8:10}}-{{n.manufacturingDate| slice:5:7}}-{{n.manufacturingDate|
-                        slice:0:4}} </td>
+                    <td> {{n.manufacturingDate | slice:8:10}}-{{n.manufacturingDate| slice:5:7}}-{{n.manufacturingDate| slice:0:4}} </td>
                     <td> {{ n.engineNumber }} </td>
                     <td> {{ n.type | uppercase }} </td>
                     <td> {{ n.lastDataReceivedAt | date:'dd-MM-yyyy':'+0000' }} </td>
@@ -109,6 +109,25 @@
         <div class="col-md-6">
             <div class="input-group-icon input-group-icon-left mr-3">
                 <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="qrCode" tabindex="-1" aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='qrCode? "block":"none"'>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="example1Label">QR Code</h5>
+                <button type="button" #closeButton class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body section-to-print">
+                <qrcode [qrdata]="qrData" [width]="300" [errorCorrectionLevel]="'M'"></qrcode>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{pinNo}} : &nbsp; <b>{{machineNo}} </b> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.print()">&#9113;</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -26,7 +26,7 @@ export class NonIotComponent implements OnInit {
   date = new Date();
   loading = false;
   searchText;
-  p: number = 1;
+  p = 1;
   pinNo = environment.labelpinno;
   status: any;
   arrayBuffer: any;
@@ -35,6 +35,9 @@ export class NonIotComponent implements OnInit {
   sheet_names: any;
   sheet_name: string;
   sheetNameCount: number;
+  qrCode: boolean;
+  qrData: string;
+  machineNo: String;
 
   constructor(
     private accountService: AccountService,
@@ -55,19 +58,19 @@ export class NonIotComponent implements OnInit {
 
 
   createUserLOgs() {
-    let params = {
-      "loginName": JSON.parse(localStorage.getItem('user')).loginName,
-      "module": "REPORT",
-      "function": "NON_IOT",
-      "type": "web"
-    }
+    const params = {
+      loginName: JSON.parse(localStorage.getItem('user')).loginName,
+      module: 'REPORT',
+      function: 'NON_IOT',
+      type: 'web'
+    };
     this.accountService.createUserlogs(params).subscribe((data) => {
-      this.status = data['status'];
-      console.log("status", this.status);
+      this.status = data.status;
+      console.log('status', this.status);
     },
       error => {
         this.alertService.error(error);
-      })
+      });
   }
   getNonIot() {
     // const data1 = {
@@ -76,9 +79,9 @@ export class NonIotComponent implements OnInit {
     //  }
     this.accountService.getNonIotReport()
       .subscribe(data => {
-        this.nonIotCount = data
-        this.nonIotCount = this.nonIotCount.docs
-        console.log("nonIotCount", this.nonIotCount)
+        this.nonIotCount = data;
+        this.nonIotCount = this.nonIotCount.docs;
+        console.log('nonIotCount', this.nonIotCount);
       });
   }
 
@@ -94,7 +97,7 @@ export class NonIotComponent implements OnInit {
   }
 
   onFileSelect(event) {
-    let af = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']
+    const af = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       // console.log(file);
@@ -123,26 +126,33 @@ export class NonIotComponent implements OnInit {
 
     this.http
       .post<any>('http://172.16.15.30:4000/noniot/noniotExcelData', formData).subscribe(response => {
-        console.log("response ===", response);
+        console.log('response ===', response);
         if (response.status == 200) {
           // Reset the file input
           this.alertService.success('File uploaded successfully', { keepAfterRouteChange: true });
           this.getNonIot();
-          this.uploadFileInput.nativeElement.value = "";
+          this.uploadFileInput.nativeElement.value = '';
           this.fileInputLabel = undefined;
         }
-        else if(response.status == 400) {
+        else if (response.status == 400) {
           this.alertService.error('The pinno should be unique. !!!', { keepAfterRouteChange: true });
-        } 
+        }
         else
         {
           this.alertService.error('Somthing went wrong !!!', { keepAfterRouteChange: true });
         }
       }, error => {
-        console.log("error is ==", error);
+        console.log('error is ==', error);
         this.alertService.error('Somthing went wrong !!!', { keepAfterRouteChange: true });
       });
   }
-
+  qrCodeGen(pinNo: string, model: string, mangDate: string, engineNumber: string): void {
+    this.qrCode = true;
+    const mngDate = new Date(mangDate);
+    const mgDate = mngDate.getDate() + '-' + (1 + mngDate.getMonth()) + '-' + mngDate.getFullYear();
+    // var mgDate = mngDate.getDate()+'-'+mngDate.getMonth()+'-'+mngDate.getFullYear();
+    this.qrData = model + ', ' + pinNo + ', ' + engineNumber + ', ' + mgDate;
+    this.machineNo = pinNo;
+  }
 
 }

@@ -2,7 +2,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { MustMatch } from '.././_helpers/must-match';
 import { AccountService, AlertService } from '@app/_services';
 
 @Component({
@@ -11,9 +10,7 @@ import { AccountService, AlertService } from '@app/_services';
 })
 export class LoginComponent implements OnInit {
     @ViewChild('exampleModal', { static: true }) exampleModalRef: ElementRef;
-
     @ViewChild('closeButton') closeButton;
- //   @ViewChild('closeButton1') closeButton;
     form: FormGroup;
     form1: FormGroup;
     loading = false;
@@ -24,153 +21,113 @@ export class LoginComponent implements OnInit {
     credentials: { loginName: any; password: any; };
     status: any;
     tokenData: any;
-    emailRegEx = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
+    emailRegEx = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     loading1: boolean;
     emailTokenData: any;
     url: any;
-  
 
+    constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private alertService: AlertService) { }
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private accountService: AccountService,
-        private alertService: AlertService,
-    ) { }
-
-    ngOnInit() {
+    ngOnInit(): void {
         this.form = this.formBuilder.group({
             loginName: ['', Validators.required],
             password: ['', Validators.required]
         });
         this.form1 = this.formBuilder.group({
-            emailID: ['', [Validators.required, Validators.pattern(this.emailRegEx)]],
-
+            emailID: ['', [Validators.required, Validators.pattern(this.emailRegEx)]]
         });
-    
     }
 
     // convenience getter for easy access to form fields
     get f() { return this.form.controls; }
     get f1() { return this.form1.controls; }
-   
-    mouseover() {
-        document.getElementById('loginButton').style.backgroundColor = "#454397";
-        document.getElementById('loginButton').style.padding = "7px 60px";
 
-
+    mouseover(): void {
+        document.getElementById('loginButton').style.backgroundColor = '#454397';
+        document.getElementById('loginButton').style.padding = '7px 60px';
     }
-    mouseout() {
-        document.getElementById('loginButton').style.backgroundColor = "#3C84F0";
-        document.getElementById('loginButton').style.padding = "4px 45px";
+    mouseout(): void {
+        document.getElementById('loginButton').style.backgroundColor = '#3C84F0';
+        document.getElementById('loginButton').style.padding = '4px 45px';
     }
-
-
-    onSubmit() {
+    onSubmit(): void {
         this.submitted = true;
-
-        // reset alerts on submit
         this.alertService.clear();
-
-        // stop here if form is invalid
         if (this.form.invalid) {
             return;
         }
-
         this.loading = true;
         this.credentials = {
             loginName: this.f.loginName.value,
             password: this.f.password.value
-        }
-        this.accountService.login(this.credentials)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    // this.createUserLOgs();
-                    let type = JSON.parse(localStorage.getItem('user')).role;
-
-                    if (type == 'customer') {
-                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard/CustomerDashboard';
-                        window.location.href = returnUrl
-                    }
-                    else {
-                        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-                        window.location.href = returnUrl
-                    }
-                },
-                error: error => {
-                    //console.log(error);
-                    this.alertService.error(error);
-                    this.loading = false;
+        };
+        this.accountService.login(this.credentials).pipe(first()).subscribe({
+            next: () => {
+                const type = JSON.parse(localStorage.getItem('user')).role;
+                if (type === 'customer') {
+                    const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard/CustomerDashboard';
+                    window.location.href = returnUrl;
                 }
-            });
+                else {
+                    const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                    window.location.href = returnUrl;
+                }
+            },
+            error: error => {
+                this.alertService.error(error);
+                this.loading = false;
+            }
+        });
     }
-    clear() {
-        this.form1.controls['emailID'].setValue('');
-    
+    clear(): void {
+        this.form1.controls.emailID.setValue('');
     }
-    onFormSubmit() {
+    onFormSubmit(): void {
         this.emailsubmitted = true;
-
-        // reset alerts on submit
         this.alertService.clear();
-
-        // stop here if form is invalid
         if (this.form1.invalid) {
             return;
         }
-        
-        // this.loading1 = true;
-        let params = {
+        const params = {
             referanceData: this.f1.emailID.value,
-            secretCode: "AJAX@123Secret"
-        }
-        this.accountService.forgotPassword(params)
-            .subscribe(res => {
-                console.log(res);
-                this.tokenData = res;
-
-                if (this.tokenData.httpCode == 200) {
-                    this.closeButton.nativeElement.click();
-                    this.alertService.success('If your email id is found in our system,then reset link will be sent on this mail id.');
-                    this.clearAlert();
-                   
-                }           
-                else
-                {
-                    this.closeButton.nativeElement.click();
-                    this.alertService.error("Email Id/UserId not found");
-                } 
-            },
-                error => {
-                    this.alertService.error(error);
-                    //    this.loading1 = false;
-                }
-            );
-    }
-  
-    createUserLOgs() {
-        debugger
-        let params = {
-            "loginName": this.f.loginName.value,
-            "module": "LOGIN",
-            "function": "LOGIN",
-            "type": "web"
-        }
-        this.accountService.createUserlogs(params).subscribe((data) => {
-            this.status = data['status'];
-            console.log("status", this.status);
+            secretCode: 'AJAX@123Secret'
+        };
+        this.accountService.forgotPassword(params).subscribe(res => {
+            this.tokenData = res;
+            if (this.tokenData.httpCode === 200) {
+                this.closeButton.nativeElement.click();
+                this.alertService.success('If your email id is found in our system,then reset link will be sent on this mail id.');
+                this.clearAlert();
+            } else {
+                this.closeButton.nativeElement.click();
+                this.alertService.error('Email Id/UserId not found');
+            }
         },
             error => {
                 this.alertService.error(error);
-            })
+            }
+        );
     }
-    clearAlert() {
+
+    createUserLOgs(): void {
+        const params = {
+            loginName: this.f.loginName.value,
+            module: 'LOGIN',
+            function: 'LOGIN',
+            type: 'web'
+        };
+        this.accountService.createUserlogs(params).subscribe((data) => {
+            this.status = data;
+        },
+        error => {
+            this.alertService.error(error);
+        });
+    }
+    clearAlert(): void {
         setTimeout(() => {
           this.alertService.clear();
         }, 5000);
-      }
+    }
 }
 
 
