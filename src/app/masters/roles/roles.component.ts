@@ -43,7 +43,6 @@ export class RolesComponent implements OnInit {
   }
 
   getRole(event,index, code) {
-    debugger
     this.showModal = true;
     var data = {
       "code":code
@@ -54,7 +53,6 @@ export class RolesComponent implements OnInit {
   }
 
   rolesSubmit(code) {
-    debugger
     const data = {
     roleMenus: {
       dashboard: {

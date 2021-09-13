@@ -10,8 +10,8 @@ export class AuthService {
     loginRecord: any;
     itrolesUrl = [
         { url: '/dashboard' },
-        { url: '/track' },  
-     ];
+        { url: '/track' },
+    ];
     adminUrl = [
         { url: '/dashboard' },
         { url: '/masters/model' },
@@ -23,7 +23,7 @@ export class AuthService {
         { url: '/masters/customer' },
         { url: '/masters/location' },
         { url: '/masters/geofencing' },
-        
+
         { url: '/track' },
         { url: 'details/:**' },
         { url: '/masters/shipment' },
@@ -40,7 +40,7 @@ export class AuthService {
         { url: '/users' },
         { url: '/users/add' },
         { url: '/users/edit' },
-        
+
     ];
 
     serviceEngineerUrl = [
@@ -50,8 +50,8 @@ export class AuthService {
         { url: '/summary' },
         { url: '/service/schedule' },
         { url: '/service/update' },
-     ];
- 
+    ];
+
     delearUrl = [
         { url: '/dashboard' },
         { url: '/track' },
@@ -69,7 +69,7 @@ export class AuthService {
         { url: '/masters/shipment' },
         { url: '/service/schedule' },
         { url: '/service/update' },
- 
+
     ];
 
     officeroUrl = [
@@ -85,7 +85,7 @@ export class AuthService {
         { url: '/masters/customer' },
         { url: '/masters/location' },
         { url: '/masters/shipment' },
-       
+
         { url: '/summary' },
         { url: '/service' },
         { url: '/user' },
@@ -102,7 +102,7 @@ export class AuthService {
 
     ];
 
-servicezoneUrl = [
+    servicezoneUrl = [
         { url: '/dashboard' },
         { url: '/masters/machine' },
         { url: '/masters/machine/add' },
@@ -120,9 +120,9 @@ servicezoneUrl = [
         { url: '/report' },
         { url: '/user/dealer' },
         { url: '/user/userlist' }
-     ];
- 
-     saleszoneUrl = [
+    ];
+
+    saleszoneUrl = [
         { url: '/dashboard' },
         { url: '/masters/machine' },
         { url: '/masters/machine/add' },
@@ -136,8 +136,8 @@ servicezoneUrl = [
         { url: '/report' },
         { url: '/user/dealer' },
         { url: '/user/userlist' }
-     ];
-     engineeringUrl = [
+    ];
+    engineeringUrl = [
         { url: '/dashboard' },
         { url: '/masters/model' },
         { url: '/users' },
@@ -148,8 +148,8 @@ servicezoneUrl = [
         { url: '/masters/customer' },
         { url: '/masters/location' },
         { url: '/masters/geofencing' },
-        
-        { url: '/track'},
+
+        { url: '/track' },
         { url: 'details/:**' },
         { url: '/masters/shipment' },
         { url: '/summary' },
@@ -158,14 +158,14 @@ servicezoneUrl = [
         { url: '/user/userlist' },
         { url: '/user/dealer' },
         { url: '/notifications' },
-     { url: '/testing/test' },
+        { url: '/testing/test' },
         // { url: '/testing/main' },
         { url: '/report' },
         { url: '/users' },
         { url: '/users/add' },
         { url: '/users/edit' },
     ];
- 
+
     productionUrl = [
         { url: '/dashboard' },
         { url: '/masters/machine' },
@@ -187,149 +187,107 @@ servicezoneUrl = [
         { url: '/track' },
         { url: 'details/:**' },
         { url: '/service/schedule' },
-     
-     ];
+
+    ];
     constructor(private accountService: AccountService, private route: ActivatedRoute, private router: Router, ) { }
     authFunction(b) {
-        console.log(JSON.parse(localStorage.getItem('user')));
-        
-        console.log("bb ", b);
-
-        if (JSON.parse(localStorage.getItem('user')).role == "ADMIN") {
+        if (JSON.parse(localStorage.getItem('user')).role == 'ADMIN') {
             this.getUrl = this.adminUrl.find(x => x.url == b);
-            console.log(this.getUrl);
             if (this.getUrl.url == b) {
-                console.log("Okk Authorized")
             } else {
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
                 this.router.navigateByUrl(returnUrl);
-                console.log("Not authoriszed");
             }
         }
-        if(JSON.parse(localStorage.getItem('user')).role == "officero"){
+        if (JSON.parse(localStorage.getItem('user')).role == 'officero') {
             this.getUrl = this.officeroUrl.find(x => x.url == b);
-            console.log(this.getUrl);
             if (this.getUrl.url == b) {
-                console.log("Okk Authorized")
             } else {
-                console.log("Not authoriszed");
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
                 this.router.navigateByUrl(returnUrl);
             }
 
         }
-  if(JSON.parse(localStorage.getItem('user')).role == "serviceandsales"){
+        if (JSON.parse(localStorage.getItem('user')).role == 'serviceandsales') {
             this.getUrl = this.servicezoneUrl.find(x => x.url == b);
-            console.log(this.getUrl);
             if (this.getUrl.url == b) {
-                console.log("Okk Authorized")
             } else {
-                console.log("Not authoriszed");
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
                 this.router.navigateByUrl(returnUrl);
             }
- 
-        }
-        if(JSON.parse(localStorage.getItem('user')).role == "saleszonal"){
-            this.getUrl = this.saleszoneUrl.find(x => x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {
-                console.log("Okk Authorized")
-            } else {
-                console.log("Not authoriszed");
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-                this.router.navigateByUrl(returnUrl);
-            }
- 
-        }
-        if(JSON.parse(localStorage.getItem('user')).role == "engineering"){​​​​​​​​
-            this.getUrl = this.engineeringUrl.find(x=>x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {​​​​​​​​
-            console.log("Okk Authorized")
-                        }​​​​​​​​ else {​​​​​​​​
-            console.log("Not authoriszed");
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-            this.router.navigateByUrl(returnUrl);
-                        }​​​​​​​​
-             
-                    }​​​​​​​​
-            if(JSON.parse(localStorage.getItem('user')).role == "customer"){
-                        this.getUrl = this.customerUrl.find(x => x.url == b);
-                        console.log(this.getUrl);
-                        if (this.getUrl.url == b) {
-                            console.log("Okk Authorized")
-                        } else {
-                            console.log("Not authoriszed");
-                            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-                            this.router.navigateByUrl(returnUrl);
-                        }
-                    }
-            if(JSON.parse(localStorage.getItem('user')).role == "production"){​​​​​​​​
-            this.getUrl = this.productionUrl.find(x=>x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {​​​​​​​​
-            console.log("Okk Authorized")
-                        }​​​​​​​​ else {​​​​​​​​
-            console.log("Not authoriszed");
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-            this.router.navigateByUrl(returnUrl);
-                        }​​​​​​​​
-             
-                    }​​​​​​​​
-            if(JSON.parse(localStorage.getItem('user')).role == "qainspector"){​​​​​​​​
-            this.getUrl = this.qainspectorUrl.find(x=>x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {​​​​​​​​
-            console.log("Okk Authorized")
-                        }​​​​​​​​ else {​​​​​​​​
-            console.log("Not authoriszed");
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-            this.router.navigateByUrl(returnUrl);
-                        }​​​​​​​​
-             
-                    }​​​​​​​​
-            
-               
-            
-            if(JSON.parse(localStorage.getItem('user')).role == "it"){​​​​​​​​
-            this.getUrl = this.itrolesUrl.find(x=>x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {​​​​​​​​
-            console.log("Okk Authorized")
-                        }​​​​​​​​ 
-            else {​​​​​​​​
-            console.log("Not authoriszed");
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-            this.router.navigateByUrl(returnUrl);
-                        }​​​​​​​​
-                    }​​​​​​​​
-            if(JSON.parse(localStorage.getItem('user')).role == "dealer"){​​​​​​​​
-            this.getUrl = this.delearUrl.find(x=>x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {​​​​​​​​
-            console.log("Okk Authorized")
-                        }​​​​​​​​ else {​​​​​​​​
-            console.log("Not authoriszed");
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-            this.router.navigateByUrl(returnUrl);
-                        }​​​​​​​​
-             
-                    }​​​​​​​​
-            if (JSON.parse(localStorage.getItem('user')).role == "serviceengineer") {​​​​​​​​
-            this.getUrl = this.serviceEngineerUrl.find(x=>x.url == b);
-            console.log(this.getUrl);
-            if (this.getUrl.url == b) {​​​​​​​​
-            console.log("Okk Authorized")
-                        }​​​​​​​​ else {​​​​​​​​
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
-            this.router.navigateByUrl(returnUrl);
-            console.log("Not authoriszed");
-                        }​​​​​​​​
-                    }​​​​​​​​
-                }​​​​​​
-            
 
-       
-      
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'saleszonal') {
+            this.getUrl = this.saleszoneUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'engineering') {
+            this.getUrl = this.engineeringUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'customer') {
+            this.getUrl = this.customerUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'production') {
+            this.getUrl = this.productionUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'qainspector') {
+            this.getUrl = this.qainspectorUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+
+        }
+
+
+
+        if (JSON.parse(localStorage.getItem('user')).role == 'it') {
+            this.getUrl = this.itrolesUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            }
+            else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'dealer') {
+            this.getUrl = this.delearUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+
+        }
+        if (JSON.parse(localStorage.getItem('user')).role == 'serviceengineer') {
+            this.getUrl = this.serviceEngineerUrl.find(x => x.url == b);
+            if (this.getUrl.url == b) {
+            } else {
+                const returnUrl = this.route.snapshot.queryParams.returnUrl || 'dashboard';
+                this.router.navigateByUrl(returnUrl);
+            }
+        }
+    }
 }

@@ -34,7 +34,6 @@ export class DcustSegmentationComponent implements OnInit {
     
     if(this.selectOne=='individual')
     {
-      // debugger
       this.accountService.getCustomerSegmentationCount()
       .pipe(first())
       .subscribe((data) => {

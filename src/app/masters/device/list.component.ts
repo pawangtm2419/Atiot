@@ -129,7 +129,6 @@ export class ListComponent implements OnInit {
     }
  
   getDeviceData(){
-debugger;
     this.accountService.getAllDevice2()
     .pipe(first())
     .subscribe(devices => {
@@ -200,9 +199,6 @@ debugger;
   }
 
   uploadFile() {
-    
-
-debugger
     const formData = new FormData;
     const files: Array<File> = this.filesToUpload;
     console.log(files);
@@ -238,7 +234,6 @@ debugger
 
 
   deleteDevice(id: string) {
-    debugger
     const user = this.devices.find(x => x.id === id);
     user.isDeleting = true;
     let result = window.confirm("Are you sure you want to delete the record?")
@@ -293,7 +288,6 @@ debugger
   }
 
   createDevice() {
-   debugger
     var createdDate=new Date();
     this.form.value.createdDate=this.datePipe.transform(createdDate,'dd-MM-yyyy h:mm:ss');
     this.form.controls['createdBy'].setValue(JSON.parse(localStorage.getItem('user')).loginName);
@@ -328,7 +322,6 @@ debugger
 
 
   update(event, index, id) {
-debugger
     this.showModal = true;
     this.isEditMode = true;
     this.id = id;

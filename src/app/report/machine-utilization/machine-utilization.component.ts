@@ -48,7 +48,6 @@ let params={
 }
 this.accountService.createUserlogs(params).subscribe((data) => {    
      this.status=data['status'];
-     console.log("status",this.status);
   },
     error => {
       this.alertService.error(error);
@@ -77,7 +76,6 @@ this.accountService.createUserlogs(params).subscribe((data) => {
   this.accountService.getMachineUtilizationData(this.timeBetween).subscribe((result) => {
     this.mutilizationdata = result
     this.mutilizationdatadocs = this.mutilizationdata.deviceData;
-    console.log(this.timeBetween)
     // this.mutilizationdatadocs = _.sortBy(this.mutilizationdatadocs, (o) => moment["default"](o.createdAt)).reverse();
 
     if (this.mutilizationdatadocs == undefined) {
@@ -88,7 +86,6 @@ this.accountService.createUserlogs(params).subscribe((data) => {
   }
   onSubmit() {
     this.submitted = true;
-    debugger
     if (this.form.invalid) {
       return;
     }
@@ -104,9 +101,8 @@ this.accountService.createUserlogs(params).subscribe((data) => {
       useType:this.useType,
     }
     this.accountService.getMachineUtilizationData(this.timeBetween).subscribe((result) => {
-      this.mutilizationdata = result
+      this.mutilizationdata = result;
       this.mutilizationdatadocs = this.mutilizationdata.deviceData;
-      console.log(this.timeBetween)
 
       if (this.mutilizationdatadocs == undefined) {
         this.alertService.error("No Record Found Between " + this.form.value.startDate + " To " + this.form.value.endDate);

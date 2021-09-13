@@ -67,11 +67,8 @@ export class BatchComponent implements OnInit {
     this.accountService.getBatchReport(this.data)
       .subscribe((data) => {
         this.batchList = data,
-          this.batchList = this.batchList,
-
-          console.log("Batch List ====", this.batchList)
-
-      })
+          this.batchList = this.batchList;
+        });
   }
 
   onSubmit2()
@@ -88,15 +85,11 @@ export class BatchComponent implements OnInit {
         toDate: this.form.value.endDate,
         loginName:this.loginName,
         useType:this.useType,
-      }
-
-      console.log('data for date feild==', this.data);
-
+      };
       this.accountService.getBatchReport(this.data)
         .subscribe((data) => {
           this.batchList = data,
-            this.batchList = this.batchList,
-            console.log("Batch List after Date filter====", this.batchList);
+            this.batchList = this.batchList;
         })
     }
   }

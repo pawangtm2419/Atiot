@@ -6,13 +6,13 @@ import { map, tap } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
-import { role, Userm, Zone, Dealer   } from  '../_models/userman';
+import { role, Userm, Zone, Dealer } from '../_models/userman';
 
 @Injectable({ providedIn: 'root' })
 export class UsermanagemntService {
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
-   
+
 
 
     constructor(
@@ -21,66 +21,64 @@ export class UsermanagemntService {
     ) {
         this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
         this.user = this.userSubject.asObservable();
-       
+
     }
 
     public get userValue(): User {
         return this.userSubject.value;
     }
 
-   
+
 
     getAllUsers() {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
-        return this.http.get<User[]>(`${environment.apiUrl}/users`,httpOptions);
+        return this.http.get<User[]>(`${environment.apiUrl}/users`, httpOptions);
     }
-   
-    getByIdUser(id){
+
+    getByIdUser(id) {
 
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
-        return this.http.get<Userm>(`${environment.apiUrl}/users/id/${id}`,httpOptions);
+        return this.http.get<Userm>(`${environment.apiUrl}/users/id/${id}`, httpOptions);
 
     }
-    deleteUsers(id){
+    deleteUsers(id) {
         //delete User data
- var headers_object = new HttpHeaders({​​​​​​​​​​​​ 'Content-Type':'application/json', 'Authorization':"Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID':environment.companyID }​​​​​​​​​​​​);
-    const httpOptions = {​​​​​​​​​​​​ headers:headers_object }​​​​​​​​​​​​;
-    const URL = environment.apiUrl + '/users/deleteUser/' + id;
-    console.log("url", URL)
-    return this.http.put(URL, httpOptions);
-    }
-    deleteDealers(id){
-        //delete dealer data
-        var headers_object = new HttpHeaders({​​​​ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID }​​​​);
-        const httpOptions = {​​​​ headers: headers_object }​​​​;
-        const URL = environment.apiUrl + '/masters/dealer/deleteDealer/' + id;
-        console.log("url", URL)
+        var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
+        const httpOptions = { headers: headers_object };
+        const URL = environment.apiUrl + '/users/deleteUser/' + id;
         return this.http.put(URL, httpOptions);
     }
-    getDealerById(id){
+    deleteDealers(id) {
+        //delete dealer data
+        var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
+        const httpOptions = { headers: headers_object };
+        const URL = environment.apiUrl + '/masters/dealer/deleteDealer/' + id;
+        return this.http.put(URL, httpOptions);
+    }
+    getDealerById(id) {
 
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
-        return this.http.get(`${environment.apiUrl}/masters/dealer/id/${id}`,httpOptions);
+        return this.http.get(`${environment.apiUrl}/masters/dealer/id/${id}`, httpOptions);
 
     }
-    getMarket(){
+    getMarket() {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
-        return this.http.get(`${environment.apiUrl}/masters/market`,httpOptions);
+        return this.http.get(`${environment.apiUrl}/masters/market`, httpOptions);
     }
 
-    getzone(){
+    getzone() {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
-        return this.http.get(`${environment.apiUrl}/masters/zone`,httpOptions);
+        return this.http.get(`${environment.apiUrl}/masters/zone`, httpOptions);
 
     }
 
@@ -88,55 +86,55 @@ export class UsermanagemntService {
     newUser(user: Userm) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-        return this.http.post<Userm[]>(`${environment.apiUrl}/users/register`, user,httpOptions);
+        return this.http.post<Userm[]>(`${environment.apiUrl}/users/register`, user, httpOptions);
 
 
     }
 
 
-    getRole(id: string){
+    getRole(id: string) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
 
-        return this.http.get<role>(`${environment.apiUrl}/roles/${id}`,httpOptions);
+        return this.http.get<role>(`${environment.apiUrl}/roles/${id}`, httpOptions);
     }
 
 
-    getZone(country: string){
+    getZone(country: string) {
 
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-        return this.http.get<Zone>(`${environment.apiUrl}/masters/zone/${country}`,httpOptions);
+        return this.http.get<Zone>(`${environment.apiUrl}/masters/zone/${country}`, httpOptions);
     }
 
-    getSubZone(zone){
+    getSubZone(zone) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-        return this.http.post<any>(`${environment.apiUrl}/masters/subzone`, zone ,httpOptions );
+        return this.http.post<any>(`${environment.apiUrl}/masters/subzone`, zone, httpOptions);
     }
 
-    getState(subzone){
+    getState(subzone) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-        return this.http.post<any>(`${environment.apiUrl}/masters/states`, subzone ,httpOptions);
+        return this.http.post<any>(`${environment.apiUrl}/masters/states`, subzone, httpOptions);
     }
-    getStateData(data){
+    getStateData(data) {
         //Get Admin State list
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
-            const httpOptions = { headers: headers_object };
-            return this.http.post(`${environment.apiUrl}/users/stateData`,data, httpOptions); 
-        }
-    getDealers(state){
+        const httpOptions = { headers: headers_object };
+        return this.http.post(`${environment.apiUrl}/users/stateData`, data, httpOptions);
+    }
+    getDealers(state) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-        return this.http.post<any>(`${environment.apiUrl}/masters/dealer`, state ,httpOptions);
+        return this.http.post<any>(`${environment.apiUrl}/masters/dealer`, state, httpOptions);
     }
 
     updateUser(id, params) {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
-        return this.http.put(`${environment.apiUrl}/users/${id}`, params ,httpOptions)
+        return this.http.put(`${environment.apiUrl}/users/${id}`, params, httpOptions)
             .pipe(map((x) => {
                 return x;
             }));
@@ -154,7 +152,7 @@ export class UsermanagemntService {
         var headers_object = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + JSON.parse(localStorage.getItem('user')).token, 'companyID': environment.companyID });
         const httpOptions = { headers: headers_object };
 
-        return this.http.get<Dealer[]>(`${environment.apiUrl}/masters/dealer/list` ,httpOptions);
+        return this.http.get<Dealer[]>(`${environment.apiUrl}/masters/dealer/list`, httpOptions);
     }
 
     newDealer(dealer: Dealer) {
@@ -162,8 +160,8 @@ export class UsermanagemntService {
         const httpOptions = { headers: headers_object };
 
 
-        return this.http.post(`${environment.apiUrl}/masters/dealer/create`, dealer ,httpOptions);
+        return this.http.post(`${environment.apiUrl}/masters/dealer/create`, dealer, httpOptions);
 
     }
-    
+
 }

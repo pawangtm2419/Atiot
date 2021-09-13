@@ -93,7 +93,6 @@ export class CustomerComponent implements OnInit {
     }
  
   getAlldealers() {
-debugger
     this.usermanagementService.getAlldealers()
       .pipe(first())
       .subscribe(dealer => {
@@ -124,7 +123,6 @@ debugger
   
 
   getCustomerData(){
-    debugger
     this.accountService.getAllCustomer()
     .pipe(first())
     .subscribe(customer => {
@@ -174,7 +172,6 @@ debugger
   }
 
   deletecustomer(id: string) {
-    debugger
     const user = this.customer.find(x => x.id === id);
     user.isDeleting = true;
     
@@ -194,7 +191,6 @@ debugger
   get f() { return this.form.controls; }
 
   onSubmit() {
-debugger
     this.submitted = true;
 
     // reset alerts on submit
@@ -225,7 +221,6 @@ debugger
   }
 
   createcustomer() {
-debugger
     // let dealer = [];
     // dealer = this.form.value.dealerName.split(" ");
     // let selectedDealer = dealer[dealer.length - 1];

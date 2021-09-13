@@ -39,7 +39,6 @@ export class AlertanalyticsComponent implements OnInit {
   }
 
   getRecord() {
-    debugger
     this.data = {
       fromDate: this.stdate,
       toDate: this.endate,
@@ -59,7 +58,6 @@ export class AlertanalyticsComponent implements OnInit {
   }
 
   onSubmit() {
-    // debugger
     this.data = {
       fromDate: this.form.value.stdate + "T00:00:00.000Z",
       toDate: this.form.value.endate + "T00:00:00.000Z",

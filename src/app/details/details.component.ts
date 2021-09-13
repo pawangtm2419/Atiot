@@ -160,17 +160,11 @@ export class DetailsComponent implements OnInit {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
     });
-    debugger
     this.typeOfDevice.forEach(element => {
-      // console.log("element Data ===", element);
-      // console.log("pin1 ===", element.pinno);
-      // console.log("pin2 ===", this.pin);
       if (element.pinno == this.pin) {
         if (element.type == 'dvmapb') {
           this.showOnColumns = true;
           this.showOffColumns = true;
-
-          console.log("showOnColumns ==", this.showOnColumns);
         }
         else if(element.type == 'bs4')
         {
@@ -195,7 +189,6 @@ export class DetailsComponent implements OnInit {
   get f() { return this.form.controls; }
 
   calculateDiff(dateSent) {
-    debugger
     let currentDate = new Date(this.dtform.value.endate);
     dateSent = new Date(dateSent);
 
@@ -220,7 +213,6 @@ export class DetailsComponent implements OnInit {
   //   }
   // }
   getEngineOff() {
-    debugger
     if (this.submitted) {
       this.calculateDiff(this.dtform.value.stdate); 
       if(this.days<=9)
@@ -236,7 +228,6 @@ export class DetailsComponent implements OnInit {
         if (data) {
           this.loading = false;
           this.EngineOffData = data
-          console.log("OFF DATA ==", this.EngineOffData);
 
           if (this.EngineOffData.status) {
             this.alertService.error("No engine off data found");
@@ -246,7 +237,6 @@ export class DetailsComponent implements OnInit {
             this.EngineOffData = data
             this.EngineOffDatadocs = this.EngineOffData.docs
             this.isChecked = false;
-            console.log("engine off data", this.EngineOffDatadocs);
             // this.getalertEngineData();
           }
         }
@@ -287,7 +277,6 @@ export class DetailsComponent implements OnInit {
             this.EngineOffData = data
             this.EngineOffDatadocs = this.EngineOffData.docs
             this.isChecked = false;
-            console.log(this.EngineOffDatadocs);
             // this.getalertEngineData();
           }
         }
@@ -311,8 +300,6 @@ export class DetailsComponent implements OnInit {
 
 
   getEngineOn() {
-    debugger
-   
     if (this.submitted) {
       this.calculateDiff(this.dtform.value.stdate); 
       if(this.days<=9)
@@ -334,7 +321,6 @@ export class DetailsComponent implements OnInit {
           }
           else {
             this.EngineOnDatadocs = this.EngineOnData.docs
-            console.log("on data", this.EngineOnDatadocs)
             this.EngineOnDatadocs.forEach(element => {
               element.extras.forEach(element1 => {
                 this.engineONExcelData.push({
@@ -392,8 +378,7 @@ export class DetailsComponent implements OnInit {
             this.clearAlert();
           }
           else {
-            this.EngineOnDatadocs = this.EngineOnData.docs
-            console.log("on data", this.EngineOnDatadocs)
+            this.EngineOnDatadocs = this.EngineOnData.docs;
             this.EngineOnDatadocs.forEach(element => {
               element.extras.forEach(element1 => {
                 this.engineONExcelData.push({
@@ -497,7 +482,6 @@ export class DetailsComponent implements OnInit {
           this.EngineOffDatadocs = [];
           this.p = 1;
           this.EngineOffDatadocs = this.alertEngineData;
-          console.log("AlertEngineOffData", this.EngineOffDatadocs);
         }
       } else {
         this.isChecked = false;
@@ -527,8 +511,7 @@ export class DetailsComponent implements OnInit {
       this.loading = true;
       this.reportDatadocs = [];
       this.accountService.getVehicleTrackReport(this.batchFilter).subscribe((data) => {
-        this.reportData = data
-        console.log("report data", this.reportData.docs)
+        this.reportData = data;
         if (this.reportData) {
           this.loading = false;
           if (this.reportData.status) {
@@ -540,11 +523,9 @@ export class DetailsComponent implements OnInit {
               this.reportDatadocs = this.reportData.docs;
               this.summeryReport = this.reportDatadocs[0];
               this.summeryReportExtras = this.summeryReport.extras[0];
-              console.log("Summary Report Extras", this.summeryReportExtras)
               this.lat = Number(this.summeryReport.lat.toString());
               this.lng = Number(this.summeryReport.lng.toString());
               this.getOpenStreetmapData();
-              console.log("Summary Report 2", this.lat, this.lng)
             }
             else {
               return false;
@@ -578,8 +559,7 @@ export class DetailsComponent implements OnInit {
       this.loading = true;
     this.reportDatadocs = [];
     this.accountService.getVehicleTrackReport(this.batchFilter).subscribe((data) => {
-      this.reportData = data
-      console.log("report data", this.reportData.docs)
+      this.reportData = data;
       if (this.reportData) {
         this.loading = false;
         if (this.reportData.status) {
@@ -591,11 +571,9 @@ export class DetailsComponent implements OnInit {
             this.reportDatadocs = this.reportData.docs;
             this.summeryReport = this.reportDatadocs[0];
             this.summeryReportExtras = this.summeryReport.extras[0];
-            console.log("Summary Report Extras", this.summeryReportExtras)
             this.lat = Number(this.summeryReport.lat.toString());
             this.lng = Number(this.summeryReport.lng.toString());
             this.getOpenStreetmapData();
-            console.log("Summary Report 2", this.lat, this.lng)
           }
           else {
             return false;
@@ -620,9 +598,6 @@ export class DetailsComponent implements OnInit {
   }
 
   geocodeLatLng(lat, lng) {
-
-    debugger
-
     const latlng = {
 
       lat: this.lat,
@@ -639,8 +614,6 @@ export class DetailsComponent implements OnInit {
 
       geocoder.geocode({ location: latlng }, (results, status) => {
 
-        console.log(results, status)
-
         if (status !== google.maps.GeocoderStatus.OK) {
 
           this.loading = false;
@@ -654,8 +627,6 @@ export class DetailsComponent implements OnInit {
         else if (status == google.maps.GeocoderStatus.OK) {
 
           this.loading = false;
-
-          console.log(results);
 
           this.address = results[0].formatted_address;
 
@@ -714,8 +685,7 @@ export class DetailsComponent implements OnInit {
             this.clearAlert();
           }
           else {
-            this.batchDatadocs = this.batchData.docs
-            console.log("Batch data " + this.batchDatadocs)
+            this.batchDatadocs = this.batchData.docs;
           }
         }
         else {
@@ -754,8 +724,7 @@ export class DetailsComponent implements OnInit {
             this.clearAlert();
           }
           else {
-            this.batchDatadocs = this.batchData.docs
-            console.log("Batch data " + this.batchDatadocs)
+            this.batchDatadocs = this.batchData.docs;
           }
         }
         else {
@@ -875,7 +844,6 @@ export class DetailsComponent implements OnInit {
           else {
             this.engineDatadocs = this.engineData.docs
             this.engineDatadocs = _.sortBy(this.engineData.docs, (o) => moment["default"](o.createdAt)).reverse();
-            console.log("Engine DATA DOCS", this.engineDatadocs)
           }
         }
         else {
@@ -916,7 +884,6 @@ export class DetailsComponent implements OnInit {
           else {
             this.engineDatadocs = this.engineData.docs
             this.engineDatadocs = _.sortBy(this.engineData.docs, (o) => moment["default"](o.createdAt)).reverse();
-            console.log("Engine DATA DOCS", this.engineDatadocs)
           }
         }
         else {
@@ -994,9 +961,7 @@ export class DetailsComponent implements OnInit {
         this.alertService.error("No summary data found");
         this.clearAlert();
       }
-      console.log("Summary data oyeeeeeeeeeeeeeeeee ", this.summary)
       let newdate = new Date(this.summary.lastOperatedOn.time)
-      console.log("new date", newdate)
       this.dateDiff = Math.abs(Math.floor((Date.UTC(this.date.getFullYear(), this.date.getMonth(), this.date.getDate()) - Date.UTC(newdate.getFullYear(), newdate.getMonth(), newdate.getDate())) / (1000 * 60 * 60 * 24)));
     },
       error => {

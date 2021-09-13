@@ -72,14 +72,12 @@ export class ModelComponent implements OnInit {
     }
     this.accountService.createUserlogs(params).subscribe((data) => {    
          this.status=data['status'];
-         console.log("status",this.status);
       },
         error => {
           this.alertService.error(error);
         })
     }
   getModelData(){
-debugger
     this.accountService.getAllModels()
     .pipe(first())
     .subscribe(model => {
@@ -163,9 +161,6 @@ debugger
   }
 
   createModel() {  
-  debugger
-  
-
     this.accountService.newModel(this.form.value)
       .pipe(first())
       .subscribe({
@@ -188,7 +183,6 @@ debugger
 
 
   update(event, index, id) {
-debugger
     this.showModal = true;
     this.isEditMode = true;
    
@@ -211,7 +205,6 @@ debugger
 
 
   deleteModel(id: string){
-    debugger
     let result = window.confirm("Are you sure you want to delete the record?")
     if (result == true) {
       this.accountService.deleteModel(id).subscribe((data) => {

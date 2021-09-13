@@ -65,14 +65,12 @@ export class UpdateEngHourComponent implements OnInit {
   }
 
   getRecord() {
-    debugger
     this.today = new Date();
     this.today.setDate(this.today.getDate() - 60);
     this.fromDate = this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00.000Z";
     this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd') + "T00:00:00.000Z";
-    this.startDate = this.fromDate.toString(),
-      this.endDate = this.toDate.toString()
-    // debugger
+    this.startDate = this.fromDate.toString();
+    this.endDate = this.toDate.toString();
     this.timeBetween = {
       gte: this.startDate,
       lt: this.endDate,
@@ -89,48 +87,8 @@ export class UpdateEngHourComponent implements OnInit {
             this.updateEngHour.push(element1);
           }
         });
-        // if (this.trackdocs == undefined) {
-        //   this.alertService.error("No Record Found Between " + this.datePipe.transform(this.today, 'yyyy-MM-dd') + " To " + this.datePipe.transform(new Date(), 'yyyy-MM-dd'))
-        // }
-      })
-    console.log("Time Between==", this.timeBetween);
-    console.log("Update Engine Hour===", this.updateEngHour);
+      });
   }
-
-  // onSubmitDate() {
-  //   debugger
-  //   this.submitted = true;
-  //   if (this.form.invalid) {
-  //     return;
-  //   }
-
-  //   this.timeBetween = {
-  //     gte: this.formDate.value.startDate + "T00:00:00.000Z",
-  //     lt: this.formDate.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
-  //     useType: JSON.parse(localStorage.getItem('user')).useType,
-  //     loginName: JSON.parse(localStorage.getItem('user')).loginName
-  //   }
-
-  //   this.accountService.getTrack(this.timeBetween).subscribe((track) => {
-  //     this.track = track
-  //     this.trackdocs = this.track.docs
-
-  //     this.trackdocs.forEach(element1 => {
-  //       if (element1.totalEngineHours < "05:00:00") {
-  //         this.updateEngHour.push(element1);
-  //         element1 = null;
-  //       }
-  //     });
-
-  //     console.log("Filter Date===", this.timeBetween);
-  //     console.log("Filter Update Data===", this.updateEngHour);
-
-  //     if (this.trackdocs == undefined) {
-  //       this.alertService.error("No Record Found Between " + this.form.value.startDate + " To " + this.form.value.endDate);
-  //     }
-  //   })
-  // }
-
 
   update(pinno) {
     this.pinno = pinno
@@ -142,13 +100,11 @@ export class UpdateEngHourComponent implements OnInit {
       hours: this.form.value.hours,
       minutes: this.form.value.minutes,
       seconds: this.form.value.seconds,
-    }
-    console.log("Update Data ===", this.data);
+    };
 
     this.accountService.updateEngHours(this.data)
       .subscribe(data => {
-        this.updateData = data
-        console.log("Update ENgine Hours ==", this.updateData);
+        this.updateData = data;
         this.alertService.success("Engine Hours Update Successfull..");
         this.closeButton.nativeElement.click();
         this.getRecord();

@@ -30,7 +30,6 @@ export class SubscriptionComponent implements OnInit {
     }
     this.accountService.createUserlogs(params).subscribe((data) => {    
          this.status=data['status'];
-         console.log("status",this.status);
       },
         error => {
           this.alertService.error(error);
@@ -48,7 +47,6 @@ export class SubscriptionComponent implements OnInit {
       .subscribe((data) => {
         this.subscriptionList = data;
         this.subscriptionList = this.subscriptionList;
-        console.log("subscription List ===", this.subscriptionList);
       })
   }
 }

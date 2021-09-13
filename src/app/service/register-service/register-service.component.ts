@@ -62,27 +62,22 @@ export class RegisterServiceComponent implements OnInit {
   }
 
   getRecord() {
-    debugger
     this.today = new Date();
     this.today.setDate(this.today.getDate() - 60);
     this.fromDate = this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00.000Z";
     this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd') + "T00:00:00.000Z";
-    this.startDate = this.fromDate.toString(),
-      this.endDate = this.toDate.toString()
-    // debugger
+    this.startDate = this.fromDate.toString();
+    this.endDate = this.toDate.toString();
     this.timeBetween = {
       gte: this.startDate,
       lt: this.endDate,
       useType: JSON.parse(localStorage.getItem('user')).useType,
       loginName: JSON.parse(localStorage.getItem('user')).loginName
     }
-    this.accountService.getTrack(this.timeBetween)
-      .subscribe((track) => {
-        this.track = track
-        this.trackdocs = this.track.docs
-      })
-    console.log("Time Between==", this.timeBetween);
-    console.log("Service Data===", this.trackdocs);
+    this.accountService.getTrack(this.timeBetween).subscribe((track) => {
+        this.track = track;
+        this.trackdocs = this.track.docs;
+      });
   }
 
   update(pinno, totalEngineHours, customerMobile, dealerCode, customerCode) {
@@ -102,13 +97,11 @@ export class RegisterServiceComponent implements OnInit {
       remarks:this.form.value.remarks,
       onDemandServiceCategory:this.form.value.category,
       ScheduleDate:this.form.value.scheduleDate
-    }
-    console.log("Data ===", this.data);
+    };
 
     this.accountService.createOnDemandService(this.data)
       .subscribe(data => {
-        this.updateData = data
-        console.log("on demain service ==", this.updateData);
+        this.updateData = data;
         this.alertService.success("On demand service create successfully..");
         this.closeButton.nativeElement.click();
         this.getRecord();

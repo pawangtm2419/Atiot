@@ -85,9 +85,6 @@ export class ShipmentComponent implements OnInit {
 
   }
   getVariant(){
-
-    console.log(this.form.value.deviceModel);
-
     this.accountService.getVariantModel(this.form.value.deviceModel)
     .subscribe(variant => {
       this.variant = variant;
@@ -106,11 +103,7 @@ export class ShipmentComponent implements OnInit {
   getInvoicPreview(i){
     this.invoicePreviewModelPop = true;
     this.invoiePreview = this.inovoiceListDocs[i];
-    this.invoiePreviewDetails = this.invoiePreview.details
-    console.log(this.invoiePreview);
-    
-    console.log(this.invoiePreviewDetails);
-    
+    this.invoiePreviewDetails = this.invoiePreview.details;
   }
 
  

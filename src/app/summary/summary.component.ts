@@ -75,12 +75,10 @@ export class SummaryComponent implements OnInit {
         gte: JSON.parse(sessionStorage.getItem('dateTimeRange')).gte,
         lt: JSON.parse(sessionStorage.getItem('dateTimeRange')).lt,
         pinno: this.id = this.route.snapshot.params['id']
-      }
-      // console.log(this.batchFilter)
+      };
     this.accountService.getBatchDatas(this.batchFilter).subscribe((data) => {
       this.batchData = data
-      this.batchDatadocs = this.batchData.docs
-      console.log(this.batchDatadocs);
+      this.batchDatadocs = this.batchData.docs;
       
     })
   }

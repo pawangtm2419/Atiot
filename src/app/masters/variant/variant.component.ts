@@ -73,7 +73,6 @@ export class VariantComponent implements OnInit {
     }
     this.accountService.createUserlogs(params).subscribe((data) => {    
          this.status=data['status'];
-         console.log("status",this.status);
       },
         error => {
           this.alertService.error(error);
@@ -84,12 +83,10 @@ export class VariantComponent implements OnInit {
   }
 
   getVariantData(){
-debugger
     this.accountService.getAllVariants()
     .pipe(first())
     .subscribe(variant => {
       this.variant = variant;
-    console.log("variant data ",this.variant)
      this.variant = this.variant.docs.filter(it => it.status == 'Active')
      this.inActive = true; 
      this.variant.forEach(element => {

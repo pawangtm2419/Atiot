@@ -127,7 +127,6 @@ this.checkAgreement();
     }
     this.accountService.createUserlogs(params).subscribe((data) => {    
          this.status=data['status'];
-         console.log("status",this.status);
       },
         error => {
           this.alertService.error(error);
@@ -146,8 +145,7 @@ this.checkAgreement();
       .pipe(first())
       .subscribe((location) => {
         this.locationDocs = location
-        this.location = this.locationDocs.docs
-        console.log(this.location);
+        this.location = this.locationDocs.docs;
  
         return this.location
       });

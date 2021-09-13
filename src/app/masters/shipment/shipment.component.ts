@@ -154,7 +154,6 @@ getToday(): string {
 
 
 getPinNoList(){
-  debugger
   this.batchFilter = {
     deviceModel:this.realeseForm.value.deviceModel,
     variant : this.realeseForm.value.variant
@@ -199,7 +198,6 @@ getPinNoList(){
     this.excelxlsxService.exportAsExcelFile(this.invoiceListExcelData, 'ShipmentMaster');
    }
   getInvoicPreview(i){
-    debugger
     this.invoicePreviewModelPop = true;
     this.invoiePreview = this.inovoiceListDocs[i];
     this.invoiePreviewDetails = this.invoiePreview.details
@@ -211,7 +209,6 @@ getPinNoList(){
 
  
   onreleaseSubmit() {
-    debugger
     this.realesesubmitted = true;
     if (this.realeseForm.valid) {
       setTimeout(() => 
@@ -245,7 +242,6 @@ getPinNoList(){
   }
 
   onSubmit() {
-    debugger
     this.submitted = true;
     this.realesesubmitted=true;
       let dealer = [];
@@ -270,7 +266,6 @@ getPinNoList(){
       }
       console.log(this.records);
       this.accountService.createInvoiceList(this.records).subscribe((invoice) => {
-        debugger
         this.createInvoid = invoice
         this.alertService.success('Shipment created Sucessfully', { keepAfterRouteChange: true });
         this.closeButton.nativeElement.click();

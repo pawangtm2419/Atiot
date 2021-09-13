@@ -43,13 +43,12 @@ export class SidenavComponent implements OnInit {
   createondemand: any;
   vehicle: any;
 
-  constructor() { } 
-   
+  constructor() { }
+
   ngOnInit(): void {
-    this.getUserroleRecord()
-  }   
-  getUserroleRecord(){
-    debugger
+    this.getUserroleRecord();
+  }
+  getUserroleRecord(): void{
     this.userRecord = JSON.parse(localStorage.getItem('user'));
     this.userType =  this.userRecord.role.toString();
     this.masters = this.userRecord.roleMenus.masters ? this.userRecord.roleMenus.masters.link : false;
@@ -72,20 +71,20 @@ export class SidenavComponent implements OnInit {
     this.usermanagement = this.userRecord.roleMenus.usermanagement ? this.userRecord.roleMenus.usermanagement.link : false;
     this.dealers = this.userRecord.roleMenus.dealers ? this.userRecord.roleMenus.dealers.link : false;
     this.vehicle = this.userRecord.roleMenus.vehicle ? this.userRecord.roleMenus.vehicle.link : false;
-    this.analytics= this.userRecord.roleMenus.analytics ? this.userRecord.roleMenus.analytics.link : false;
-    this.machineUtilization= this.userRecord.roleMenus.machineUtilization ? this.userRecord.roleMenus.machineUtilization.link : false;
-    this.serviceReport= this.userRecord.roleMenus.serviceReport ?  this.userRecord.roleMenus.serviceReport.link : false;
-    this.qatesting= this.userRecord.roleMenus.qatesting ? this.userRecord.roleMenus.qatesting.link : false;
-    this.subscription= this.userRecord.roleMenus.subscription ?  this.userRecord.roleMenus.subscription.link : false;
-    this.noniotMachines= this.userRecord.roleMenus.noniotMachines ? this.userRecord.roleMenus.noniotMachines.link :false;
-    this.userlogs= this.userRecord.roleMenus.userlogs ?  this.userRecord.roleMenus.userlogs.link : false;
-    this.roles= this.userRecord.roleMenus.roles ?  this.userRecord.roleMenus.roles.link : false;
-    this.batch= this.userRecord.roleMenus.batch ? this.userRecord.roleMenus.batch.link : false;
-    this.battery= this.userRecord.roleMenus.battery ?  this.userRecord.roleMenus.battery.link : false;
-    this.fuel= this.userRecord.roleMenus.fuel ?  this.userRecord.roleMenus.fuel.link : false;
+    this.analytics = this.userRecord.roleMenus.analytics ? this.userRecord.roleMenus.analytics.link : false;
+    this.machineUtilization = this.userRecord.roleMenus.machineUtilization ? this.userRecord.roleMenus.machineUtilization.link : false;
+    this.serviceReport = this.userRecord.roleMenus.serviceReport ?  this.userRecord.roleMenus.serviceReport.link : false;
+    this.qatesting = this.userRecord.roleMenus.qatesting ? this.userRecord.roleMenus.qatesting.link : false;
+    this.subscription = this.userRecord.roleMenus.subscription ?  this.userRecord.roleMenus.subscription.link : false;
+    this.noniotMachines = this.userRecord.roleMenus.noniotMachines ? this.userRecord.roleMenus.noniotMachines.link : false;
+    this.userlogs = this.userRecord.roleMenus.userlogs ?  this.userRecord.roleMenus.userlogs.link : false;
+    this.roles = this.userRecord.roleMenus.roles ?  this.userRecord.roleMenus.roles.link : false;
+    this.batch = this.userRecord.roleMenus.batch ? this.userRecord.roleMenus.batch.link : false;
+    this.battery = this.userRecord.roleMenus.battery ?  this.userRecord.roleMenus.battery.link : false;
+    this.fuel = this.userRecord.roleMenus.fuel ?  this.userRecord.roleMenus.fuel.link : false;
     this.createondemand = this.userRecord.roleMenus.createondemand ?  this.userRecord.roleMenus.createondemand.link : false;
   }
 }
-    
+
 
 

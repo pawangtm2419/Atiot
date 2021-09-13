@@ -115,7 +115,6 @@ export class TestComponent implements OnInit {
     }
   }
   getQAData() {
-    debugger
     this.loading = true;
     this.timeBetween = {
       gte: this.startDate,

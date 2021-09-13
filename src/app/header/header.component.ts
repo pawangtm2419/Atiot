@@ -76,7 +76,6 @@ onSubmit(){
   }
   this.loading=false;
   this.accountService.changePassword(this.form.value).subscribe(data => {
-    console.log(data);
     this.returnData = data
     this.closeButton.nativeElement.click();
 

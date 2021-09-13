@@ -48,7 +48,6 @@ export class BatteryComponent implements OnInit {
   }
 
   getRecord() {
-    debugger
     this.data = {
       searchDays: this.searchDays,
     }
@@ -56,13 +55,10 @@ export class BatteryComponent implements OnInit {
     .subscribe((data) => {
       this.batteryList = data,
       this.batteryList = this.batteryList.sort((a,b) => a.totalDaysRemaning - b.totalDaysRemaning);
-      
-      console.log("battery List ====", this.batteryList)
     })  
   }
 
   onSubmit() {
-    debugger
     this.data = {
       searchDays: this.remainform.value.remainingDate,
     }
@@ -70,10 +66,6 @@ export class BatteryComponent implements OnInit {
     .subscribe((data) => {
       this.batteryList = data,
       this.batteryList = this.batteryList.sort((a,b) => a.totalDaysRemaning - b.totalDaysRemaning);
-      
-      console.log("battery Filter Data ====", this.batteryList);
-      // console.log("Filter value ====", this.remainform.value.remainingDate);
-      
     }) 
   }
 

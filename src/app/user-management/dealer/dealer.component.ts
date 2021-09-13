@@ -106,7 +106,6 @@ export class DealerComponent implements OnInit {
 
 
   getAlldealers() {
-debugger
     this.usermanagementService.getAlldealers()
       .pipe(first())
       .subscribe(dealer => {
@@ -117,7 +116,6 @@ debugger
       console.log(this.dealer)
   }
   inactiveRecords(event: any) {
-    debugger
     if (event) {
       this.usermanagementService.getAlldealers()
         .pipe(first())
@@ -217,7 +215,6 @@ debugger
   }
 
   deleteDealer(id: string) {
-    debugger
     const dealer = this.dealer.find(x => x.id === id);
     dealer.isDeleting = true;
     let result = window.confirm("Are you sure you want to delete the record?")
@@ -279,7 +276,6 @@ debugger
 
 
   onSubmit() {
-    debugger;
     this.submitted = true;
 
     // reset alerts on submit
@@ -339,7 +335,6 @@ debugger
 
 
   update(event, index, id) {
-debugger
     this.showModal = true;
     this.isEditMode = true;
     this.id = id;
@@ -369,7 +364,6 @@ if(dealer){
 
 
   updateDealer(id) {
-    debugger
     console.log(this.form.value);
     this.usermanagementService.updateDealer(id, this.form.value)
 

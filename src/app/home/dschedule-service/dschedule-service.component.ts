@@ -45,7 +45,6 @@ export class DscheduleServiceComponent implements OnInit {
         this.scheduledServices=this.scheduledServices.countAnddetails;
         this.scheduledServices=this.scheduledServices.openDeatials;
         this.servicesCount = this.scheduledServices;
-        console.log("scheduledServices", this.servicesCount);
     })
    }
 
@@ -62,7 +61,6 @@ export class DscheduleServiceComponent implements OnInit {
           this.completedServices=this.completedServices.countAnddetails;
           this.completedServices=this.completedServices.closedDetails;
           this.servicesCount = this.completedServices;
-          console.log("completedServices", this.servicesCount);
       })
     }
    

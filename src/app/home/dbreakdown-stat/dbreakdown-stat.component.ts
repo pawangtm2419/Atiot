@@ -24,7 +24,6 @@ export class DbreakdownStatComponent implements OnInit {
   }
 
   getRecord() {
-    // debugger
     const data1 = {
       useType: JSON.parse(localStorage.getItem('user')).useType,
       loginName: JSON.parse(localStorage.getItem('user')).loginName.toUpperCase()
@@ -33,14 +32,6 @@ export class DbreakdownStatComponent implements OnInit {
       .subscribe((data) => {
         this.breakdownCount = data;
         this.breakdownCount = this.breakdownCount.Details;
-
-        console.log("Breakdown List ====", this.breakdownCount);
-
-        // this.trackdocs = _.sortBy(this.trackdocs, (o) => moment["default"](o.createdAt)).reverse();
-        // if (this.trackdocs == undefined) {
-        //   this.alertService.error("No Record Found Between " + this.datePipe.transform(this.today, 'yyyy-MM-dd') + " To " + this.datePipe.transform(new Date(), 'yyyy-MM-dd'))
-        // }
-
       })
   }
 }

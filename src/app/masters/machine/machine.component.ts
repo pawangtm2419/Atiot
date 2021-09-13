@@ -2,11 +2,10 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { first } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { AccountService, AlertService } from '@app/_services';
-import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Master } from '@app/_models';
-import { AuthService } from '@app/_services/auth.service';
 import { ExcelService, ExcelServiceXlsx } from '../../_services/excel.service';
 import * as XLSX from 'xlsx';
 import { environment } from '@environments/environment';
@@ -19,6 +18,20 @@ import { environment } from '@environments/environment';
 })
 
 export class MachineComponent implements OnInit {
+  constructor(
+    private accountService: AccountService,
+    private excelxlsxService: ExcelServiceXlsx,
+    private excelService: ExcelService,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private datePipe: DatePipe,
+    private alertService: AlertService,
+    private http: HttpClient
+  ) { }
+
+  get f() { return this.form.controls; }
+  get f1() { return this.deviceform.controls; }
 
   @ViewChild('exampleModal', { static: true }) exampleModalRef: ElementRef;
   @ViewChild('closeButton') closeButton;
@@ -27,7 +40,7 @@ export class MachineComponent implements OnInit {
   @ViewChild('fileInput')
   myInputVariable: ElementRef;
 
-  //@ViewChild('fileInput') fileInput;  
+  // @ViewChild('fileInput') fileInput;
   comp = environment.companyID;
   message: string;
   fileToUpload: File = null;
@@ -36,13 +49,13 @@ export class MachineComponent implements OnInit {
   devices = null;
   variant = null;
   form: FormGroup;
-  showMapping=false;
-  showAddMachine=false;
+  showMapping = false;
+  showAddMachine = false;
   exceltoJson = {};
   deviceform: FormGroup;
   submitted = false;
   loading = false;
-  p: number = 1;
+  p = 1;
   searchText;
   isEdit = false;
   editMachineData: Master;
@@ -51,14 +64,14 @@ export class MachineComponent implements OnInit {
   inActive = false;
   active = false;
   arrayBuffer: any;
-  itemsperpage=50;
+  itemsperpage = 50;
   file: File;
   deviceModel;
-  date = new Date()
+  date = new Date();
   deviceid: any;
   qrData: any;
-  machineNo: String;
-  qrCode=false;
+  machineNo: string;
+  qrCode = false;
   check: any;
   up: any;
   downloadFile: any;
@@ -75,137 +88,96 @@ export class MachineComponent implements OnInit {
   sheet_names: any;
   sheet_name: string;
   sheetNameCount: number;
-  pinNo=environment.labelpinno;
+  pinNo = environment.labelpinno;
   modeltext: string;
-  disableDelete=false;
+  disableDelete = false;
   devicetypeValue: string;
   status: any;
-  noSpacePattern="^(?=.*[0-9])(?=.*[A-Z])([A-Z0-9]+)$";
-  // http: any;
-  // fileformat: any;
-  // fileContent: any;
-  // fileInputLabel: string;
+  noSpacePattern = '^(?=.*[0-9])(?=.*[A-Z])([A-Z0-9]+)$';
+  isEditMode: boolean;
+  showModal: boolean;
 
-
-  constructor(private accountService: AccountService,
-    private excelxlsxService: ExcelServiceXlsx,
-    private excelService: ExcelService,
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private datePipe: DatePipe,
-    private alertService: AlertService,
-    private http: HttpClient) {
-  
-  }
-
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.createUserLOgs();
-    if(JSON.parse(localStorage.getItem('user')).role =='production')
-    {
-      this.showMapping=true;
-      this.disableDelete=true;
+    if (JSON.parse(localStorage.getItem('user')).role === 'production') {
+      this.showMapping = true;
+      this.disableDelete = true;
     }
-    if(JSON.parse(localStorage.getItem('user')).role =='qainspector')
-    {
-      this.showAddMachine=true;
-      this.disableDelete=true;
+    if (JSON.parse(localStorage.getItem('user')).role === 'qainspector') {
+      this.showAddMachine = true;
+      this.disableDelete = true;
     }
-    this.getDeviceName()
+    this.getDeviceName();
     this.getMachineData();
-    //add machine
+    // add machine
     this.dropdownData();
     this.form = this.formBuilder.group({
       deviceModel: ['', Validators.required],
       variant: ['', Validators.required],
       engineNumber: ['', Validators.required],
-      pinno: ['',[Validators.required,Validators.pattern(this.noSpacePattern)]],
-      batterylotno: ['',[Validators.required,Validators.pattern(this.noSpacePattern)]],
+      pinno: ['', [Validators.required, Validators.pattern(this.noSpacePattern)]],
+      batterylotno: ['', [Validators.required, Validators.pattern(this.noSpacePattern)]],
       manufacturingDate: ['', Validators.required],
       // deliveryDate: ['', Validators.required],
-     //  shipmentDate: ['', Validators.required],
+      // shipmentDate: ['', Validators.required],
       batteryInstallationDate: ['', Validators.required],
-      createdDate:[''],
-      createdBy:[''],
-      updatedBy:[''],
-      updatedAt:['']
+      createdDate: [''],
+      createdBy: [''],
+      updatedBy: [''],
+      updatedAt: ['']
     });
 
     this.deviceform = this.formBuilder.group({
       deviceID: ['', Validators.required],
-      devicetype:['']
-    })
-  }
-  createUserLOgs(){
-    let params={
-        "loginName":JSON.parse(localStorage.getItem('user')).loginName,
-        "module":"MASTER",
-        "function":"MACHINE",
-        "type":"web"
-    }
-    this.accountService.createUserlogs(params).subscribe((data) => {    
-         this.status=data['status'];
-         console.log("status",this.status);
-      },
-        error => {
-          this.alertService.error(error);
-        })
-    }
-  getDeviceName() {
-    debugger
-    this.accountService.getAllDevice()
-      .pipe(first())
-      .subscribe(devices => {
-        
-        this.devices = devices;
-        // this.devices = this.devices.filter(it => it.status == 'Active')
-        this.inActive = true;
-      });
-    console.log(this.devices);
-  }
-  filterItem(event) {
-    debugger
-    if (!event.inputType) {
-      let deviceValue = [];
-      deviceValue =event.target.value.split("-");
-      this.devicetypeValue=deviceValue[deviceValue.length-1]
-      let selecteddeviceValue =deviceValue[0];
-      this.modeltext =selecteddeviceValue;
-      event.target.value = "";
-    }
-  }
-  getMachineData() {
-    const data1 = {
-      useType: JSON.parse(localStorage.getItem('user')).useType,
-      loginName:JSON.parse(localStorage.getItem('user')).loginName
-     }
-    this.accountService.getAllMachines1(data1) .subscribe(master => {
-      this.master = master
-      this.master = this.master.docs.filter(it => it.status == 'Active');
-      this.inActive = true;
-      console.log("machine data", this.master)
+      devicetype: ['']
     });
   }
-  // getMachineData() {
-  //   this.accountService.getAllMachines1()
-  //     .pipe(first())
-  //     .subscribe(master => {
-  //       ;
-  //       this.master = master
-  //       this.master = this.master.docs.filter(it => it.status == 'Active');
-  //       this.inActive = true;
-  //       console.log("machine data", this.master)
-  //     });
-  // }
-  // $(document).ready(function() {
-  //   $('.mdb-select').materialSelect();
-  //   });
-
+  createUserLOgs(): void {
+    const params = {
+      loginName: JSON.parse(localStorage.getItem('user')).loginName,
+      module: 'MASTER',
+      function: 'MACHINE',
+      type: 'web'
+    };
+    this.accountService.createUserlogs(params).subscribe((data) => {
+      this.status = data.status;
+    },
+      error => {
+        this.alertService.error(error);
+      });
+  }
+  getDeviceName(): void {
+    this.accountService.getAllDevice().pipe(first()).subscribe(devices => {
+      this.devices = devices;
+      // this.devices = this.devices.filter(it => it.status === 'Active')
+      this.inActive = true;
+    });
+  }
+  filterItem(event: any): void {
+    if (!event.inputType) {
+      let deviceValue = [];
+      deviceValue = event.target.value.split('-');
+      this.devicetypeValue = deviceValue[deviceValue.length - 1];
+      const selecteddeviceValue = deviceValue[0];
+      this.modeltext = selecteddeviceValue;
+      event.target.value = '';
+    }
+  }
+  getMachineData(): void {
+    const data1 = {
+      useType: JSON.parse(localStorage.getItem('user')).useType,
+      loginName: JSON.parse(localStorage.getItem('user')).loginName
+    };
+    this.accountService.getAllMachines1(data1).subscribe(master => {
+      this.master = master;
+      this.master = this.master.docs.filter(it => it.status === 'Active');
+      this.inActive = true;
+    });
+  }
   getToday(): string {
     return new Date().toISOString().split('T')[0];
   }
-  public downloadMachineMaster() {
+  public downloadMachineMaster(): void {
     const link = document.createElement('a');
     link.setAttribute('target', '_blank');
     link.setAttribute('href', '../../../assets/files/machinemaster.xlsx');
@@ -214,100 +186,64 @@ export class MachineComponent implements OnInit {
     link.click();
     link.remove();
   }
-  public readFile() {
-    let fileReader = new FileReader();
+  public readFile(): void {
+    const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
-      var data = new Uint8Array(this.arrayBuffer);
-      var arr = new Array();
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-      var bstr = arr.join("");
-      this.workbook = XLSX.read(bstr, { type: "binary" });
+      const data = new Uint8Array(this.arrayBuffer);
+      const arr = new Array();
+      for (let i = 0; i !== data.length; ++i) { arr[i] = String.fromCharCode(data[i]); }
+      const bstr = arr.join('');
+      this.workbook = XLSX.read(bstr, { type: 'binary' });
       this.sheet_names = this.workbook.SheetNames;
       this.sheetNameCount = this.workbook.SheetNames.length;
       this.sheet_name = this.sheet_names[0];
-      var worksheet = this.workbook.Sheets[this.sheet_name];
-  
-    }
-
+      const worksheet = this.workbook.Sheets[this.sheet_name];
+    };
   }
 
-  onFileSelect(fileInput: any) {
-
-    this.filesToUpload = <Array<File>>fileInput.target.files;
+  onFileSelect(fileInput: any): void {
+    this.filesToUpload = (fileInput.target.files as Array<File>);
     this.file = fileInput.target.files[0];
     this.readFile();
   }
 
-  uploadFile() {
-    
-debugger
-
+  uploadFile(): void {
     const formData: any = new FormData();
     const files: Array<File> = this.filesToUpload;
-    console.log(files);
     this.currentFile = files[0];
- 
-    formData.append("file", files[0]);
-    formData.append("dataType", 'items');
-  
-    console.log(files[0]);
-  
-    if (this.currentFile && this.sheetNameCount == 1 && this.sheet_name == "machinemaster") {
-      this.accountService.uploadMachineData(formData).subscribe(
-        files => {
-          console.log('files', files);
-          this.alertService.success('File uploaded successfully', { keepAfterRouteChange: true });
-          this.getMachineData();
-          this.myInputVariable.nativeElement.value = "";
-        },
+    formData.append('file', files[0]);
+    formData.append('dataType', 'items');
+    if (this.currentFile && this.sheetNameCount === 1 && this.sheet_name === 'machinemaster') {
+      this.accountService.uploadMachineData(formData).subscribe(() => {
+        this.alertService.success('File uploaded successfully', { keepAfterRouteChange: true });
+        this.getMachineData();
+        this.myInputVariable.nativeElement.value = '';
+      },
         error => {
           this.alertService.error(error);
           this.loading = false;
-        }
-      )
+        });
     }
     else {
-      this.myInputVariable.nativeElement.value = "";
+      this.myInputVariable.nativeElement.value = '';
       this.alertService.error('Please select valid file', { keepAfterRouteChange: true });
     }
   }
 
-
-  // inactiveRecords(event: any) {
-
-  //   if (event) {
-  //     this.inActive = false;
-  //     this.accountService.getAllMachines1()
-  //       .pipe(first())
-  //       .subscribe(master => {
-  //         this.master = master
-  //         this.master = this.master.docs.filter(it => it.status == 'InActive');
-  //         this.inActive = true;
-  //       });
-
-  //   }
-  //   else {
-  //     this.inActive = false;
-  //     this.getMachineData();
-  //   }
-  // }
-
-  inactiveRecords(event: any) {
-debugger
+  inactiveRecords(event: any): void {
     if (event) {
       this.inActive = false;
       const data1 = {
         useType: JSON.parse(localStorage.getItem('user')).useType,
-        loginName:JSON.parse(localStorage.getItem('user')).loginName
-       }
-      this.accountService.getAllMachines1(data1) .subscribe(master => {
-        this.master = master
-       // this.master = this.master.docs.filter(it => it.status == 'Active');
-        this.master = this.master.docs.filter(it => it.status == 'InActive');
+        loginName: JSON.parse(localStorage.getItem('user')).loginName
+      };
+      this.accountService.getAllMachines1(data1).subscribe(master => {
+        this.master = master;
+        // this.master = this.master.docs.filter(it => it.status === 'Active');
+        this.master = this.master.docs.filter(it => it.status === 'InActive');
         this.inActive = true;
-        console.log("machine data", this.master)
       });
     }
     else {
@@ -315,334 +251,192 @@ debugger
       this.getMachineData();
     }
   }
-  // deleteUser(id: string) {
-  //   
-  //   const master = this.master.find(x => x.id === id);
-  //   master.isDeleting = true;
-  //   this.accountService.deleteMachine(id)
-  //     .pipe(first())
-  //     .subscribe(() => this.master = this.master.filter(x => x.id !== id));
-  // }
-
-deleteMachine(id: string) {
+  deleteMachine(id: string): void {
     const master = this.master.find(x => x.id === id);
     master.isDeleting = true;
-    let result = window.confirm("Are you sure you want to delete the record?")
-    if (result == true) {
+    const result = window.confirm('Are you sure you want to delete the record?');
+    if (result === true) {
       this.accountService.deleteMachineData(id).subscribe((data) => {
-        this.deleteMachinedata = data
+        this.deleteMachinedata = data;
         this.alertService.success('Machine deleted successfully', { keepAfterRouteChange: true });
-        this.getMachineData()
-      })
+        this.getMachineData();
+      });
     }
     else {
       master.isDeleting = false;
     }
- 
+
   }
-  dropdownData() {
+  dropdownData(): void {
     this.accountService.getAllModels()
       .pipe(first())
       .subscribe(model => {
 
         this.model = model;
-        this.model = this.model.docs.filter(it => it.status == 'Active');
-        this.model.sort((a, b) => a.title.toUpperCase() < b.title.toUpperCase() ? -1 : a.title > b.title ? 1 : 0)
+        this.model = this.model.docs.filter(it => it.status === 'Active');
+        this.model.sort((a, b) => a.title.toUpperCase() < b.title.toUpperCase() ? -1 : a.title > b.title ? 1 : 0);
         //  this.model.materialSelect();
       });
   }
-
-  get f() { return this.form.controls; }
-  get f1() { return this.deviceform.controls }
-  getVariant() {
-
-
-    this.accountService.getVariantModel(this.form.value.deviceModel)
-      .subscribe(variant => {
-        this.variant = variant;
-
-      });
-
+  getVariant(): void {
+    this.accountService.getVariantModel(this.form.value.deviceModel).subscribe(variant => {
+      this.variant = variant;
+    });
   }
-  ondeviceSubmit() {
-    ;
+  ondeviceSubmit(): void {
     this.submitted = true;
-
-    // reset alerts on submit
     this.alertService.clear();
-
-    // stop here if form is invalid
     if (this.deviceform.invalid) {
       return;
     }
-
     this.loading = true;
     this.getMachineData();
     this.closeButton.nativeElement.click();
-
-    // if (this.isEditMode) {
-    //  }
-    // else {
-    //   this.createDevice();
-
-    // }
-
   }
 
-  onSubmit() {
-    ;
+  onSubmit(): void {
     this.submitted = true;
-
-    // reset alerts on submit
     this.alertService.clear();
-
-    // stop here if form is invalid
     if (this.form.invalid) {
       return;
     }
-
     this.loading = true;
-
     if (this.isEditMode) {
-      // this.update();
       this.updateMachine1(this.id);
-    }
-    else {
+    } else {
       this.createMachine();
-
     }
-
-
   }
-
-
-
-
-
-  isEditMode: boolean;
-  showModal: boolean;
-  addMachine() {
+  addMachine(): void {
     this.showModal = true;
     this.isEditMode = false;
     this.form.reset();
     this.submitted = false;
-
   }
 
-
-  // addDevice() {
-  //   this.showModal = true;
-  //   this.isEditMode = false;
-  //   this.form.reset();
-  //   this.submitted = false;
-  // }
-
-  // createDevice() {
-
-  //   
-  //   this.accountService.newDevice(this.form.value)
-  //     .subscribe(res => {
-  //       console.log(res);
-  //       this.alertService.success('Device added successfully', { keepAfterRouteChange: true });
-  //       this.closeButton.nativeElement.click();
-  //       this.getDeviceName();
-  //     },
-  //       error => {
-  //         this.alertService.error(error);
-  //         this.loading = false;
-  //       }
-  //     );
-
-
-  // }
-
-  createMachine() {
-    var createdAt=new Date();
-    this.form.value.createdDate=this.datePipe.transform(createdAt,'dd-MM-yyyy h:mm:ss');
-   this.form.controls['createdBy'].setValue(JSON.parse(localStorage.getItem('user')).loginName);
-    this.accountService.newMC(this.form.value)
-      .subscribe((res) => {
-        console.log(res);
-
-        this.up = res
-
-        if (this.up.status == "success") {
-          this.alertService.success('Machine added successfully', { keepAfterRouteChange: true });
-          this.getMachineData();
-        }
-        else {
-          this.alertService.error('Machine already created', { keepAfterRouteChange: true });
-
-        }
-        this.closeButton.nativeElement.click();
-        this.loading = false;
-
-      },
-        err => {
-          this.alertService.error(err);
-          this.loading = false;
-        }
-      );
-
-  }
-
-
-
-
-
-
-
-  update(event, index, id) {
-    
-    this.showModal = true;
-    this.isEditMode = true;
-    this.id = id;
-    let ids = index;
-    if (this.isEditMode) {
-      this.accountService.getByIdMachine(this.id)
-        .subscribe(master => {
-          console.log(ids);
-          
-          this.master = master;
-          this.form.patchValue(this.master);
-          this.form.get('deviceModel').setValue(this.master.deviceModel);
-          this.form.get('variant').setValue(this.master.variant);
-          this.form.value.manufacturingDate.setValue(new Date(this.master.manufacturingDate));
-          console.log(this.form)
-        });
-    }
-
-  }
-
-  mapCheck(deviceId, pinNo, id) {
-      this.modeltext='';
-      this.deviceform.controls['deviceID'].setValue(null);
-      if (deviceId) {
-        this.deviceid = deviceId;
-        this.pinNumber = pinNo;
-        this.id = id;
-        this.accountService.mapCheck(this.deviceid)
-          .subscribe(master => {
-            console.log(master);
-            this.check = master
-            this.checkedStatus = this.check.status
-  
-          });
-        if (this.checkedStatus === "machine is mapped") {
-          return this.alertService.error("machine is already mapped")
-        }
-        // else {
-        //   this.id=id;
-        //   this.checkedStatus = 'machine is not mapped'
-        //   this.getDeviceName();
-        //   this.updateDeviceMapping();
-        // }
-      }
-      else {
-        this.checkedStatus = 'machine is not mapped'
-        this.id = id;
-        this.pinNumber = pinNo;
-        this.getDeviceName();
-      }
-  }
-
-
-  updateMachine1(id) {
-    var updatedDate=new Date();
-    this.form.value.updatedAt=this.datePipe.transform(updatedDate,'dd-MM-yyyy h:mm:ss');
-    this.form.controls['updatedBy'].setValue(JSON.parse(localStorage.getItem('user')).loginName);
-    this.accountService.updateMachine(id, this.form.value)
-
-      .subscribe(res => {
-        console.log(res);
-        this.alertService.success('Updated successful', { keepAfterRouteChange: true });
-        // this.router.navigate(['../../'], { relativeTo: this.route });
-        this.closeButton.nativeElement.click();
+  createMachine(): void {
+    const createdAt = new Date();
+    this.form.value.createdDate = this.datePipe.transform(createdAt, 'dd-MM-yyyy h:mm:ss');
+    this.form.controls.createdBy.setValue(JSON.parse(localStorage.getItem('user')).loginName);
+    this.accountService.newMC(this.form.value).subscribe((res) => {
+      this.up = res;
+      if (this.up.status === 'success') {
+        this.alertService.success('Machine added successfully', { keepAfterRouteChange: true });
         this.getMachineData();
-      },
-        error => {
-          console.log(error)
-          // this.alertService.error(error);
-          this.loading = false;
-          this.closeButton.nativeElement.click();
-        }
-
-      );
-
-
+      } else {
+        this.alertService.error('Machine already created', { keepAfterRouteChange: true });
+      }
+      this.closeButton.nativeElement.click();
+      this.loading = false;
+    },
+      err => {
+        this.alertService.error(err);
+        this.loading = false;
+      }
+    );
   }
 
-  update1(event, index, id) {
-    debugger
+  update(event, index, id): void {
     this.showModal = true;
     this.isEditMode = true;
     this.id = id;
-
-
-
-    let ids = index;
+    const ids = index;
     if (this.isEditMode) {
-
-      this.accountService.getByIdDevice(this.id)
-        .subscribe(devices => {
-
-          this.devices = devices;
-          this.form.setValue(this.devices);
-        });
+      this.accountService.getByIdMachine(this.id).subscribe(master => {
+        this.master = master;
+        this.form.patchValue(this.master);
+        this.form.get('deviceModel').setValue(this.master.deviceModel);
+        this.form.get('variant').setValue(this.master.variant);
+        this.form.value.manufacturingDate.setValue(new Date(this.master.manufacturingDate));
+      });
     }
   }
 
-  updateDeviceMapping() {
-    debugger
+  mapCheck(deviceId, pinNo, id): void {
+    this.modeltext = '';
+    this.deviceform.controls.deviceID.setValue(null);
+    if (deviceId) {
+      this.deviceid = deviceId;
+      this.pinNumber = pinNo;
+      this.id = id;
+      this.accountService.mapCheck(this.deviceid).subscribe(master => {
+        this.check = master;
+        this.checkedStatus = this.check.status;
+      });
+      if (this.checkedStatus === 'machine is mapped') {
+        return this.alertService.error('machine is already mapped');
+      }
+    }
+    else {
+      this.checkedStatus = 'machine is not mapped';
+      this.id = id;
+      this.pinNumber = pinNo;
+      this.getDeviceName();
+    }
+  }
+
+
+  updateMachine1(id): void {
+    const updatedDate = new Date();
+    this.form.value.updatedAt = this.datePipe.transform(updatedDate, 'dd-MM-yyyy h:mm:ss');
+    this.form.controls.updatedBy.setValue(JSON.parse(localStorage.getItem('user')).loginName);
+    this.accountService.updateMachine(id, this.form.value).subscribe(res => {
+      this.alertService.success('Updated successful', { keepAfterRouteChange: true });
+      // this.router.navigate(['../../'], { relativeTo: this.route });
+      this.closeButton.nativeElement.click();
+      this.getMachineData();
+    },
+      error => {
+        // this.alertService.error(error);
+        this.loading = false;
+        this.closeButton.nativeElement.click();
+      });
+  }
+
+  update1(event, index, id): void {
+    this.showModal = true;
+    this.isEditMode = true;
+    this.id = id;
+    const ids = index;
+    if (this.isEditMode) {
+      this.accountService.getByIdDevice(this.id).subscribe(devices => {
+        this.devices = devices;
+        this.form.setValue(this.devices);
+      });
+    }
+  }
+
+  updateDeviceMapping(): void {
     this.deviceform.value.pinno = this.pinNumber;
-    if(this.devicetypeValue == "advance")
-    {
-      this.deviceform.value.devicetype = "dvmap";
+    if (this.devicetypeValue === 'advance') {
+      this.deviceform.value.devicetype = 'dvmap';
     }
-    else if(this.devicetypeValue == "basic")
-    {
-      this.deviceform.value.devicetype = "dvmapb";
-    }
-    else
-    {
+    else if (this.devicetypeValue === 'basic') {
+      this.deviceform.value.devicetype = 'dvmapb';
+    } else {
       this.deviceform.value.devicetype = this.devicetypeValue;
     }
-   let params =
-   {
-     "deviceID":this.modeltext,
-     "devicetype":this.deviceform.value.devicetype,
-     "pinno":this.deviceform.value.pinno
-   }
-    this.accountService.updateDeviceMap(params)
-      .subscribe(res => {
-        console.log(res);
-        this.alertService.success('Update successful', { keepAfterRouteChange: true });
-        // this.closeButton.nativeElement.click();
-      },
-        error => {
-          this.alertService.error(error);
-          this.loading = false;
-        }
-      );
-    console.log("saving device data");
+    const params = {
+      deviceID: this.modeltext,
+      devicetype: this.deviceform.value.devicetype,
+      pinno: this.deviceform.value.pinno
+    };
+    this.accountService.updateDeviceMap(params).subscribe(res => {
+      this.alertService.success('Update successful', { keepAfterRouteChange: true });
+      // this.closeButton.nativeElement.click();
+    },
+      error => {
+        this.alertService.error(error);
+        this.loading = false;
+      }
+    );
   }
 
-  /*  closeModal(modal){
-    document.querySelector('#'+ modal).classList.remove('md-show');
-  }
-  closeMyModal(event){
-   ((event.target.parentElement).parentElement).classList.remove('md-show');
-  } 
- */
-
-  qrCodeGen(pinNo: String, model: String, mngDate: Date, engineNumber: string) {
+  qrCodeGen(pinNo: string, model: string, mngDate: Date, engineNumber: string): void {
     this.qrCode = true;
-    var mngDate = new Date(mngDate);
-    var mgDate = mngDate.getDate()+'-'+(1+mngDate.getMonth())+'-'+mngDate.getFullYear();
-    // var mgDate = mngDate.getDate()+'-'+mngDate.getMonth()+'-'+mngDate.getFullYear();
-    this.qrData = model+', '+pinNo+', '+engineNumber+', '+mgDate;
+    const mngDate1 = new Date(mngDate);
+    const mgDate = mngDate1.getDate() + '-' + (1 + mngDate1.getMonth()) + '-' + mngDate1.getFullYear();
+    this.qrData = model + ', ' + pinNo + ', ' + engineNumber + ', ' + mgDate;
     this.machineNo = pinNo;
   }
-
-
 }

@@ -84,7 +84,6 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger
     this.userDetail = JSON.parse(localStorage.getItem('user'));
     this.selectedUserType=this.userDetail.useType;
     if(this.userDetail.useType == "ZONE")
@@ -134,9 +133,7 @@ export class UsersComponent implements OnInit {
   }
 
   checkDisableFields() {
-    debugger
     if (this.isEditMode) {
-      debugger
       this.form.controls['useType'].disable();
       this.form.controls['role'].disable();
       this.form.controls['loginName'].disable();
@@ -165,11 +162,9 @@ export class UsersComponent implements OnInit {
         this.user = this.user.docs.filter(it => it.isActive == true);
 
       });
-    console.log(this.user);
   }
 
   inactiveRecords(event: any) {
-    debugger
     if (event) {
       this.usermanagementService.getAllUsers()
         .pipe(first())
@@ -285,7 +280,6 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: string) {
-    debugger
     const user = this.user.find(x => x.id === id);
     user.isDeleting = true;
     this.usermanagementService.deleteUsers(id)
@@ -307,7 +301,6 @@ export class UsersComponent implements OnInit {
   get f() { return this.form.controls; }
 
   onSubmit() {
-    debugger;
     this.submitted = true;
 
     // reset alerts on submit
@@ -336,8 +329,6 @@ export class UsersComponent implements OnInit {
   isEditMode: boolean;
   showModal: boolean;
   addMachine() {
-    debugger
-
     this.showModal = true;
     this.isEditMode = false;
     this.checkDisableFields();
@@ -354,7 +345,6 @@ export class UsersComponent implements OnInit {
 
 
   createUser() {
-    debugger
     if (this.form.value.useType == 'DEALER' || this.form.value.useType == 'CUSTOMER') {
       this.form.value.agreementSignedOn = '';
     }
@@ -366,8 +356,6 @@ export class UsersComponent implements OnInit {
     this.usermanagementService.newUser(this.form.value)
       // .pipe(first())
       .subscribe(res => {
-        //next: () 
-        console.log(res)
         this.alertService.success('User added successfully', { keepAfterRouteChange: true });
         // this.router.navigate(['../'], { relativeTo: this.route });
         this.closeButton.nativeElement.click();
@@ -408,17 +396,14 @@ export class UsersComponent implements OnInit {
 
 
   updateUser(id) {
-    console.log(this.form.value);
     this.usermanagementService.updateUser(id, this.form.value)
 
       .subscribe(res => {
-        console.log(res);
         this.alertService.success('Updated successful', { keepAfterRouteChange: true });
         this.closeButton.nativeElement.click();
         this.getAllUser();
       },
         error => {
-          console.log(error)
           this.alertService.error(error);
           this.loading = false;
           this.closeButton.nativeElement.click();

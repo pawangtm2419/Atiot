@@ -70,19 +70,9 @@ export class NotificationsComponent implements OnInit {
     }
 
     this.accountService.getNotificationListAll(this.data).subscribe((notification) => {
-      this.notificationList = notification
-      this.notification = this.notificationList.docs
-
-      console.log("Notification List2 ====", this.notificationList);
-
-
-      // this.trackdocs = _.sortBy(this.trackdocs, (o) => moment["default"](o.createdAt)).reverse();
-      // if (this.trackdocs == undefined) {
-      //   this.alertService.error("No Record Found Between " + this.datePipe.transform(this.today, 'yyyy-MM-dd') + " To " + this.datePipe.transform(new Date(), 'yyyy-MM-dd'))
-      // }
-
-
-    })
+      this.notificationList = notification;
+      this.notification = this.notificationList.docs;
+    });
   }
 
   onSubmit() {
@@ -98,20 +88,9 @@ export class NotificationsComponent implements OnInit {
       loginName : JSON.parse(localStorage.getItem('user')).loginName,
     }
     this.accountService.getNotificationList(this.timeBetween).subscribe((notification) => {
-      this.notificationList = notification
-      this.notification = this.notificationList.docs
-
-      console.log('Notification List ===', this.notificationList);
-      // this.track = track
-      // this.trackdocs = this.track.docs
-      // // console.log(this.trackdocs.createdAt);
-      // this.trackdocs = _.sortBy(this.trackdocs, (o) => moment["default"](o.createdAt)).reverse();
-      // console.log(this.trackdocs);
-
-      // if (this.trackdocs == undefined) {
-      //   this.alertService.error("No Record Found Between " + this.form.value.startDate + " To " + this.form.value.endDate);
-      // }
-    })
+      this.notificationList = notification;
+      this.notification = this.notificationList.docs;
+    });
   }
 
 }

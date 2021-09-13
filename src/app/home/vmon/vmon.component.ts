@@ -50,8 +50,7 @@ export class VmonComponent implements OnInit {
       this.accountService.getMonitorData(data1)
       .subscribe((data) => {
         this.monitordata = data
-        this.monitordata = this.monitordata.countAnddetails.Activedetails
-        console.log("Active data ", this.monitordata);
+        this.monitordata = this.monitordata.countAnddetails.Activedetails;
     })
    }
 
@@ -64,8 +63,7 @@ export class VmonComponent implements OnInit {
       this.accountService.getMonitorData(data1)
       .subscribe((data) => {
         this.monitordata = data
-        this.monitordata = this.monitordata.countAnddetails.InActivedetails
-        console.log("InActive data ", this.monitordata);
+        this.monitordata = this.monitordata.countAnddetails.InActivedetails;
       })
     }
    

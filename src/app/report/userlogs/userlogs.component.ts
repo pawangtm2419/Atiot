@@ -46,7 +46,6 @@ export class UserlogsComponent implements OnInit {
   }
 
   getRecord() {
-    debugger
     this.showSummary=true;
     this.today = new Date();
     this.today.setDate(this.today.getDate() -1);
@@ -89,7 +88,6 @@ export class UserlogsComponent implements OnInit {
         })
     }
   showSummaryData() {
-  debugger
     this.submitted = true;
     this.showSummary=true;
     this.showDetails=false;
@@ -115,7 +113,6 @@ export class UserlogsComponent implements OnInit {
     })
   }
   showDetailsData(){
-    debugger
     this.submitted = true;
     this.showSummary=false;
     this.showDetails=true;

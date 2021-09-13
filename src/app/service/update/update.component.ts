@@ -125,7 +125,6 @@ export class UpdateComponent implements OnInit {
   }
 
   getCategory(pinno, deviceModel, deviceId, companyId, snum, customerMob, engineNo, type) {
-    debugger
     this.form.reset();
     this.realeseForm.reset();
     this.submitted = false;
@@ -197,14 +196,11 @@ export class UpdateComponent implements OnInit {
     }
   }
   delete(v) {
-    debugger
-    // this.release.pop(this.release[v])
     this.release.splice(v, 1);
   }
 
 
   onSubmit() {
-    debugger
     this.submitted = true;
     this.realesesubmitted = true;
     if (this.release.length > 0) {

@@ -116,7 +116,6 @@ ngOnInit() {
  }
 
  checkAgreement(){
-   debugger
    if(JSON.parse(localStorage.getItem('user')).role =='customer' || JSON.parse(localStorage.getItem('user')).role == 'dealer')
    {
      if(JSON.parse(localStorage.getItem('user')).agreementSignedOn == null)
@@ -158,10 +157,9 @@ ngOnInit() {
     this.today.setDate(this.today.getDate() -2);
     this.fromDate = this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00.000Z";
    // this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd') + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z";
-   this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')  + "T00:00:00.000Z";
-   this.startDate = this.fromDate.toString(),
-    this.endDate = this.toDate.toString()
-debugger
+    this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')  + "T00:00:00.000Z";
+    this.startDate = this.fromDate.toString();
+    this.endDate = this.toDate.toString();
     this.timeBetween = {
       gte: this.startDate,
       lt: this.endDate,
@@ -209,14 +207,12 @@ debugger
   }
 
   calculateDiff(dateSent){
-    debugger
     let currentDate =new Date(this.form.value.endDate);
     dateSent = new Date(dateSent);
 
     this.days=Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(dateSent.getFullYear(), dateSent.getMonth(), dateSent.getDate()) ) /(1000 * 60 * 60 * 24));
 }
   onSubmit() {
-    debugger
     this.submitted = true;
     if (this.form.invalid) {
       return;
@@ -243,7 +239,6 @@ debugger
   }
 
   mapDate(pinno,f1) {
-    debugger
     this.calculateDiff(this.form.value.startDate); 
     if(this.days<=2)
     {
@@ -363,7 +358,6 @@ debugger
         }
       }
       trackVehicleLastLocation(pinno,var2) {
-        debugger
         this.parsobj = [];
         this.parseObjDocs=[];
         this.coordinatedata=[];
@@ -432,7 +426,6 @@ debugger
       }
       
       onNavigate(pinno,f3) {
-        debugger
         this.calculateDiff(this.form.value.startDate); 
         if(this.days<=9)
         {
@@ -454,7 +447,6 @@ debugger
       }
       }
       createUserLogs() {
-        debugger
     if(this.clickType == 'isPinNo')
     {
       this.params = {
@@ -493,7 +485,6 @@ debugger
 
 
   onSummary(pinno) {
-    debugger;
     this.timeBetween = {
       gte: this.form.value.startDate + "T00:00:00.000Z",
       lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z"
@@ -503,7 +494,6 @@ debugger
   }
 
   onAlert(pinno) {
-    debugger;
     this.alertData = {
       gte: this.form.value.startDate + "T00:00:00.000Z",
       lt: this.form.value.endDate + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z",
@@ -519,7 +509,6 @@ debugger
     return parseInt(val);
   }
   meter(enhr, tdist, vnum, pinno, model,f2) {
-    debugger;
     this.clickType=f2;
     this.enhr = enhr
     this.tdist = tdist

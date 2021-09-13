@@ -133,7 +133,6 @@ export class ReportComponent implements OnInit {
 
   }
   mapCheck(dealerData) {
-    debugger
   //  this.Customerform.reset();
     if (dealerData) {
       this.dealerData = dealerData;
@@ -160,7 +159,6 @@ export class ReportComponent implements OnInit {
   }
 
   updateCustomerMapping(){
-    debugger
     let subscription = [];
     subscription = this.Customerform.value.subscriptionMonths.split(" ");
     let selectedmonth = subscription[0];
@@ -193,7 +191,6 @@ export class ReportComponent implements OnInit {
   }
 
   sendNotification(){
-  debugger
       let params={
        "machineno":this.pinNumber,
        "title": "Customer Assignment",
@@ -256,7 +253,6 @@ this.accountService.createNotification(params).subscribe((data) => {
   }
 
   onSubmit() {
-    debugger
     this.submitted = true;
     this.timeBetween = {
       useType: JSON.parse(localStorage.getItem('user')).useType,

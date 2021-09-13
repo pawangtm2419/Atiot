@@ -258,8 +258,6 @@ export class HomeComponent implements OnInit {
 
 
   checkAgreement() {
-  //console.log('user',JSON.parse(localStorage.getItem('user')))
-
   this.type = JSON.parse(localStorage.getItem('user')).role;
 
 //   if(type=='customer')
@@ -269,9 +267,7 @@ export class HomeComponent implements OnInit {
 //  }
     this.checkSignedon = JSON.parse(localStorage.getItem('user')).agreementSignedOn;
 
-    if (this.checkSignedon == null) {
-      console.log('RoleType',this.type);
-     
+    if (this.checkSignedon == null) {     
       let popupLoaded = JSON.parse(localStorage.getItem('popupLoaded'));
      
       if (this.type === 'dealer' || this.type === 'customer') {
@@ -280,7 +276,6 @@ export class HomeComponent implements OnInit {
         //this.agree();
       }
       localStorage.setItem('popupLoaded', '1');
-      console.log("popup value ", JSON.parse(localStorage.getItem('popupLoaded')))
     }
     else
     {
@@ -299,7 +294,6 @@ export class HomeComponent implements OnInit {
         next: () => {
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
           this.router.navigateByUrl(returnUrl);
-          console.log("abcd");
           this.showModal = true;
         }
       });
@@ -407,9 +401,7 @@ this.showDealerDiv=false;
 
           ]
         })
-    })
-
-    console.log(this.vehiclePark, 'vehiclePark')
+    });
   }
     else
     {
@@ -441,8 +433,7 @@ this.showDealerDiv=false;
             [
               { name: 'IOT', value: iottotal },
               { name: 'NONIOT', value: noniottotal }
-            ]
-        console.log("vehiclepark2",this.vehiclePark2)
+            ];
           }
   this.IOTCount = iottotal;
     this.NonIOTCount =noniottotal;
@@ -487,8 +478,7 @@ this.showDealerDiv=false;
        loginName:JSON.parse(localStorage.getItem('user')).loginName
       }
      this.accountService.getMonitorData(data1).subscribe((data) => {
-       this.monitordata = data
-       console.log("Vehicle Monitoring Data ====   ", this.monitordata);
+       this.monitordata = data;
        this.active = this.monitordata.countAnddetails.Active
        this.inactive = this.monitordata.countAnddetails.InActive
        this.vehicleMonitoring = [
@@ -535,22 +525,16 @@ this.showDealerDiv=false;
     this.accountService.getAllvehiclemonModel(data1).subscribe((data) => {
       this.allModelDocs = data
       this.allModel = this.allModelDocs.dataconcat;
-      console.log("all Models   ", this.allModel);
-      this.totalLength = this.allModel.length
+      this.totalLength = this.allModel.length;
 
       this.viewPolygon();
 
       this.activeDevices = this.allModel.filter(it => it.status == "Active");
       this.devices = this.activeDevices.length;
-     console.log('devices',this.devices);
     })
   }
 
   viewPolygon() {
-
-
-    console.log('show length ', this.allModel.length);
-
     var latlangValue = [];
     for (var i = 0; i < this.allModel.length; i++) {
      let allModelType = 'noniot';
@@ -571,8 +555,7 @@ this.showDealerDiv=false;
     }
     this.maplat = latlangValue[0].lat;
     this.maplng = latlangValue[0].lng;
-    this.coordinatedata = latlangValue
-console.log("coordinates",this.coordinatedata);
+    this.coordinatedata = latlangValue;
 
     const myLatLng = { lat: this.maplat, lng: this.maplng };
 
@@ -597,7 +580,6 @@ console.log("coordinates",this.coordinatedata);
     // }
     //  this.accountService.getMonitorData(data1).subscribe((data) => {
     //    this.monitordata = data
-    //    console.log("Vehicle Monitoring Data ====   ", this.monitordata);
     //    this.active = this.monitordata.countAnddetails.Active
     //    this.inactive = this.monitordata.countAnddetails.InActive
     this.utilizationData = [
@@ -621,7 +603,6 @@ console.log("coordinates",this.coordinatedata);
     .subscribe((data) => {
       this.breakdownStatisticsdata = data;
       this.breakdownStatisticsdata = this.breakdownStatisticsdata.count;
-      console.log("Break Down Statistics Data == ", this.breakdownStatisticsdata);
       if(this.breakdownStatisticsdata)
       {
         this.breakDownDataKeys=Object.keys(this.breakdownStatisticsdata);
@@ -668,7 +649,6 @@ console.log("coordinates",this.coordinatedata);
       }
       this.accountService.getServiceSchedule(data1).subscribe((data) => {
         this.servicedata = data;
-        console.log(" Service Schedule Data == ", this.servicedata);
         if(this.servicedata)
         {
           this.upcomingServiceCount=this.servicedata.countAnddetails.upcomingcount;
@@ -695,7 +675,6 @@ console.log("coordinates",this.coordinatedata);
     }
     this.accountService.getServiceSchedulesStatus(data1).subscribe((data) => {
       this.serviceScheduledStatus = data;
-      console.log(" Service Schedule Status Data == ", this.serviceScheduledStatus);
       this.scheduleService = 
       [
         {
@@ -736,7 +715,6 @@ console.log("coordinates",this.coordinatedata);
       this.accountService.getLastmonthtopfiveperformer(data1).subscribe((data) => {
       this.lastMonthPerformerData = data;
       this.top5Performers = this.getCustomArrayForTopPerformers(this.lastMonthPerformerData);
-      console.log("lasttopperformerdata", this.lastMonthPerformerData);
     })
  
 
@@ -751,9 +729,7 @@ console.log("coordinates",this.coordinatedata);
       this.accountService.getCurrentmonthtopfiveperformer(data1).subscribe((data) => {
       this.currentMonthPerformerData = data;
       this.top5Performers = this.getCustomArrayForTopPerformers(this.currentMonthPerformerData);
-      console.log("Distance",this.Distance);
-      console.log("topperformerdata", this.top5Performers);
-    })
+    });
    
     }
    
@@ -788,8 +764,7 @@ console.log("coordinates",this.coordinatedata);
       loginName:JSON.parse(localStorage.getItem('user')).loginName
     }
     this.accountService.getCurrentMonthCountInner(data1).subscribe((data) => {
-      this.currentmonthcount = data
-      console.log('run hour current month data=== ',this.currentmonthcount);
+      this.currentmonthcount = data;
       if(this.currentmonthcount)
       {
          this.getRunHour();
@@ -807,8 +782,7 @@ console.log("coordinates",this.coordinatedata);
       loginName:JSON.parse(localStorage.getItem('user')).loginName
     }
     this.accountService.getLastMonthCountInner(data1).subscribe((data) => {
-      this.lastmonthcount = data
-      console.log(this.lastmonthcount);
+      this.lastmonthcount = data;
       if(this.lastmonthcount)
       {
          this.getRunHour();
@@ -825,8 +799,7 @@ console.log("coordinates",this.coordinatedata);
       loginName:JSON.parse(localStorage.getItem('user')).loginName
     }
     this.accountService.getCurrentYearCountInner(data1).subscribe((data) => {
-      this.currentyearcount = data
-      console.log(this.currentyearcount);
+      this.currentyearcount = data;
       if(this.currentyearcount)
       {
          this.getRunHour();
@@ -850,9 +823,7 @@ console.log("coordinates",this.coordinatedata);
       {
         'name' : "Above 150 hrs", 'value' : this.currentmonthcount.onefiftyplusCount
       },
-    ]
-
-    console.log("run hours1==", this.runHour);
+    ];
     
     this.runHour2 = 
     [
@@ -865,8 +836,7 @@ console.log("coordinates",this.coordinatedata);
       {
         'name' : "Above 150 hrs", 'value' : this.lastmonthcount.onefiftyplusCount
       },
-    ]
-    console.log("run hours2==", this.runHour2);
+    ];
     
     this.runHour3 = 
     [
@@ -879,16 +849,14 @@ console.log("coordinates",this.coordinatedata);
       {
         'name' : "Above 150 hrs", 'value' : this.currentyearcount.onefiftyplusCount
       }
-    ]
-    console.log("run hours3==", this.runHour3);
+    ];
   }
   // ***********RUN HOUR STATISTICS End Here****************
  
    // ***********Customer Segmentation start Here****************
    getCustomerSegmentation() {
     this.accountService.getCustomerSegmentationCount().subscribe((data) => {
-      this.customerSegmentationCount =data;
-      console.log(this.customerSegmentationCount);
+      this.customerSegmentationCount = data;
       if(this.customerSegmentationCount)
       {
         this.customerSegmentation = 

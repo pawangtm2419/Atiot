@@ -176,7 +176,6 @@ this.createUserLOgs();
   get f() { return this.form1.controls; }
 
   getServiceById(pinno, serviceNumber) {
-    debugger
     this.pinno = pinno;
     this.serviceNumber = serviceNumber;
     // this.isEditMode = true;
@@ -201,7 +200,6 @@ this.createUserLOgs();
 
 
   onSubmit() {
-    debugger
     this.submitted = true;
     if (this.form1.invalid) {
       return;

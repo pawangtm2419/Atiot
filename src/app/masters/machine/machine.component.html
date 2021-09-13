@@ -1,9 +1,7 @@
-<div *ngIf="!master || inActive == false ">
+<div *ngIf="!master || inActive == false">
     <span class="spinner-border spinner-border-lg align-center"></span>
 </div>
-
-<div *ngIf="checkedStatus == 'machine is not mapped' " class="modal fade" id="example1" tabindex="-1"
-    aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='showModal? "block":"none"'>
+<div *ngIf="checkedStatus == 'machine is not mapped'" class="modal fade" id="example1" tabindex="-1" aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='showModal? "block":"none"'>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,31 +10,21 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <div class="modal-body">
                 <form [formGroup]="deviceform" (ngSubmit)="ondeviceSubmit()">
-
                     <div class="row" style="margin-top: 10px;">
-
                         <div class="col-md-6">
-                            <input class="form-control" list="deviceID" name="deviceID" formControlName="deviceID"
-                                placeholder="search....." (input)="filterItem($event)" autocomplete="off">
+                            <input class="form-control" list="deviceID" name="deviceID" formControlName="deviceID" placeholder="search....." (input)="filterItem($event)" autocomplete="off">
                             <datalist id="deviceID">
-                                <option value="{{device.deviceID}}-{{device.category?device.category:device.type}}"
-                                    *ngFor="let device of devices">
+                                <option value="{{device.deviceID}}-{{device.category?device.category:device.type}}" *ngFor="let device of devices">
                             </datalist>
                         </div>
                         <div class="col-md-6">
-                            <input class="form-control" type="text" name="modeltext" [(ngModel)]="modeltext"
-                                [ngModelOptions]="{standalone: true}" disabled>
+                            <input class="form-control" type="text" name="modeltext" [(ngModel)]="modeltext" [ngModelOptions]="{standalone: true}" disabled>
                         </div>
-
-
-
                         <!-- <div class="col-md-12">
                             <label><span class="required-asterisk">*</span>Device</label><br>
-                            <select class="form-control" formControlName="deviceID" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f1.deviceID.errors }">
+                            <select class="form-control" formControlName="deviceID" class="form-control" [ngClass]="{ 'is-invalid': submitted && f1.deviceID.errors }">
                                 <option></option>
                                 <option *ngFor="let device of devices">{{device.deviceID}}</option>
                             </select>
@@ -44,23 +32,16 @@
                                 <div *ngIf="f1.deviceID.errors.required">Device is required</div>
                             </div>
                         </div> -->
-                    </div>
-
-                    <br>
+                    </div><br>
                     <div class="form-group" style="text-align: center;">
-
-                        <button type="submit" class="btn btn-primary" (click)="updateDeviceMapping()" id="closeModel1">
-                            Save
-                        </button>&nbsp;
+                        <button type="submit" class="btn btn-primary" (click)="updateDeviceMapping()" id="closeModel1"> Save </button>&nbsp;
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="qrCode" tabindex="-1" aria-labelledby="example1lLabel" aria-hidden="true" [style.display]='showModal? "block":"none"'>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

@@ -174,7 +174,6 @@ export class CustDashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private httpClient: HttpClient) {
     this.users = this.accountService.userValue;
-    console.log('print this')
   }
 
 
@@ -306,7 +305,6 @@ export class CustDashboardComponent implements OnInit {
 
   // ***********VEHICLE MONITORING Start Here****************
   getVehicleMonitoring() {
-    // debugger
       const data1 = {
        useType: JSON.parse(localStorage.getItem('user')).useType,
        loginName:JSON.parse(localStorage.getItem('user')).loginName
@@ -500,7 +498,6 @@ console.log("coordinates",this.coordinatedata);
     
     if(this.selectMonth=='lastMonth')
     {
-      debugger
       const data1 = {
         useType: JSON.parse(localStorage.getItem('user')).useType,
         loginName:JSON.parse(localStorage.getItem('user')).loginName
@@ -515,7 +512,6 @@ console.log("coordinates",this.coordinatedata);
   }
     else if(this.selectMonth=='currentMonth')
     {
-      debugger
       const data1 = {
         useType: JSON.parse(localStorage.getItem('user')).useType,
         loginName:JSON.parse(localStorage.getItem('user')).loginName

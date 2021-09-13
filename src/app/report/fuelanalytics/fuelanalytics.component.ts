@@ -74,17 +74,7 @@ export class FuelanalyticsComponent implements OnInit {
     this.accountService.getfuelAnalytics(this.data)
       .subscribe((data) => {
         this.fuelList = data,
-          this.fuelList = this.fuelList
-
-
-        // this.coordinatedata.forEach(element => {
-        //   if(element.pinno == pinno){
-        //     this.lastLocationlat=element.lat,
-        //     this.lastLocationlng=element.lng
-        //    // 
-        // }
-        // });
-        console.log("Fuel List ====", this.fuelList)
+          this.fuelList = this.fuelList;
       })
   }
 
@@ -101,36 +91,17 @@ export class FuelanalyticsComponent implements OnInit {
         toDate: this.form.value.endDate,
         // loginName:this.loginName,
         // useType:this.useType,
-      }
-
-      console.log('data for date feild==', this.data);
+      };
 
       this.accountService.getfuelAnalytics(this.data)
         .subscribe((data) => {
           this.fuelList = data,
-            this.fuelList = this.fuelList,
-            console.log("fuel List after Date filter====", this.fuelList);
+            this.fuelList = this.fuelList;
         })
     }
   }
 
   vehicleLastLocation(pinno,var2) {
-    debugger
-    // this.today = new Date();
-    // this.today.setDate(this.today.getDate() - 30);
-    // this.fromDate = this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00.000Z";
-    // this.toDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd') + "T" + this.datePipe.transform(new Date(), 'HH:mm:ss') + ".000Z";
-    // this.startDate = this.fromDate.toString();
-    // this.endDate = this.toDate.toString();
-
-    // this.data = {
-    //   fromDate: this.startDate,
-    //   toDate: this.endDate,
-    // }
-    // this.accountService.getfuelAnalytics(this.data)
-    //   .subscribe((data) => {
-    //     this.fuelList = data
-    //       this.fuelList = this.fuelList
     if(var2==true)
     {
       this.fuelList.forEach(element => {
@@ -142,21 +113,10 @@ export class FuelanalyticsComponent implements OnInit {
       this.getOpenStreetmapData();
 
     }
-        
-         
-       //   });
-
-
-        // this.lastLocationlat = this.coordinatedata[0].lat;
-        // this.lastLocationlng = this.coordinatedata[0].lng; 
-             
-      
-   
   }
 
 
   getOpenStreetmapData() {
-    debugger
     // this.mapData
     this.locationInfo = [];
     const lat = this.lastLocationlat;
