@@ -143,6 +143,7 @@ export class HomeComponent implements OnInit {
   paintDefesctsPre: any;
   eleSensor: number;
   eleSensorPre: any;
+  isBrackDownData = false;
   breakDownDataKeys: string[];
   breakDownDataValues: number[];
   breakDownProgressBar1: any;
@@ -447,7 +448,7 @@ export class HomeComponent implements OnInit {
 
   viewPolygon(): void {
     var latlangValue = [];
-    for (let i = 0; i < this.allModel.length; i++) {
+    for(let i = 0; i < this.allModel.length; i++) {
       let allModelType = 'noniot';
       if (this.allModel[i].type == 'dvmap') {
         allModelType = 'iot';
@@ -502,6 +503,7 @@ export class HomeComponent implements OnInit {
         this.breakdownStatisticsdata = data;
         this.breakdownStatisticsdata = this.breakdownStatisticsdata.count;
         if (this.breakdownStatisticsdata) {
+          this.isBrackDownData = true;
           this.breakDownDataKeys = Object.keys(this.breakdownStatisticsdata);
           this.breakDownDataValues = Object.values(this.breakdownStatisticsdata);
 
@@ -512,6 +514,7 @@ export class HomeComponent implements OnInit {
           this.breakDownProgressBar5 = (this.breakDownDataValues[4]) + '%';
         }
         else {
+          this.isBrackDownData = false;
           return;
         }
       });
@@ -531,16 +534,16 @@ export class HomeComponent implements OnInit {
       useType: JSON.parse(localStorage.getItem('user')).useType,
       loginName: JSON.parse(localStorage.getItem('user')).loginName
     };
-    this.accountService.getServiceSchedule(data1).subscribe((data) => {
+    this.accountService.getServiceSchedule(data1).subscribe((data: any) => {
       this.servicedata = data;
       if (this.servicedata) {
-        this.upcomingServiceCount = this.servicedata.countAnddetails.upcomingcount;
+        this.upcomingServiceCount = this.servicedata.upcomingcount;
         this.upcomingServiceCountPre = (this.upcomingServiceCount) + '%';
-        this.overdueServiceCount = this.servicedata.countAnddetails.Overduecount;
+        this.overdueServiceCount = this.servicedata.Overduecount;
         this.overdueServiceCountPre = (this.overdueServiceCount) + '%';
-        this.pastSevenDaysCount = this.servicedata.countAnddetails['Overdue Past 7 Days count'];
+        this.pastSevenDaysCount = this.servicedata['Overdue Past 7 Days count'];
         this.pastSevenDaysCountPre = (this.pastSevenDaysCount) + '%';
-        this.pastThirtyDaysCount = this.servicedata.countAnddetails['Overdue Past 30 Days count'];
+        this.pastThirtyDaysCount = this.servicedata['Overdue Past 30 Days count'];
         this.pastThirtyDaysCountPre = (this.pastThirtyDaysCount) + '%';
       }
       else {
@@ -604,7 +607,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  getCustomArrayForTopPerformers(argumentData) {
+  getCustomArrayForTopPerformers(argumentData): any[] {
     if (argumentData.length > 0) {
       this.customArray = [];
       this.Distance = 0;
@@ -615,8 +618,11 @@ export class HomeComponent implements OnInit {
         this.secConvert = (this.EngineHours) * (1 / 3600);
         this.EngineHours2 = parseInt(this.secConvert);
         this.customArray.push({
-          name: element.pinno.slice(-7, -1) + element.pinno.slice(-1),
-          series: [{ name: 'Total Hrs', value: (element.totalSecond) * (1 / 3600) }, { name: 'Total Distance', value: element.totalDistance }]
+          name: element.pinno.slice(-7),
+          series: [
+            { name: 'Total Hrs', value: (element.totalSecond) * (1 / 3600) },
+            { name: 'Total Distance', value: element.totalDistance }
+          ]
         });
       });
       return this.customArray;

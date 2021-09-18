@@ -832,7 +832,7 @@
                                     [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
                                 </ngx-charts-bar-vertical-2d>
                             </ng-container>
-                            <ng-container *ngIf="vehiclePark2.length > 0">
+                            <ng-container *ngIf="showvehiclePark2">
                                 <ngx-charts-bar-vertical [view]="view2" [hidden]="showvehiclePark"
                                     [scheme]="colorScheme" [results]="vehiclePark2" [gradient]="gradient"
                                     [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
@@ -889,10 +889,9 @@
             </div>
         </div>
         <div class="col-md-3 card breakStat col-xs-12 m-mb-1">
+            <div *ngIf="isBrackDownData">
             <div class="heading"><a (click)="breakdownSt()"> <u>BREAKDOWN STATISTICS</u></a></div>
-            
-            <label class="f-12 m-tb" style="margin-top: 5px;">{{breakDownDataKeys[0]}}</label>
-            <!-- <progress class="prog-bar" max="100" value="50"></progress> -->
+            <label class="f-12 m-tb" style="margin-top: 5px">{{breakDownDataKeys[0]}}</label>
             <div class="row">
                 <div class="col-md-9 col-xs-9" style="padding: 0;">
                     <div class="progress">
@@ -964,6 +963,7 @@
                     <span class="f-count">{{breakDownDataValues[4]}}</span>
                 </div>
             </div>
+        </div>
         </div>
     </div>
     <div class="row">
